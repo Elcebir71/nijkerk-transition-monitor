@@ -8,6 +8,11 @@ of 75 fictional farms.
 GitHub Pages for this repo (Settings → Pages → Source: `main` / root) to get
 a shareable link.
 
+<p>
+  <img src="docs/screenshot-kaart.png" alt="Map view: farm locations, scenario slider and KPI tiles" width="49%">
+  <img src="docs/screenshot-tabel.png" alt="Table view: searchable/filterable farm list with detail panel" width="49%">
+</p>
+
 ## What this is
 
 Grew out of an earlier feasibility analysis for a Nijkerk "Biogas Hub"
