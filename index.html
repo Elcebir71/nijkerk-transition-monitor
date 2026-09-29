@@ -1,0 +1,571 @@
+<title>Transitie Monitor Nijkerk</title>
+<style>
+/* Layout: fixed control rail (scenario slider + KPI readouts) beside a
+   tabbed content area — Kaart (schematic SVG scatter map) / Tabel (search + sortable table).
+   No basemap tiles (sandboxed artifact, CSP) — schematic outline + graticule instead. */
+:root{
+  --bg:#f5f3ec; --panel:#ffffff; --ink:#1c2620; --ink-dim:#5a6a5e;
+  --line:#d9d4c4; --accent:#4a6b4f; --accent-2:#c98a2c; --accent-3:#3e5c76;
+  --warn-bg:#fbeedd; --warn-fg:#8a5a12; --chip-bg:#eef0e6; --danger:#a74636;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141a15; --panel:#1c241d; --ink:#eef1ea; --ink-dim:#9fae9f;
+    --line:#33402f; --accent:#8fbf94; --accent-2:#e3aa53; --accent-3:#7fa3c4;
+    --warn-bg:#3a2e14; --warn-fg:#f0c581; --chip-bg:#26301f; --danger:#e08272;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141a15; --panel:#1c241d; --ink:#eef1ea; --ink-dim:#9fae9f;
+  --line:#33402f; --accent:#8fbf94; --accent-2:#e3aa53; --accent-3:#7fa3c4;
+  --warn-bg:#3a2e14; --warn-fg:#f0c581; --chip-bg:#26301f; --danger:#e08272;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;margin:0;padding:16px}
+h1,h2,h3{font-family:"Fraunces","IBM Plex Sans",serif;font-weight:600;margin:0 0 4px;text-wrap:balance}
+.mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.wrap{max-width:1240px;margin:0 auto}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.top h1{font-size:1.5rem}
+.subtitle{color:var(--ink-dim);font-size:.9rem;max-width:60ch}
+.banner{background:var(--warn-bg);color:var(--warn-fg);border:1px solid color-mix(in srgb, var(--warn-fg) 30%, transparent);border-radius:10px;padding:10px 14px;font-size:.85rem;font-weight:600;margin-bottom:14px;letter-spacing:.01em}
+.grid{display:grid;grid-template-columns:280px 1fr;gap:14px}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.rail{display:flex;flex-direction:column;gap:12px;min-width:0}
+.field-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);margin-bottom:6px;display:block}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.slider-value{font-family:"IBM Plex Mono",monospace;font-size:1.4rem;font-weight:600;color:var(--accent)}
+.kpi{display:grid;grid-template-columns:1fr;gap:8px}
+.kpi-tile{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--chip-bg)}
+.kpi-tile .num{font-family:"IBM Plex Mono",monospace;font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi-tile .lbl{font-size:.72rem;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.05em}
+.kpi-tile .sub{font-size:.72rem;color:var(--ink-dim);margin-top:2px}
+.legend{display:flex;flex-direction:column;gap:6px;font-size:.82rem}
+.legend-row{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.legend-row input{accent-color:var(--accent)}
+.dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;border:1px solid rgba(0,0,0,.15)}
+.content-panel{position:relative;min-width:0;display:flex;flex-direction:column;gap:10px}
+.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px}
+.tab-btn{flex:1;border:none;background:transparent;color:var(--ink-dim);font-family:"IBM Plex Sans",sans-serif;font-size:.85rem;font-weight:600;padding:8px 12px;border-radius:9px;cursor:pointer;transition:background .15s ease,color .15s ease}
+.tab-btn.active{background:var(--accent);color:#fff}
+.tabview{display:none}
+.tabview.active{display:block}
+.canvas-wrap{position:relative;min-width:0}
+svg{width:100%;height:auto;display:block;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+.farm-dot{cursor:pointer;transition:r .15s ease,opacity .15s ease}
+.farm-dot:hover{stroke:var(--ink);stroke-width:1.5}
+.muted{opacity:.15}
+.grat-line{stroke:var(--line);stroke-width:1}
+.boundary{fill:color-mix(in srgb, var(--accent) 7%, transparent);stroke:var(--accent);stroke-width:1.2;stroke-dasharray:3 3}
+.ark-zone{fill:color-mix(in srgb, var(--accent-3) 12%, transparent);stroke:var(--accent-3);stroke-width:1;stroke-dasharray:2 2}
+.map-label{font-size:11px;fill:var(--ink-dim);font-family:"IBM Plex Mono",monospace}
+.detail{position:absolute;top:10px;right:10px;max-width:250px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:.82rem;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.detail h3{font-size:.95rem}
+.detail .close{position:absolute;top:8px;right:10px;cursor:pointer;color:var(--ink-dim);font-size:1rem;background:none;border:none}
+.detail table{width:100%;border-collapse:collapse;margin-top:6px}
+.detail td{padding:2px 0;font-size:.78rem}
+.detail td.v{text-align:right;font-family:"IBM Plex Mono",monospace}
+.tag{display:inline-block;font-size:.68rem;padding:2px 7px;border-radius:20px;background:var(--chip-bg);color:var(--ink-dim);margin-top:6px;margin-right:4px}
+.tag.approx{background:var(--warn-bg);color:var(--warn-fg)}
+.tag.warn{background:var(--warn-bg);color:var(--warn-fg)}
+footer{margin-top:14px;font-size:.75rem;color:var(--ink-dim);line-height:1.6}
+footer a{color:var(--accent-3)}
+.axis-hint{font-size:.68rem;color:var(--ink-dim);margin-top:6px}
+.sector-slider{margin-bottom:10px}
+.sector-slider:last-child{margin-bottom:0}
+.sector-val{color:var(--accent);font-weight:600}
+#mode-tabs .tab-btn{font-size:.72rem;padding:7px 6px;line-height:1.2}
+
+/* --- table tab --- */
+.table-controls{display:flex;flex-wrap:wrap;gap:8px}
+.table-controls input[type=search],.table-controls select{font-family:"IBM Plex Sans",sans-serif;font-size:.82rem;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink)}
+.table-controls input[type=search]{flex:1;min-width:140px}
+.table-count{font-size:.75rem;color:var(--ink-dim);align-self:center;margin-left:auto;white-space:nowrap}
+.table-grid{display:grid;grid-template-columns:1fr 260px;gap:12px}
+@media (max-width:980px){.table-grid{grid-template-columns:1fr}}
+.table-scroll{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:12px}
+table.data{width:100%;border-collapse:collapse;font-size:.8rem}
+table.data thead th{position:sticky;top:0;background:var(--chip-bg);text-align:left;padding:8px 10px;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-dim);border-bottom:1px solid var(--line)}
+table.data td{padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.data tbody tr{cursor:pointer}
+table.data tbody tr:hover{background:var(--chip-bg)}
+table.data tbody tr.sel{background:color-mix(in srgb, var(--accent) 14%, transparent)}
+.warn-cell{color:var(--warn-fg);font-weight:600}
+.side-detail{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.82rem;height:fit-content}
+.side-detail .row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dashed var(--line)}
+.side-detail .row:last-child{border-bottom:none}
+.pill{display:inline-block;font-size:.68rem;padding:2px 8px;border-radius:20px;font-weight:600}
+.pill.g{background:var(--chip-bg);color:var(--accent)}
+.pill.a{background:var(--warn-bg);color:var(--warn-fg)}
+.pill.r{background:var(--warn-bg);color:var(--danger)}
+.species-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.sp{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:.75rem}
+.sp b{display:block;font-family:"IBM Plex Mono",monospace;font-size:.92rem}
+.sp .meta{color:var(--ink-dim);font-size:.68rem}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Transitie Monitor Nijkerk</h1>
+      <div class="subtitle">Prototype: mest- en stikstofbelasting per bedrijfstype, met een schuifregelaar voor krimp-/transitiescenario's. Kaart- en tabelweergave op dezelfde synthetische dataset.</div>
+    </div>
+  </div>
+
+  <div class="banner">⚠ SYNTHETISCHE DEMODATA — geen van de 75 bedrijven, locaties of dieraantallen hieronder is echt. Alleen de totalen per diercategorie zijn gekalibreerd op (een marge onder) de echte CBS-Landbouwtelling 2023 voor gemeente Nijkerk.</div>
+
+  <div class="grid">
+    <div class="rail">
+      <div class="panel">
+        <span class="field-label">Scenariomodus</span>
+        <div class="tabs" id="mode-tabs" style="margin-bottom:10px">
+          <button class="tab-btn active" id="mode-btn-uniform" data-mode="uniform">Gemeenschappelijk</button>
+          <button class="tab-btn" id="mode-btn-persector" data-mode="persector">Per diersector</button>
+        </div>
+
+        <div id="mode-uniform">
+          <span class="field-label">Afname veestapel (alle sectoren gelijk)</span>
+          <div class="slider-value"><span id="pctval">0</span>%</div>
+          <input type="range" id="reduction" min="0" max="80" step="5" value="0">
+          <div class="axis-hint">Elk bedrijf schaalt N-excretie, mest en biogaspotentieel evenredig mee met deze afname.</div>
+        </div>
+
+        <div id="mode-persector" hidden>
+          <div class="axis-hint" style="margin-bottom:8px">v1.1.1: werkt op DIERSOORT-niveau, niet op bedrijfstype. Melkkoe/jongvee-melk/stier → Melkvee, fokzeug/vleesvarken/big → Varkens, leghen/vleeskuiken/eend → Pluimvee, de rest (vleeskalf, schaap, geit, paard) → Overig. Een "gemengd" bedrijf reageert dus nu per diersoort: alleen de melkkoeien erin krimpen mee met een melkvee-reductie.</div>
+          <div class="sector-slider"><span class="field-label" style="margin-bottom:2px">Melkvee <span class="mono sector-val" id="pv-melkvee">0</span>%</span><input type="range" class="sector-range" id="sec-melkvee" min="0" max="80" step="5" value="0"></div>
+          <div class="sector-slider"><span class="field-label" style="margin-bottom:2px">Varkens <span class="mono sector-val" id="pv-varkens">0</span>%</span><input type="range" class="sector-range" id="sec-varkens" min="0" max="80" step="5" value="0"></div>
+          <div class="sector-slider"><span class="field-label" style="margin-bottom:2px">Pluimvee <span class="mono sector-val" id="pv-pluimvee">0</span>%</span><input type="range" class="sector-range" id="sec-pluimvee" min="0" max="80" step="5" value="0"></div>
+          <div class="sector-slider"><span class="field-label" style="margin-bottom:2px">Overig <span class="mono sector-val" id="pv-overig">0</span>%</span><input type="range" class="sector-range" id="sec-overig" min="0" max="80" step="5" value="0"></div>
+        </div>
+        <div class="axis-hint">Geldt gemeentebreed (alle 75 bedrijven), onafhankelijk van filters hieronder.</div>
+      </div>
+
+      <div class="panel kpi">
+        <div class="kpi-tile"><div class="lbl">Stikstofexcretie</div><div class="num mono" id="kpi-n">–</div><div class="sub">kg N / jaar</div></div>
+        <div class="kpi-tile"><div class="lbl">Mestvolume</div><div class="num mono" id="kpi-m">–</div><div class="sub">ton / jaar</div></div>
+        <div class="kpi-tile"><div class="lbl">Geschat biogaspotentieel</div><div class="num mono" id="kpi-b">–</div><div class="sub">m³ / jaar (indicatief)</div></div>
+        <div class="kpi-tile"><div class="lbl">Bedrijven totaal</div><div class="num mono" id="kpi-count">75</div><div class="sub">synthetische bedrijven in gemeente</div></div>
+      </div>
+
+      <div class="panel">
+        <span class="field-label">Datakwaliteit (per diersoort)</span>
+        <div class="legend">
+          <div class="legend-row"><span class="dot" style="background:var(--accent)"></span>Officiele RVO-norm</div>
+          <div class="legend-row"><span class="dot" style="background:var(--accent-2)"></span>Literatuur-benadering (APPROX)</div>
+        </div>
+        <div class="axis-hint">Kwaliteit is per diersoort bepaald (zie detailpaneel per bedrijf), niet per bedrijf als geheel — een "gemengd" bedrijf kan beide bevatten.</div>
+        <div class="axis-hint">Ring/rode markering op de kaart = amoniakinhibitie-waarschuwing (&gt;50% pluimveemest).</div>
+      </div>
+    </div>
+
+    <div class="content-panel">
+      <div class="tabs" id="view-tabs">
+        <button class="tab-btn active" id="tab-btn-map" data-tab="map">🗺 Kaart</button>
+        <button class="tab-btn" id="tab-btn-table" data-tab="table">📋 Tabel &amp; zoeken</button>
+      </div>
+
+      <!-- KAART TAB -->
+      <div class="tabview active" id="tabview-map">
+        <div class="grid" style="grid-template-columns:1fr;gap:10px">
+          <div class="panel" style="padding:10px 14px">
+            <span class="field-label" style="margin-bottom:8px">Bedrijfstype (filter — beïnvloedt alleen kaartweergave)</span>
+            <div class="legend" id="legend" style="flex-direction:row;flex-wrap:wrap;gap:12px"></div>
+          </div>
+          <div class="canvas-wrap">
+            <svg id="map" viewBox="0 0 720 640" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="detail" id="detail" hidden>
+              <button class="close" id="detail-close" aria-label="Sluiten">✕</button>
+              <h3 id="d-id"></h3>
+              <div id="d-tags"></div>
+              <table id="d-animals"></table>
+              <table>
+                <tr><td>N-excretie</td><td class="v" id="d-n"></td></tr>
+                <tr><td>Mestvolume</td><td class="v" id="d-m"></td></tr>
+                <tr><td>Biogaspotentieel</td><td class="v" id="d-b"></td></tr>
+                <tr><td>Afst. tot indic. referentiepunt*</td><td class="v" id="d-ark"></td></tr>
+              </table>
+              <div class="axis-hint">* Willekeurig gekozen punt bij Arkemheen, GEEN Natura 2000-gebiedsgrens. Zie footer.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABEL TAB -->
+      <div class="tabview" id="tabview-table">
+        <div class="table-controls">
+          <input type="search" id="t-search" placeholder="Zoek op bedrijfs-ID (bv. SYN-015)…">
+          <select id="t-type"><option value="all">Alle bedrijfstypen</option></select>
+          <select id="t-quality">
+            <option value="all">Alle datakwaliteit</option>
+            <option value="A">Volledig officiele RVO-norm</option>
+            <option value="L">Volledig literatuur-benadering</option>
+            <option value="mixed">Gemengd (beide)</option>
+          </select>
+          <span class="table-count" id="t-count">– / 75</span>
+        </div>
+        <div class="table-grid">
+          <div class="table-scroll">
+            <table class="data">
+              <thead>
+                <tr><th>ID</th><th>Type</th><th>N (kg)</th><th>Mest (ton)</th><th>Biogas (m³)</th><th>Afst. ref.punt*</th><th>Kwaliteit</th><th>NH₃</th></tr>
+              </thead>
+              <tbody id="t-body"></tbody>
+            </table>
+          </div>
+          <div class="side-detail" id="t-detail">
+            <div class="axis-hint">Klik een rij om details te zien.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Bronnen: CBS StatLine 80781ned (Landbouw; gewassen, dieren en grondgebruik naar gemeente, GM0267 Nijkerk, 2023) ·
+    RVO.nl Tabel 4/6 Diergebonden normen 2024 (per diersoort; zie datakwaliteit-label in het detailpaneel per bedrijf) ·
+    Locatiemethode (v1.1): alle 75 bedrijfslocaties zijn volledig willekeurig gegenereerd binnen een schematische
+    Nijkerk-omtrek (buiten het bebouwde centrum, min. 150m onderlinge afstand) — GEEN enkele locatie is afgeleid van
+    een echt BRP-perceel, BAG-gebouw of adres. * "Afst. ref.punt" = afstand tot een zelfgekozen, indicatief punt bij
+    Arkemheen (52,265°N 5,405°O), NIET de officiele Natura 2000-gebiedsgrens. Dit is een demonstratie-prototype, geen
+    beleidsinstrument en geen vervanging van het onderliggende Nijkerk-emissiereductierapport.
+  </footer>
+</div>
+
+<script>
+const FARMS = [{"id":"SYN-001","t":"varkens","la":52.20115,"lo":5.40626,"ark":7100,"n":26249,"m":2871.0,"b":100486,"q":"L","am":0,"an":{"fokzeug":428,"vleesvarken":2071,"big":964}},{"id":"SYN-002","t":"melkvee","la":52.25007,"lo":5.47383,"ark":4970,"n":7875,"m":1320.0,"b":39600,"q":"A","am":0,"an":{"melkkoe":45,"jongvee_melk":55}},{"id":"SYN-003","t":"vleeskalveren","la":52.21672,"lo":5.37744,"ark":5687,"n":6424,"m":1635.2,"b":49056,"q":"L","am":0,"an":{"vleeskalf":584}},{"id":"SYN-004","t":"melkvee","la":52.19518,"lo":5.4483,"ark":8305,"n":7710,"m":1328.0,"b":39840,"q":"A","am":0,"an":{"melkkoe":50,"jongvee_melk":38}},{"id":"SYN-005","t":"melkvee","la":52.17481,"lo":5.40263,"ark":10030,"n":15390,"m":2682.0,"b":80460,"q":"A","am":0,"an":{"melkkoe":105,"jongvee_melk":62}},{"id":"SYN-006","t":"geiten_schapen","la":52.24089,"lo":5.4542,"ark":4290,"n":15997,"m":1302.0,"b":36456,"q":"L","am":0,"an":{"melkgeit":1388,"overige_geit":94,"schaap":241}},{"id":"SYN-007","t":"gemengd","la":52.19537,"lo":5.4608,"ark":8625,"n":17588,"m":2664.4,"b":78911,"q":"A","am":0,"an":{"melkkoe":81,"jongvee_vlees":62,"schaap":261,"paard_pony":58}},{"id":"SYN-008","t":"geiten_schapen","la":52.25742,"lo":5.47702,"ark":4973,"n":11400,"m":933.1,"b":26127,"q":"L","am":0,"an":{"melkgeit":973,"overige_geit":133,"schaap":147}},{"id":"SYN-009","t":"varkens","la":52.20807,"lo":5.39617,"ark":6359,"n":28251,"m":3065.7,"b":107299,"q":"L","am":0,"an":{"fokzeug":412,"vleesvarken":2113,"big":1644}},{"id":"SYN-010","t":"varkens","la":52.27346,"lo":5.42315,"ark":1552,"n":14197,"m":1509.0,"b":52815,"q":"L","am":0,"an":{"fokzeug":140,"vleesvarken":970,"big":1503}},{"id":"SYN-011","t":"melkvee","la":52.18183,"lo":5.38741,"ark":9325,"n":10620,"m":1884.0,"b":56520,"q":"A","am":0,"an":{"melkkoe":78,"jongvee_melk":28}},{"id":"SYN-012","t":"paarden","la":52.26183,"lo":5.46296,"ark":3960,"n":1376,"m":195.2,"b":5466,"q":"A","am":0,"an":{"paard_pony":32}},{"id":"SYN-013","t":"geiten_schapen","la":52.25756,"lo":5.48173,"ark":5287,"n":10268,"m":844.9,"b":23657,"q":"L","am":0,"an":{"melkgeit":934,"overige_geit":55,"schaap":117}},{"id":"SYN-014","t":"vleeskalveren","la":52.21212,"lo":5.45525,"ark":6803,"n":5764,"m":1467.2,"b":44016,"q":"L","am":0,"an":{"vleeskalf":524}},{"id":"SYN-015","t":"pluimvee","la":52.25992,"lo":5.46516,"ark":4133,"n":41839,"m":939.3,"b":93925,"q":"L","am":1,"an":{"leghen":49290,"vleeskuiken":58093,"eend":1156}},{"id":"SYN-016","t":"melkvee","la":52.26334,"lo":5.45903,"ark":3682,"n":7245,"m":1218.0,"b":36540,"q":"A","am":0,"an":{"melkkoe":42,"jongvee_melk":49}},{"id":"SYN-017","t":"pluimvee","la":52.19616,"lo":5.41612,"ark":7692,"n":22595,"m":500.3,"b":50028,"q":"L","am":1,"an":{"leghen":30457,"vleeskuiken":24556,"eend":816}},{"id":"SYN-018","t":"pluimvee","la":52.18046,"lo":5.40769,"ark":9402,"n":35338,"m":782.8,"b":78277,"q":"L","am":1,"an":{"leghen":46861,"vleeskuiken":40250,"eend":782}},{"id":"SYN-019","t":"paarden","la":52.18271,"lo":5.41442,"ark":9173,"n":1720,"m":244.0,"b":6832,"q":"A","am":0,"an":{"paard_pony":40}},{"id":"SYN-020","t":"melkvee","la":52.23938,"lo":5.42736,"ark":3230,"n":12877,"m":2245.5,"b":67365,"q":"A","am":0,"an":{"melkkoe":88,"jongvee_melk":50,"stier":1}},{"id":"SYN-021","t":"melkvee","la":52.21124,"lo":5.40422,"ark":5978,"n":8610,"m":1394.0,"b":41820,"q":"A","am":0,"an":{"melkkoe":41,"jongvee_melk":82}},{"id":"SYN-022","t":"varkens","la":52.2003,"lo":5.51256,"ark":10267,"n":17661,"m":1874.7,"b":65615,"q":"L","am":0,"an":{"fokzeug":197,"vleesvarken":797,"big":2668}},{"id":"SYN-023","t":"pluimvee","la":52.24069,"lo":5.46376,"ark":4828,"n":25528,"m":565.7,"b":56573,"q":"L","am":1,"an":{"leghen":34661,"vleeskuiken":26887,"eend":1335}},{"id":"SYN-024","t":"melkvee","la":52.19014,"lo":5.48164,"ark":9825,"n":10612,"m":1769.5,"b":53085,"q":"A","am":0,"an":{"melkkoe":59,"jongvee_melk":77,"stier":1}},{"id":"SYN-025","t":"pluimvee","la":52.18932,"lo":5.42954,"ark":8580,"n":18408,"m":428.1,"b":42807,"q":"L","am":1,"an":{"leghen":15059,"vleeskuiken":36092,"eend":1374}},{"id":"SYN-026","t":"paarden","la":52.23104,"lo":5.47501,"ark":6081,"n":2408,"m":341.6,"b":9565,"q":"A","am":0,"an":{"paard_pony":56}},{"id":"SYN-027","t":"paarden","la":52.26134,"lo":5.48862,"ark":5705,"n":1505,"m":213.5,"b":5978,"q":"A","am":0,"an":{"paard_pony":35}},{"id":"SYN-028","t":"pluimvee","la":52.19628,"lo":5.37778,"ark":7863,"n":31998,"m":690.3,"b":69033,"q":"L","am":1,"an":{"leghen":52271,"vleeskuiken":19264,"eend":920}},{"id":"SYN-029","t":"melkvee","la":52.20544,"lo":5.41289,"ark":6645,"n":14977,"m":2657.5,"b":79725,"q":"A","am":0,"an":{"melkkoe":110,"jongvee_melk":38,"stier":1}},{"id":"SYN-030","t":"geiten_schapen","la":52.19436,"lo":5.51349,"ark":10784,"n":14840,"m":1184.6,"b":33169,"q":"L","am":0,"an":{"melkgeit":1153,"overige_geit":144,"schaap":317}},{"id":"SYN-031","t":"melkvee","la":52.26489,"lo":5.41989,"ark":1013,"n":12172,"m":2109.5,"b":63285,"q":"A","am":0,"an":{"melkkoe":81,"jongvee_melk":53,"stier":1}},{"id":"SYN-032","t":"melkvee","la":52.24148,"lo":5.43195,"ark":3195,"n":10432,"m":1835.5,"b":55065,"q":"A","am":0,"an":{"melkkoe":74,"jongvee_melk":33,"stier":1}},{"id":"SYN-033","t":"vleeskalveren","la":52.26894,"lo":5.44137,"ark":2513,"n":6710,"m":1708.0,"b":51240,"q":"L","am":0,"an":{"vleeskalf":610}},{"id":"SYN-034","t":"melkvee","la":52.20008,"lo":5.40975,"ark":7226,"n":13702,"m":2331.5,"b":69945,"q":"A","am":0,"an":{"melkkoe":84,"jongvee_melk":79,"stier":1}},{"id":"SYN-035","t":"pluimvee","la":52.23151,"lo":5.41215,"ark":3756,"n":33413,"m":737.9,"b":73794,"q":"L","am":1,"an":{"leghen":45868,"vleeskuiken":35008,"eend":1088}},{"id":"SYN-036","t":"melkvee","la":52.23397,"lo":5.50678,"ark":7740,"n":15292,"m":2627.5,"b":78825,"q":"A","am":0,"an":{"melkkoe":98,"jongvee_melk":77,"stier":1}},{"id":"SYN-037","t":"melkvee","la":52.21434,"lo":5.40568,"ark":5633,"n":12907,"m":2273.5,"b":68205,"q":"A","am":0,"an":{"melkkoe":92,"jongvee_melk":40,"stier":1}},{"id":"SYN-038","t":"melkvee","la":52.27774,"lo":5.44892,"ark":3307,"n":8497,"m":1415.5,"b":42465,"q":"A","am":0,"an":{"melkkoe":47,"jongvee_melk":62,"stier":1}},{"id":"SYN-039","t":"varkens","la":52.18164,"lo":5.38002,"ark":9424,"n":20974,"m":2288.7,"b":80104,"q":"L","am":0,"an":{"fokzeug":346,"vleesvarken":1416,"big":1300}},{"id":"SYN-040","t":"geiten_schapen","la":52.18362,"lo":5.46649,"ark":9971,"n":5671,"m":445.8,"b":12482,"q":"L","am":0,"an":{"melkgeit":416,"overige_geit":46,"schaap":150}},{"id":"SYN-041","t":"melkvee","la":52.25596,"lo":5.4359,"ark":2331,"n":6367,"m":1029.5,"b":30885,"q":"A","am":0,"an":{"melkkoe":30,"jongvee_melk":60,"stier":1}},{"id":"SYN-042","t":"varkens","la":52.17873,"lo":5.42986,"ark":9741,"n":17236,"m":1847.0,"b":64644,"q":"L","am":0,"an":{"fokzeug":189,"vleesvarken":1402,"big":1170}},{"id":"SYN-043","t":"melkvee","la":52.24426,"lo":5.45301,"ark":4000,"n":7942,"m":1383.5,"b":41505,"q":"A","am":0,"an":{"melkkoe":54,"jongvee_melk":31,"stier":1}},{"id":"SYN-044","t":"melkvee","la":52.20028,"lo":5.4685,"ark":8396,"n":9217,"m":1529.5,"b":45885,"q":"A","am":0,"an":{"melkkoe":50,"jongvee_melk":70,"stier":1}},{"id":"SYN-045","t":"pluimvee","la":52.18382,"lo":5.43778,"ark":9299,"n":44488,"m":999.6,"b":99957,"q":"L","am":1,"an":{"leghen":51084,"vleeskuiken":64807,"eend":505}},{"id":"SYN-046","t":"melkvee","la":52.22009,"lo":5.51512,"ark":9009,"n":7987,"m":1335.5,"b":40065,"q":"A","am":0,"an":{"melkkoe":45,"jongvee_melk":56,"stier":1}},{"id":"SYN-047","t":"melkvee","la":52.26484,"lo":5.41224,"ark":493,"n":15982,"m":2767.5,"b":83025,"q":"A","am":0,"an":{"melkkoe":106,"jongvee_melk":71,"stier":1}},{"id":"SYN-048","t":"gemengd","la":52.22506,"lo":5.39962,"ark":4456,"n":17769,"m":2809.6,"b":83561,"q":"A","am":0,"an":{"melkkoe":100,"jongvee_vlees":41,"schaap":240,"paard_pony":36}},{"id":"SYN-049","t":"vleeskalveren","la":52.20364,"lo":5.4682,"ark":8067,"n":14542,"m":3701.6,"b":111048,"q":"L","am":0,"an":{"vleeskalf":1322}},{"id":"SYN-050","t":"gemengd","la":52.23655,"lo":5.39577,"ark":3225,"n":14250,"m":2068.2,"b":61018,"q":"A","am":0,"an":{"melkkoe":54,"jongvee_vlees":61,"schaap":247,"paard_pony":60}},{"id":"SYN-051","t":"geiten_schapen","la":52.25283,"lo":5.45337,"ark":3559,"n":11472,"m":928.4,"b":25995,"q":"L","am":0,"an":{"melkgeit":978,"overige_geit":58,"schaap":195}},{"id":"SYN-052","t":"melkvee","la":52.25453,"lo":5.45202,"ark":3405,"n":12382,"m":2143.5,"b":64305,"q":"A","am":0,"an":{"melkkoe":82,"jongvee_melk":55,"stier":1}},{"id":"SYN-053","t":"vleeskalveren","la":52.17206,"lo":5.4213,"ark":10394,"n":17017,"m":4331.6,"b":129948,"q":"L","am":0,"an":{"vleeskalf":1547}},{"id":"SYN-054","t":"varkens","la":52.2046,"lo":5.38163,"ark":6902,"n":18948,"m":2008.5,"b":70296,"q":"L","am":0,"an":{"fokzeug":161,"vleesvarken":1482,"big":1747}},{"id":"SYN-055","t":"varkens","la":52.18108,"lo":5.44541,"ark":9729,"n":27904,"m":3037.7,"b":106321,"q":"L","am":0,"an":{"fokzeug":438,"vleesvarken":1968,"big":1687}},{"id":"SYN-056","t":"varkens","la":52.17934,"lo":5.48633,"ark":11019,"n":23628,"m":2553.3,"b":89366,"q":"L","am":0,"an":{"fokzeug":313,"vleesvarken":1864,"big":1367}},{"id":"SYN-057","t":"melkvee","la":52.25318,"lo":5.39213,"ark":1579,"n":8145,"m":1446.0,"b":43380,"q":"A","am":0,"an":{"melkkoe":60,"jongvee_melk":21}},{"id":"SYN-058","t":"gemengd","la":52.22238,"lo":5.45492,"ark":5832,"n":18302,"m":2901.0,"b":86476,"q":"A","am":0,"an":{"melkkoe":104,"jongvee_vlees":56,"schaap":238,"paard_pony":22}},{"id":"SYN-059","t":"melkvee","la":52.2001,"lo":5.50299,"ark":9829,"n":9877,"m":1713.5,"b":51405,"q":"A","am":0,"an":{"melkkoe":66,"jongvee_melk":42,"stier":1}},{"id":"SYN-060","t":"varkens","la":52.21685,"lo":5.40456,"ark":5354,"n":26757,"m":2868.9,"b":100410,"q":"L","am":0,"an":{"fokzeug":279,"vleesvarken":2439,"big":1303}},{"id":"SYN-061","t":"vleeskalveren","la":52.22917,"lo":5.48176,"ark":6571,"n":11440,"m":2912.0,"b":87360,"q":"L","am":0,"an":{"vleeskalf":1040}},{"id":"SYN-062","t":"gemengd","la":52.19332,"lo":5.41945,"ark":8031,"n":10810,"m":1597.6,"b":47125,"q":"A","am":0,"an":{"melkkoe":50,"jongvee_vlees":16,"schaap":222,"paard_pony":44}},{"id":"SYN-063","t":"gemengd","la":52.21844,"lo":5.45012,"ark":6020,"n":14406,"m":1998.7,"b":58676,"q":"A","am":0,"an":{"melkkoe":48,"jongvee_vlees":50,"schaap":329,"paard_pony":73}},{"id":"SYN-064","t":"paarden","la":52.18483,"lo":5.40648,"ark":8915,"n":3182,"m":451.4,"b":12639,"q":"A","am":0,"an":{"paard_pony":74}},{"id":"SYN-065","t":"gemengd","la":52.20784,"lo":5.46066,"ark":7400,"n":13405,"m":2139.7,"b":63744,"q":"A","am":0,"an":{"melkkoe":74,"jongvee_vlees":48,"schaap":139,"paard_pony":23}},{"id":"SYN-066","t":"melkvee","la":52.19639,"lo":5.40581,"ark":7629,"n":6937,"m":1219.5,"b":36585,"q":"A","am":0,"an":{"melkkoe":49,"jongvee_melk":22,"stier":1}},{"id":"SYN-067","t":"pluimvee","la":52.17953,"lo":5.46703,"ark":10401,"n":33432,"m":730.6,"b":73056,"q":"L","am":1,"an":{"leghen":49411,"vleeskuiken":29416,"eend":652}},{"id":"SYN-068","t":"melkvee","la":52.19627,"lo":5.50791,"ark":10370,"n":12787,"m":2161.5,"b":64845,"q":"A","am":0,"an":{"melkkoe":76,"jongvee_melk":80,"stier":1}},{"id":"SYN-069","t":"melkvee","la":52.19723,"lo":5.47268,"ark":8834,"n":15772,"m":2715.5,"b":81465,"q":"A","am":0,"an":{"melkkoe":102,"jongvee_melk":77,"stier":1}},{"id":"SYN-070","t":"melkvee","la":52.19471,"lo":5.39271,"ark":7861,"n":10717,"m":1795.5,"b":53865,"q":"A","am":0,"an":{"melkkoe":61,"jongvee_melk":74,"stier":1}},{"id":"SYN-071","t":"melkvee","la":52.27116,"lo":5.45809,"ark":3677,"n":7365,"m":1258.0,"b":37740,"q":"A","am":0,"an":{"melkkoe":46,"jongvee_melk":41}},{"id":"SYN-072","t":"vleeskalveren","la":52.2221,"lo":5.48991,"ark":7495,"n":6006,"m":1528.8,"b":45864,"q":"L","am":0,"an":{"vleeskalf":546}},{"id":"SYN-073","t":"vleeskalveren","la":52.25759,"lo":5.40137,"ark":860,"n":10824,"m":2755.2,"b":82656,"q":"L","am":0,"an":{"vleeskalf":984}},{"id":"SYN-074","t":"melkvee","la":52.18227,"lo":5.43723,"ark":9457,"n":14392,"m":2579.5,"b":77385,"q":"A","am":0,"an":{"melkkoe":110,"jongvee_melk":25,"stier":1}},{"id":"SYN-075","t":"melkvee","la":52.2169,"lo":5.44259,"ark":5929,"n":11932,"m":2011.5,"b":60345,"q":"A","am":0,"an":{"melkkoe":70,"jongvee_melk":77,"stier":1}}];
+
+const TYPE_META = {
+  melkvee:        {label:"Melkvee",        color:"#4a6b4f"},
+  vleeskalveren:  {label:"Vleeskalveren",  color:"#8a5a2f"},
+  varkens:        {label:"Varkens",        color:"#c9578a"},
+  pluimvee:       {label:"Pluimvee",       color:"#c98a2c"},
+  geiten_schapen: {label:"Geiten/schapen", color:"#3e5c76"},
+  paarden:        {label:"Paarden",        color:"#7a5ea8"},
+  gemengd:        {label:"Gemengd",        color:"#5a8a8a"},
+};
+const ANIMAL_LABELS = {
+  melkkoe:"Melkkoe", vleeskalf:"Vleeskalf", jongvee_vlees:"Jongvee (vlees)", jongvee_melk:"Jongvee (melk)",
+  stier:"Stier", fokzeug:"Fokzeug", vleesvarken:"Vleesvarken", big:"Big", leghen:"Leghen",
+  vleeskuiken:"Vleeskuiken", eend:"Eend", melkgeit:"Melkgeit", overige_geit:"Overige geit",
+  schaap:"Schaap", paard_pony:"Paard/pony"
+};
+// Datakwaliteit PER DIERSOORT (v1.1, per externe review) - vaste eigenschap van
+// de RVO/literatuur-bron voor die diercategorie, niet van het individuele
+// (fictieve) bedrijf. Zie scripts/generate.py NORMS voor de brontekst per soort.
+const ANIMAL_QUALITY = {melkkoe:"A", vleeskalf:"L", jongvee_vlees:"A", jongvee_melk:"A", stier:"A", fokzeug:"A", vleesvarken:"A", big:"L", leghen:"A", vleeskuiken:"A", eend:"L", melkgeit:"A", overige_geit:"L", schaap:"A", paard_pony:"A"};
+function farmQualityMix(f){
+  const tiers = new Set(Object.keys(f.an).map(k => ANIMAL_QUALITY[k] || "L"));
+  if(tiers.size > 1) return "mixed";
+  return tiers.has("A") ? "A" : "L";
+}
+function qualityLabel(mix){
+  return mix==='A' ? 'Officiele RVO-norm' : mix==='L' ? 'Literatuur-benadering' : 'Gemengd (deels RVO, deels benadering)';
+}
+const fmt = n => Math.round(n).toLocaleString('nl-NL');
+const fmt1 = n => n.toLocaleString('nl-NL', {maximumFractionDigits:1});
+
+/* ---------------- view tabs (Kaart / Tabel) ---------------- */
+document.querySelectorAll('#view-tabs .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#view-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tabview').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tabview-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---------------- scenario: gemeenschappelijk vs. per diersector ---------------- */
+// v1.1.1 (per externe review, 2e ronde): "per diersector" werkte eerst op
+// bedrijfstype-niveau (een heel "gemengd" bedrijf viel in 1 emmer), waardoor
+// een melkvee-reductie de melkkoeien in een gemengd bedrijf niet raakte. Dit
+// is nu een echte PER-DIERCATEGORIE rekenmotor: elke diersoort heeft een
+// vaste sector, en N/mest/biogas worden per soort herberekend met dezelfde
+// coefficienten als scripts/generate.py (NORMS/BIOGAS_YIELD/MEST_DENSITY),
+// dus ook een gemengd bedrijf reageert nu correct: alleen de melkkoe/
+// jongvee_melk/stier-rijen erin krimpen bij een "melkvee"-reductie.
+const CATEGORY_INFO = {
+  melkkoe: {n:120.0, m3:22.0, type:"rundvee"},
+  vleeskalf: {n:11.0, m3:2.8, type:"rundvee"},
+  jongvee_vlees: {n:45.0, m3:6.0, type:"rundvee"},
+  jongvee_melk: {n:45.0, m3:6.0, type:"rundvee"},
+  stier: {n:67.0, m3:9.5, type:"rundvee"},
+  fokzeug: {n:20.7, m3:2.5, type:"varkens"},
+  vleesvarken: {n:7.0, m3:0.73, type:"varkens"},
+  big: {n:3.0, m3:0.3, type:"varkens"},
+  leghen: {n:0.5, m3:0.016, type:"pluimvee"},
+  vleeskuiken: {n:0.29, m3:0.011, type:"pluimvee"},
+  eend: {n:0.3, m3:0.015, type:"pluimvee"},
+  melkgeit: {n:9.4, m3:0.8, type:"overig"},
+  overige_geit: {n:6.0, m3:0.5, type:"overig"},
+  schaap: {n:9.9, m3:0.6, type:"overig"},
+  paard_pony: {n:43.0, m3:6.1, type:"overig"},
+};
+const BIOGAS_YIELD_M3_PER_TON = {rundvee:30.0, varkens:35.0, pluimvee:100.0, overig:28.0};
+const MEST_DENSITY_TON_PER_M3 = {rundvee:1.0, varkens:1.0, pluimvee:0.65, overig:1.0};
+// Sector = het scenario-slider-blok waarin een diersoort valt (voor de
+// per-diersector modus). Let op: dit is NIET hetzelfde als "manure_type"
+// hierboven (jongvee_vlees is rundvee-mesttype maar valt in de "overig"
+// scenario-sector, samen met schaap/geit/paard/vleeskalf).
+const CATEGORY_SECTOR = {
+  melkkoe:"melkvee", jongvee_melk:"melkvee", stier:"melkvee", fokzeug:"varkens", vleesvarken:"varkens", big:"varkens", leghen:"pluimvee", vleeskuiken:"pluimvee", eend:"pluimvee", vleeskalf:"overig", jongvee_vlees:"overig", melkgeit:"overig", overige_geit:"overig", schaap:"overig", paard_pony:"overig",
+};
+let scenarioMode = "uniform"; // "uniform" | "persector"
+const slider = document.getElementById('reduction');
+const pctval = document.getElementById('pctval');
+const sectorSliders = {
+  melkvee: document.getElementById('sec-melkvee'),
+  varkens: document.getElementById('sec-varkens'),
+  pluimvee: document.getElementById('sec-pluimvee'),
+  overig: document.getElementById('sec-overig'),
+};
+const sectorLabels = {
+  melkvee: document.getElementById('pv-melkvee'),
+  varkens: document.getElementById('pv-varkens'),
+  pluimvee: document.getElementById('pv-pluimvee'),
+  overig: document.getElementById('pv-overig'),
+};
+document.querySelectorAll('#mode-tabs .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#mode-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    scenarioMode = btn.dataset.mode;
+    document.getElementById('mode-uniform').hidden = scenarioMode!=='uniform';
+    document.getElementById('mode-persector').hidden = scenarioMode!=='persector';
+    renderAll();
+  });
+});
+function sectorFactor(sector){
+  if(scenarioMode==='uniform') return 1 - (Number(slider.value)/100);
+  const el = sectorSliders[sector] || sectorSliders.overig;
+  return 1 - (Number(el.value)/100);
+}
+// Herberekent N/mest/biogas voor 1 bedrijf op DIERCATEGORIE-niveau: elke
+// diersoort in f.an krijgt het krimppercentage van zijn eigen sector, niet
+// van het bedrijfstype. Zo krimpt bij een "gemengd" bedrijf alleen de
+// melkkoe/jongvee_melk/stier-rijen mee met een melkvee-reductie.
+function computeScaled(f){
+  let n = 0;
+  const manureByType = {rundvee:0, varkens:0, pluimvee:0, overig:0};
+  for(const [cat, count] of Object.entries(f.an)){
+    const info = CATEGORY_INFO[cat];
+    if(!info) continue;
+    const factor = sectorFactor(CATEGORY_SECTOR[cat] || 'overig');
+    n += count * info.n * factor;
+    manureByType[info.type] += count * info.m3 * factor;
+  }
+  let manureTon = 0, biogas = 0;
+  for(const type of Object.keys(manureByType)){
+    const ton = manureByType[type] * MEST_DENSITY_TON_PER_M3[type];
+    manureTon += ton;
+    biogas += ton * BIOGAS_YIELD_M3_PER_TON[type];
+  }
+  return {n, m: manureTon, b: biogas};
+}
+function renderKPIs(){
+  pctval.textContent = slider.value;
+  Object.entries(sectorSliders).forEach(([sec, el])=>{ sectorLabels[sec].textContent = el.value; });
+  let sumN=0,sumM=0,sumB=0;
+  FARMS.forEach(f=>{ const s=computeScaled(f); sumN+=s.n; sumM+=s.m; sumB+=s.b; });
+  document.getElementById('kpi-n').textContent = fmt(sumN);
+  document.getElementById('kpi-m').textContent = fmt(sumM);
+  document.getElementById('kpi-b').textContent = fmt(sumB);
+}
+function renderAll(){
+  renderKPIs();
+  if(selectedId){
+    const f=FARMS.find(x=>x.id===selectedId);
+    if(f){
+      if(typeof detail!=='undefined' && !detail.hidden) showMapDetail(f);
+      if(typeof selectTableFarm==='function') selectTableFarm(selectedId);
+    }
+  }
+  if(typeof renderMapSizes==='function') renderMapSizes();
+}
+slider.addEventListener('input', renderAll);
+Object.values(sectorSliders).forEach(el => el.addEventListener('input', renderAll));
+
+/* ---------------- KAART tab ---------------- */
+const LAT_MIN=52.170, LAT_MAX=52.280, LON_MIN=5.370, LON_MAX=5.525;
+const PAD=54, W=720, H=640;
+function project(lat, lon){
+  const x = PAD + (lon-LON_MIN)/(LON_MAX-LON_MIN) * (W-2*PAD);
+  const y = PAD + (LAT_MAX-lat)/(LAT_MAX-LAT_MIN) * (H-2*PAD-40);
+  return [x,y];
+}
+const ARK_REF = project(52.265, 5.405);
+
+const svg = document.getElementById('map');
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+
+const boundaryPts = [
+  [5.378,52.183],[5.390,52.174],[5.420,52.171],[5.460,52.174],[5.490,52.178],
+  [5.510,52.188],[5.520,52.205],[5.515,52.225],[5.505,52.242],[5.495,52.258],
+  [5.475,52.272],[5.450,52.278],[5.420,52.276],[5.395,52.265],[5.383,52.245],
+  [5.376,52.220],[5.375,52.200]
+];
+const boundaryD = "M " + boundaryPts.map(([lo,la])=>project(la,lo).join(",")).join(" L ") + " Z";
+svg.appendChild(el('path',{d:boundaryD, class:'boundary'}));
+svg.appendChild(el('circle',{cx:ARK_REF[0], cy:ARK_REF[1], r:46, class:'ark-zone'}));
+svg.appendChild(el('text',{x:ARK_REF[0], y:ARK_REF[1]-52, class:'map-label', 'text-anchor':'middle'})).textContent = "Arkemheen (indicatief)";
+for(let lat=52.18; lat<=52.27; lat+=0.03){
+  const [,y] = project(lat, LON_MIN);
+  svg.appendChild(el('line',{x1:PAD-6,y1:y,x2:W-PAD,y2:y,class:'grat-line'}));
+  const t = el('text',{x:8,y:y+3,class:'map-label'}); t.textContent = lat.toFixed(2)+"°N"; svg.appendChild(t);
+}
+for(let lon=5.39; lon<=5.51; lon+=0.04){
+  const [x,] = project(LAT_MIN, lon);
+  svg.appendChild(el('line',{x1:x,y1:PAD-6,x2:x,y2:H-PAD-34,class:'grat-line'}));
+  const t = el('text',{x:x-14,y:H-PAD-18,class:'map-label'}); t.textContent = lon.toFixed(2)+"°O"; svg.appendChild(t);
+}
+const capt = el('text',{x:W/2,y:H-14,class:'map-label','text-anchor':'middle'});
+capt.textContent = "Schematische weergave (geen kadastrale kaart) — puntlocaties zijn fictief, zie waarschuwing hierboven";
+svg.appendChild(capt);
+
+const dotsLayer = el('g',{}); svg.appendChild(dotsLayer);
+const farmDots = {};
+function radiusFor(m){ return Math.max(3.5, Math.min(15, Math.sqrt(m)/4.2)); }
+FARMS.forEach(f=>{
+  const [x,y] = project(f.la, f.lo);
+  const meta = TYPE_META[f.t] || {color:"#888"};
+  const c = el('circle',{cx:x,cy:y,r:radiusFor(f.m),fill:meta.color,'fill-opacity':0.82,class:'farm-dot','data-type':f.t});
+  if(f.am){ c.setAttribute('stroke', 'var(--accent-2)'); c.setAttribute('stroke-width','2'); }
+  c.addEventListener('click', ()=>showMapDetail(f));
+  dotsLayer.appendChild(c);
+  farmDots[f.id] = c;
+});
+function renderMapSizes(){
+  FARMS.forEach(f=>{
+    const s = computeScaled(f);
+    farmDots[f.id].setAttribute('r', radiusFor(s.m));
+  });
+}
+
+const legend = document.getElementById('legend');
+const activeTypes = new Set(Object.keys(TYPE_META));
+Object.entries(TYPE_META).forEach(([key,meta])=>{
+  const row = document.createElement('label'); row.className='legend-row';
+  row.innerHTML = `<input type="checkbox" checked data-type="${key}"><span class="dot" style="background:${meta.color}"></span>${meta.label}`;
+  legend.appendChild(row);
+});
+legend.addEventListener('change', e=>{
+  const t = e.target.getAttribute('data-type');
+  if(!t) return;
+  if(e.target.checked) activeTypes.add(t); else activeTypes.delete(t);
+  renderMapFilter();
+});
+
+const detail = document.getElementById('detail');
+document.getElementById('detail-close').addEventListener('click', ()=>{ detail.hidden = true; });
+function showMapDetail(f){
+  document.getElementById('d-id').textContent = f.id + " (fictief)";
+  const mix = farmQualityMix(f);
+  const tags = document.getElementById('d-tags');
+  tags.innerHTML = `<span class="tag ${mix!=='A'?'approx':''}">${qualityLabel(mix)}</span>` +
+                    (f.am ? `<span class="tag warn">Amoniakinhibitie-risico</span>` : '');
+  const at = document.getElementById('d-animals');
+  at.innerHTML = Object.entries(f.an).map(([k,v])=>{
+    const tier = ANIMAL_QUALITY[k] || 'L';
+    return `<tr><td>${ANIMAL_LABELS[k]||k} <span class="tag ${tier==='L'?'approx':''}" style="margin:0;padding:1px 5px;font-size:.6rem">${tier==='A'?'RVO':'APPROX'}</span></td><td class="v">${v.toLocaleString('nl-NL')}</td></tr>`;
+  }).join('');
+  const s = computeScaled(f);
+  document.getElementById('d-n').textContent = fmt(s.n)+" kg";
+  document.getElementById('d-m').textContent = fmt(s.m)+" ton";
+  document.getElementById('d-b').textContent = fmt(s.b)+" m³";
+  document.getElementById('d-ark').textContent = f.ark.toLocaleString('nl-NL')+" m";
+  detail.hidden = false;
+}
+function renderMapFilter(){
+  let count=0;
+  FARMS.forEach(f=>{
+    const visible = activeTypes.has(f.t);
+    farmDots[f.id].classList.toggle('muted', !visible);
+    if(visible) count++;
+  });
+}
+
+/* ---------------- TABEL tab ---------------- */
+const tSearch = document.getElementById('t-search');
+const tType = document.getElementById('t-type');
+const tQuality = document.getElementById('t-quality');
+const tBody = document.getElementById('t-body');
+const tCount = document.getElementById('t-count');
+const tDetail = document.getElementById('t-detail');
+let selectedId = null;
+
+Object.entries(TYPE_META).forEach(([key,meta])=>{
+  const o = document.createElement('option'); o.value=key; o.textContent=meta.label;
+  tType.appendChild(o);
+});
+
+function tFiltered(){
+  const q = tSearch.value.toLowerCase().trim();
+  const t = tType.value;
+  const qm = tQuality.value;
+  return FARMS.filter(f =>
+    (!q || f.id.toLowerCase().includes(q)) &&
+    (t==='all' || f.t===t) &&
+    (qm==='all' || farmQualityMix(f)===qm)
+  );
+}
+function renderTable(){
+  const list = tFiltered();
+  tBody.innerHTML = list.map(f => {
+    const mix = farmQualityMix(f);
+    const qLabel = mix==='A' ? 'OFFICIAL_RVO' : mix==='L' ? 'LITERATURE_APPROX' : 'GEMENGD';
+    return `<tr data-id="${f.id}" class="${f.id===selectedId?'sel':''}">
+      <td><b>${f.id}</b></td>
+      <td>${(TYPE_META[f.t]||{}).label||f.t}</td>
+      <td>${fmt(f.n)}</td>
+      <td>${fmt1(f.m)}</td>
+      <td>${fmt(f.b)}</td>
+      <td>${fmt(f.ark)} m</td>
+      <td>${qLabel}</td>
+      <td class="${f.am?'warn-cell':''}">${f.am?'JA':'—'}</td>
+    </tr>`;
+  }).join('');
+  tCount.textContent = `${list.length} / ${FARMS.length}`;
+  Array.from(tBody.querySelectorAll('tr')).forEach(tr=>{
+    tr.addEventListener('click', ()=> selectTableFarm(tr.dataset.id));
+  });
+}
+function selectTableFarm(id){
+  selectedId = id;
+  const f = FARMS.find(x=>x.id===id);
+  if(!f) return;
+  Array.from(tBody.querySelectorAll('tr')).forEach(tr=> tr.classList.toggle('sel', tr.dataset.id===id));
+  const speciesHtml = Object.entries(f.an)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([k,v])=>{
+      const tier = ANIMAL_QUALITY[k] || 'L';
+      return `<div class="sp"><div class="meta">${ANIMAL_LABELS[k]||k} <span class="pill ${tier==='A'?'g':'a'}" style="font-size:.6rem;padding:1px 5px">${tier==='A'?'RVO':'APPROX'}</span></div><b>${v.toLocaleString('nl-NL')}</b><div class="meta">dieren</div></div>`;
+    }).join('');
+  const mix = farmQualityMix(f);
+  const qPill = mix==='A' ? '<span class="pill g">OFFICIAL_RVO</span>' : mix==='L' ? '<span class="pill a">LITERATURE_APPROX</span>' : '<span class="pill a">GEMENGD (per soort, zie hierboven)</span>';
+  const warnPill = f.am ? '<span class="pill r">JA</span>' : '<span class="pill g">NEE</span>';
+  const s = computeScaled(f);
+  const changed = Math.round(s.n) !== f.n || Math.abs(s.m - f.m) > 0.05;
+  tDetail.innerHTML = `
+    <h3 style="margin-bottom:2px">${f.id}</h3>
+    <div class="axis-hint" style="margin-bottom:8px">${(TYPE_META[f.t]||{}).label||f.t} • fictief • ${fmt(f.ark)} m tot indicatief referentiepunt</div>
+    <div class="species-grid">${speciesHtml}</div>
+    <div class="row"><span>N-excretie (baseline)</span><b>${fmt(f.n)} kg</b></div>
+    <div class="row"><span>Mestvolume (baseline)</span><b>${fmt1(f.m)} ton</b></div>
+    <div class="row"><span>Biogaspotentieel (baseline)</span><b>${fmt(f.b)} m³</b></div>
+    ${changed ? `<div class="row"><span>Bij huidig scenario (per diersoort)</span><b>${fmt(s.n)} kg N • ${fmt1(s.m)} ton • ${fmt(s.b)} m³</b></div>` : ''}
+    <div class="row"><span>Datakwaliteit</span>${qPill}</div>
+    <div class="row"><span>NH₃-inhibitie</span>${warnPill}</div>`;
+}
+[tSearch, tType, tQuality].forEach(elm => elm.addEventListener('input', renderTable));
+
+/* ---------------- init ---------------- */
+renderKPIs();
+renderMapFilter();
+renderTable();
+selectTableFarm(FARMS[0].id);
+</script>

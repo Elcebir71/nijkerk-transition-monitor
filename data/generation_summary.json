@@ -1,0 +1,40 @@
+{
+  "check": {
+    "melkkoe": 2612,
+    "vleeskalf": 7157,
+    "jongvee_vlees": 334,
+    "jongvee_melk": 1625,
+    "stier": 22,
+    "fokzeug": 2903,
+    "vleesvarken": 16522,
+    "big": 15353,
+    "leghen": 374962,
+    "vleeskuiken": 334373,
+    "eend": 8628,
+    "melkgeit": 5842,
+    "overige_geit": 530,
+    "schaap": 2843,
+    "paard_pony": 553
+  },
+  "real_2023": {
+    "melkkoe": 3074,
+    "vleeskalf": 8421,
+    "jongvee_vlees": 394,
+    "jongvee_melk": 1912,
+    "stier": 26,
+    "fokzeug": 3416,
+    "vleesvarken": 19438,
+    "big": 18063,
+    "leghen": 441132,
+    "vleeskuiken": 393380,
+    "eend": 10151,
+    "melkgeit": 6874,
+    "overige_geit": 624,
+    "schaap": 3346,
+    "paard_pony": 651
+  },
+  "target_fraction": 0.85,
+  "total_n_kg": 1100659,
+  "total_manure_ton": 129783.40000000001,
+  "total_biogas_m3": 4439301
+}
