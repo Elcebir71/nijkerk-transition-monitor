@@ -54,6 +54,16 @@ CBS_CAVEATS = [
 # Other sources (used by later scripts)
 RIVM_GDN_BASE_URL = "https://data.rivm.nl/data/gcn"
 RIVM_GDN_FILES = ["depo_NTOT_2025.zip", "depo_NHx_2025.zip", "depo_NOy_2025.zip"]
+# PDOK: municipal boundary (Kadaster, Bestuurlijke Gebieden). Coordinates are EPSG:28992 (metres).
+PDOK_MUNICIPALITY_WFS = "https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0"
+PDOK_MUNICIPALITY_LAYER = "bestuurlijkegebieden:Gemeentegebied"
+PDOK_MUNICIPALITY_CODE = "0267"
+# Small box around Nijkerk town, only used to find the boundary feature.
+MUNICIPALITY_SEED_BBOX = (157000, 465000, 163000, 472000)
+
+# PDOK: Natura 2000 boundaries (RVO). Licence CC0.
 PDOK_NATURA2000_WFS = "https://service.pdok.nl/rvo/natura2000/wfs/v1_0"
 PDOK_NATURA2000_LAYER = "natura2000:natura2000"
 NATURA2000_SEARCH_RADIUS_M = 15000
+# Codes used in the "beschermin" attribute. Unknown codes are passed through unchanged.
+NATURA2000_PROTECTION_LABELS = {"VR": "Vogelrichtlijn", "HR": "Habitatrichtlijn"}
