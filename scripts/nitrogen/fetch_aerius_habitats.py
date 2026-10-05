@@ -152,12 +152,14 @@ def main() -> None:
         "type": "FeatureCollection",
         "source": {
             "publisher": "RIVM, AERIUS open data",
-            "dataset": "Relevante habitatkartering",
+            "dataset": "AERIUS relevante habitatkartering",
+            "description_nl": "De stikstofgevoelige habitattypen binnen een Natura 2000-gebied die ook daadwerkelijk relevant zijn bevonden voor AERIUS",
+            "record": config.AERIUS_HABITAT_RECORD,
             "layer": config.AERIUS_HABITAT_LAYER,
             "url": config.AERIUS_WFS,
             "info": config.AERIUS_PRODUCT_PAGE,
-            "version": "As served on the fetch date. AERIUS 2025 was the current release when this script was written.",
-            "licence": "See the Nationaal Georegister record of this dataset (not checked for this layer yet)",
+            "version": "As served on the fetch date. The register record describes the AERIUS 2025 release (published 2025-10-07).",
+            "licence": "Public domain (Creative Commons Public Domain Mark 1.0), no restrictions, per the Nationaal Georegister record",
             "fetched_on": fetched_on,
         },
         "notes": [
@@ -168,9 +170,10 @@ def main() -> None:
             f"Map area: the bounding box of {config.MUNICIPALITY_NAME} plus {config.SURROUNDINGS_RADIUS_M / 1000:.0f} km. Areas are computed on the unsimplified data.",
             f"Drawn shapes: all relevant habitat types of an area merged, parts under {DRAW_MIN_PART_M2 / 10000:g} ha left out, "
             f"holes under {DRAW_MIN_HOLE_M2 / 10000:g} ha filled, simplified to {DRAW_SIMPLIFY_M} m. For display only.",
-            "Codes: H = habitat type; ZGH = search area (indications, but no certainty, that the habitat type is present).",
+            "Codes: H = habitat type; ZGH = search area (indications, but no certainty, that the habitat type is present); "
+            "Lg = nitrogen-sensitive habitat of Birds and Habitats Directive species (leefgebied).",
             "service_reply lists every Natura 2000 area the service returned for the bounding box; the query is by location, not by area name.",
-            "Still to verify from the AERIUS documentation: the exact criteria for 'relevant' and the codes starting with Lg or L.",
+            "Still to verify from the AERIUS documentation: the exact criteria for 'relevant' and the code L4030.",
         ],
         "service_reply": [
             {"natura2000_area": name, **{k: (round(v, 1) if isinstance(v, float) else v) for k, v in counts.items()}}

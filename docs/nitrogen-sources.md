@@ -79,6 +79,13 @@ The land-use row is not needed for v1.
   spatial allocation. Shown on the page as a note, not explained.
 - **Units:** kg of the substance per year; NOx expressed as NO₂. Not
   comparable with deposition in mol N.
+- **Spatial allocation (Emissieregistratie, "Ruimtelijke verdeling van
+  emissies over Nederland"):** emissions are distributed with
+  "verdeelsleutels, waarbij de verdeling wordt benaderd via gegevens die een
+  sterk verband hebben met de emissiebronnen". For large point sources
+  "zijn emissie en locatie beide bekend". For road traffic "wordt
+  bijvoorbeeld de verkeersintensiteit gebruikt". Municipal figures are
+  therefore allocations, not measurements, and include through traffic.
 - **Terms of use (from the export):** reuse allowed with source attribution;
   no rights can be derived from the data.
 - **Script:** `scripts/nitrogen/load_emissions.py` (needs `openpyxl`)
@@ -137,13 +144,20 @@ The land-use row is not needed for v1.
   municipality; distance to the nearest mapped habitat.
 - **May not calculate:** an own comparison of KDW with the RIVM 1x1 km map.
   If exceedance is shown later, use the flags AERIUS publishes per hexagon.
+- **Official description (Nationaal Georegister):** "Deze webservice bevat
+  de stikstofgevoelige habitattypen binnen een Natura2000-[ge]bied die ook
+  daadwerkelijk relevant zijn bevonden voor AERIUS 2025". Published
+  2025-10-07. Licence: public domain (CC Public Domain Mark 1.0), no
+  restrictions. The page wording "relevante stikstofgevoelige habitattypen"
+  follows this description.
 - **Codes:** H = habitat type. ZGH = search area: indications, but no
   certainty, that the type is present (source: BIJ12 Methodiekdocument
-  kartering habitattypen). Lg and L = species habitats (leefgebieden); this
-  reading is not yet backed by a quoted source.
+  kartering habitattypen). Lg = "stikstofgevoelige leefgebieden van soorten
+  van de Vogel- en Habitatrichtlijn" (source: natura2000.nl,
+  herstelstrategieën; Lg13 and Lg14 match the names in the data).
 - **To verify:** the exact criteria for "relevant"; whether the threshold is
-  a KDW below 2,400 mol; the licence of this specific layer; the meaning of
-  the hexagon fields `exceeding` and `above_cl`.
+  a KDW below 2,400 mol; the code `L4030` (not found in the sources checked);
+  the meaning of the hexagon fields `exceeding` and `above_cl`.
 - **Note on years:** AERIUS deposition per hexagon is for 2023, the RIVM GDN
   map on the page is for 2025. Do not combine them in one figure.
 - **Script:** `scripts/nitrogen/fetch_aerius_habitats.py`. The download is

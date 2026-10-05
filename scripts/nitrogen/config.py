@@ -98,6 +98,7 @@ ER_SUBSTANCES = {
 AERIUS_WFS = "https://connect.aerius.nl/opendata/wfs"
 AERIUS_HABITAT_LAYER = "base_geometries:relevant_habitats"
 AERIUS_PRODUCT_PAGE = "https://www.aeriusproducten.nl/producten/aerius-monitor"
+AERIUS_HABITAT_RECORD = "https://www.nationaalgeoregister.nl/geonetwork/srv/api/records/4e214ddf-4384-42a3-89d9-4074541b640d"
 # PDOK: municipal boundary (Kadaster, Bestuurlijke Gebieden). Coordinates are EPSG:28992 (metres).
 PDOK_MUNICIPALITY_WFS = "https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0"
 PDOK_MUNICIPALITY_LAYER = "bestuurlijkegebieden:Gemeentegebied"
