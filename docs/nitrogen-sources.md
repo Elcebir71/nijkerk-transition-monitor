@@ -33,10 +33,11 @@ be Gelderland sources. The main nitrogen-sensitive Natura 2000 context is the
 | NOx emissie | Emissieregistratie (RIVM e.a.) | Reeks 1990–2024 | Municipal level to verify | 1990–2024 | CSV (manual export) | Emissie | Partly verified |
 | Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National 1x1 km grid, clipped to Nijkerk + 15 km | 2025; prognosis 2030–2040 | Zip with ESRI ASCII grid, EPSG:28992 | Weergave | Verified |
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
-| Depositie per habitat | AERIUS Monitor | To determine | Veluwe | – | – | Weergave | Not checked |
+| Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on fetch date (AERIUS 2025) | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
+| Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | Deposition year 2023 | WFS | Not used yet | Fields seen, definitions not verified |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
 
-The last two rows are not needed for v1.
+The land-use row is not needed for v1.
 
 ## Per source
 
@@ -106,16 +107,46 @@ The last two rows are not needed for v1.
   (VR+HR) lies about 0.7 km outside the boundary.
 - **Script:** `scripts/nitrogen/fetch_natura2000.py`
 
+### 5. AERIUS: nitrogen-sensitive habitat types
+
+- **Where:** `https://connect.aerius.nl/opendata/wfs`, layer
+  `base_geometries:relevant_habitats`. Product information:
+  <https://www.aeriusproducten.nl/producten/aerius-monitor>
+- **What it means:** per Natura 2000 area and habitat type, the mapped
+  polygons that AERIUS treats as relevant (nitrogen-sensitive), with the
+  critical deposition value (KDW, mol N per ha per year) and a coverage
+  fraction per polygon. Covers Natura 2000 areas only.
+- **Result for the map area (2026-10-05):** 33 habitat types and species
+  habitats, all in the Veluwe, 39,436 ha mapped; KDW from 500 to 2,399.
+  Inside the municipality of Nijkerk: 0 ha. Arkemheen, Veluwerandmeren and
+  Eemmeer & Gooimeer Zuidoever have no relevant types in the map area.
+- **May calculate:** area of mapped habitat in the map area and inside the
+  municipality; distance to the nearest mapped habitat.
+- **May not calculate:** an own comparison of KDW with the RIVM 1x1 km map.
+  If exceedance is shown later, use the flags AERIUS publishes per hexagon.
+- **Codes:** H = habitat type. ZGH = search area: indications, but no
+  certainty, that the type is present (source: BIJ12 Methodiekdocument
+  kartering habitattypen). Lg and L = species habitats (leefgebieden); this
+  reading is not yet backed by a quoted source.
+- **To verify:** the exact criteria for "relevant"; whether the threshold is
+  a KDW below 2,400 mol; the licence of this specific layer; the meaning of
+  the hexagon fields `exceeding` and `above_cl`.
+- **Note on years:** AERIUS deposition per hexagon is for 2023, the RIVM GDN
+  map on the page is for 2025. Do not combine them in one figure.
+- **Script:** `scripts/nitrogen/fetch_aerius_habitats.py`. The download is
+  kept in `data/nitrogen/raw/` (not committed) and reused on later runs.
+
 ## The page
 
-`nitrogen.html` shows the three working layers. It reads one file,
+`nitrogen.html` shows the four working layers. It reads one file,
 `data/nitrogen/processed/nitrogen_data.js`, which `scripts/nitrogen/build_page_data.py`
 makes by copying the processed files as they are. Run order:
 
 1. `fetch_cbs_livestock.py`
 2. `fetch_natura2000.py`
 3. `fetch_rivm_deposition.py`
-4. `build_page_data.py`
+4. `fetch_aerius_habitats.py`
+5. `build_page_data.py`
 
 The map area is the bounding box of the municipality plus 15 km. Natura 2000
 areas are listed when they intersect that area. The Emissieregistratie layer
@@ -123,6 +154,5 @@ is shown on the page as "not added yet".
 
 ## Still needed
 
-- A cited source for which nearby Natura 2000 areas are nitrogen-sensitive.
 - Province of Gelderland policy documents, to replace the Utrecht references
   in the original project sketch.

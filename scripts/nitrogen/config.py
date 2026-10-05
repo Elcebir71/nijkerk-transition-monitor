@@ -81,6 +81,12 @@ RIVM_GDN_METADATA = {
     "report": "Mijnen-Visser et al., Grootschalige concentratie- en depositiekaarten Nederland, Rapportage juni 2026",
 }
 MOL_N_TO_KG = 14.007 / 1000
+
+# AERIUS open data (RIVM): nitrogen-sensitive ("relevant") habitat types in Natura 2000 areas.
+# Layer and field names were read from the live service with inspect_aerius.py on 2026-10-05.
+AERIUS_WFS = "https://connect.aerius.nl/opendata/wfs"
+AERIUS_HABITAT_LAYER = "base_geometries:relevant_habitats"
+AERIUS_PRODUCT_PAGE = "https://www.aeriusproducten.nl/producten/aerius-monitor"
 # PDOK: municipal boundary (Kadaster, Bestuurlijke Gebieden). Coordinates are EPSG:28992 (metres).
 PDOK_MUNICIPALITY_WFS = "https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0"
 PDOK_MUNICIPALITY_LAYER = "bestuurlijkegebieden:Gemeentegebied"
