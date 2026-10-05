@@ -82,6 +82,17 @@ RIVM_GDN_METADATA = {
 }
 MOL_N_TO_KG = 14.007 / 1000
 
+# Emissieregistratie: manual export (no API). See load_emissions.py for the export steps.
+ER_EXPORT_PAGE = "https://www.emissieregistratie.nl/data/data-export"
+ER_EXPORT_PATTERN = "ER_DataExport*.xlsx"
+ER_AREA_CODE = "0267"   # Code_gebied of Nijkerk in the export
+ER_NON_MUNICIPAL_CODES = {"9999"}   # "Noordzee": in the export, but not a municipality
+# Stofcode in the export -> key used on the page
+ER_SUBSTANCES = {
+    "301": {"id": "nh3", "label_nl": "Ammoniak", "formula": "NH₃", "unit_nl": "ton NH₃"},
+    "305": {"id": "nox", "label_nl": "Stikstofoxiden", "formula": "NOx", "unit_nl": "ton NOx (als NO₂)"},
+}
+
 # AERIUS open data (RIVM): nitrogen-sensitive ("relevant") habitat types in Natura 2000 areas.
 # Layer and field names were read from the live service with inspect_aerius.py on 2026-10-05.
 AERIUS_WFS = "https://connect.aerius.nl/opendata/wfs"

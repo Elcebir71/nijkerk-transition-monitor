@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Stikstofmonitor Nijkerk</title>
-<meta name="description" content="Openbare cijfers over veestapel, stikstofdepositie en natuur in en rond Nijkerk, met bron en beperkingen.">
+<meta name="description" content="Openbare cijfers over veestapel, stikstofemissies, stikstofdepositie en natuur in en rond Nijkerk, met bron en beperkingen.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 /* Same design tokens as index.html (Transitie Monitor), plus chart colours.
@@ -132,6 +132,9 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .chart-legend span{display:inline-flex;align-items:center;gap:7px}
 .lk{width:18px;height:0;border-top:2px solid var(--series-1);display:inline-block}
 .lk.ctx{border-top-color:var(--muted)}
+.lk.s2{border-top-color:var(--series-2)}
+.charts.em-charts{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),440px))}
+.em-table-title{font-weight:600;font-size:.86rem;margin:12px 0 6px}
 .glyph{width:9px;height:9px;display:inline-block;background:var(--ink-dim)}
 .glyph.brk{transform:rotate(45deg)}
 .glyph.evt{border-radius:50%}
@@ -145,8 +148,9 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .axisline{stroke:var(--axis);stroke-width:1}
 .tick{font:400 10.5px "IBM Plex Sans",system-ui,sans-serif;fill:var(--muted);font-variant-numeric:tabular-nums}
 .line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
-.line.s1{stroke:var(--series-1)} .line.ctx{stroke:var(--muted)}
-.dot.s1{fill:var(--series-1)} .dot.ctx{fill:var(--muted)}
+.line.s1{stroke:var(--series-1)} .line.s2{stroke:var(--series-2)} .line.ctx{stroke:var(--muted)}
+.dot.s1{fill:var(--series-1)} .dot.s2{fill:var(--series-2)} .dot.ctx{fill:var(--muted)}
+.yeartick{stroke:var(--axis);stroke-width:1}
 .dot{stroke:var(--panel);stroke-width:2}
 .endlabel{font:600 11px "IBM Plex Sans",system-ui,sans-serif;fill:var(--ink)}
 .marker line{stroke:var(--ink-dim);stroke-width:1;stroke-dasharray:3 3}
@@ -180,12 +184,12 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   <header class="top">
     <div>
       <h1>Stikstofmonitor Nijkerk</h1>
-      <div class="subtitle">Openbare cijfers over veestapel, stikstofdepositie en natuur in en rond Nijkerk, overzichtelijk en controleerbaar bij elkaar gebracht. Een onafhankelijk dataproject van een inwoner.</div>
+      <div class="subtitle">Openbare cijfers over veestapel, stikstofemissies, stikstofdepositie en natuur in en rond Nijkerk, overzichtelijk en controleerbaar bij elkaar gebracht. Een onafhankelijk dataproject van een inwoner.</div>
     </div>
     <a class="backlink" href="index.html">Naar de Transitie Monitor (synthetische demodata)</a>
   </header>
 
-  <div class="principle"><strong>Alleen echte, openbare data.</strong> Deze pagina toont cijfers zoals CBS, RIVM en PDOK ze publiceren, met bron, peildatum en beperkingen erbij. Ik reken niet zelf aan depositie en leg geen verband tussen dieraantallen en depositie.</div>
+  <div class="principle"><strong>Alleen echte, openbare data.</strong> Deze pagina toont cijfers zoals CBS, RIVM, de Emissieregistratie en PDOK ze publiceren, met bron, peildatum en beperkingen erbij. Ik reken niet zelf aan depositie en leg geen verband tussen dieraantallen en depositie.</div>
 
   <div class="missing" id="missing" hidden>
     <strong>Het databestand ontbreekt.</strong> Voer in de map van het project <code>python scripts/nitrogen/build_page_data.py</code> uit en laad deze pagina opnieuw.
@@ -251,6 +255,23 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     </div>
   </section>
 
+  <section class="panel" id="emissies" hidden>
+    <h2>Emissies van ammoniak en stikstofoxiden, <span id="em-period"></span></h2>
+    <p class="lede">Cijfers van de Emissieregistratie voor de gemeente Nijkerk, per sector. Emissie is wat hier vrijkomt; depositie (de kaart hierboven) is wat hier neerkomt. Dat zijn verschillende grootheden met verschillende eenheden. Deze pagina rekent de een niet om naar de ander.</p>
+    <div class="chart-legend" id="em-legend" style="margin-top:12px"></div>
+    <div class="charts em-charts" id="em-charts"></div>
+    <ul class="notes" style="margin-top:14px" id="em-notes">
+      <li><strong>Plaats van uitstoot.</strong> De emissies zijn toegerekend aan de plaats waar ze vrijkomen. Bij verkeer telt dus ook doorgaand verkeer op wegen binnen de gemeente mee.</li>
+      <li><strong>Toedeling, geen meting.</strong> De cijfers per gemeente komen grotendeels uit een ruimtelijke verdeling van landelijk berekende emissies; het zijn geen metingen per gemeente.</li>
+      <li><strong>Jaren.</strong> Tot 2015 bevat de export alleen elk vijfde jaar. De lijnen daartussen verbinden de punten; het zijn geen cijfers. De streepjes onder de as geven de jaren met een cijfer aan.</li>
+      <li><strong>Eenheid.</strong> Ton per jaar van de stof zelf. Stikstofoxiden zijn door de Emissieregistratie uitgedrukt als NO₂.</li>
+    </ul>
+    <details>
+      <summary>Tabellen met alle sectoren</summary>
+      <div id="em-tables"></div>
+    </details>
+  </section>
+
   <section class="panel" id="veestapel">
     <h2>Veestapel en landbouwbedrijven, <span id="ls-period"></span></h2>
     <p class="lede">Cijfers uit de Landbouwtelling van het CBS. Let op de formulering: het CBS telt dieren bij landbouwbedrijven met hun hoofdvestiging in Nijkerk; de dieren zelf kunnen elders staan. Peildatum is 1 april.</p>
@@ -291,6 +312,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
           <li>Geen individuele bedrijven tonen.</li>
           <li>Geen eigen oordeel over welke natuur stikstofgevoelig is; de pagina toont de kartering van AERIUS.</li>
           <li>Geen eigen vergelijking van depositie met kritische depositiewaarden.</li>
+          <li>Geen omrekening van emissie naar depositie.</li>
           <li>Geen kostenberekeningen.</li>
         </ul>
       </div>
@@ -862,6 +884,165 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   });
 
   // =====================================================================
+  // 3b. Emissions by sector (Emissieregistratie)
+  // =====================================================================
+  var EM = D.emissions || null;
+  if (EM) {
+    var eYears = EM.years, GROUPS = [
+      { key: 'Landbouw', label: 'Landbouw', cls: 's1' },
+      { key: 'Verkeer en vervoer', label: 'Verkeer en vervoer', cls: 's2' },
+      { key: null, label: 'Overige sectoren', cls: 'ctx' }
+    ];
+    var ton = function (kg) { return kg === null || kg === undefined ? null : kg / 1000; };
+    var fmtTon = function (v) { return v === null || v === undefined ? 'geen cijfer' : (v < 10 ? nf1.format(v) : nf0.format(v)) + ' ton'; };
+    $('#emissies').hidden = false;
+    $('#em-period').textContent = eYears[0] + '–' + eYears[eYears.length - 1];
+    GROUPS.forEach(function (g) {
+      var sp = document.createElement('span'); sp.appendChild(h('span', 'lk' + (g.cls === 's1' ? '' : ' ' + g.cls))); sp.appendChild(document.createTextNode(g.label)); $('#em-legend').appendChild(sp);
+    });
+
+    var drawEmission = function (card, sub) {
+      // Years before the dominant sector has figures are left out of the chart.
+      var skip = sub.years_without_dominant_sector || [];
+      var idx = []; eYears.forEach(function (y, i) { if (skip.indexOf(y) < 0) idx.push(i); });
+      var y0 = eYears[idx[0]], y1 = eYears[idx[idx.length - 1]];
+      var named = GROUPS.filter(function (g) { return g.key; }).map(function (g) { return g.key; });
+      var series = GROUPS.map(function (g) {
+        var values = idx.map(function (i) {
+          if (g.key) return ton(sub.sectors[g.key] ? sub.sectors[g.key][i] : null);
+          var sum = null;
+          Object.keys(sub.sectors).forEach(function (sec) { var v = sub.sectors[sec][i]; if (named.indexOf(sec) < 0 && v !== null) sum = (sum || 0) + v; });
+          return ton(sum);
+        });
+        return { name: g.label, cls: g.cls, values: values };
+      });
+      var totals = idx.map(function (i) { return ton(sub.total[i]); });
+      var max = 0; series.forEach(function (sr) { sr.values.forEach(function (v) { if (v !== null && v > max) max = v; }); });
+      var step = niceStep(max || 1), top = Math.ceil(max / step) * step;
+      var xOfY = function (year) { return m.l + pw * (year - y0) / (y1 - y0); };
+      var yOf = function (v) { return m.t + ph - ph * v / top; };
+      var last = idx.length - 1;
+
+      card.appendChild(h('h4', null, sub.label_nl + ' (' + sub.formula + ')'));
+      var now = h('div', 'now'), domI = eYears.indexOf(y1), dom = sub.sectors[sub.dominant_sector][domI];
+      now.appendChild(document.createTextNode(y1 + ': '));
+      now.appendChild(h('b', null, nf0.format(totals[last])));
+      now.appendChild(document.createTextNode(' ' + sub.unit_nl + ', waarvan ' + nf0.format(dom / sub.total[domI] * 100) + '% ' + sub.dominant_sector.toLowerCase()));
+      card.appendChild(now);
+
+      var svg = s('svg', { viewBox: '0 0 ' + CW + ' ' + CH, 'class': 'chart-svg', tabindex: '0', role: 'img' });
+      svg.setAttribute('aria-label', sub.label_nl + ' per sector, ' + y0 + ' tot ' + y1 + '. Gebruik de pijltjestoetsen om per jaar te lezen; alle cijfers staan ook in de tabellen onder de grafieken.');
+      for (var v = 0; v <= top + 1e-9; v += step) {
+        svg.appendChild(s('line', { x1: m.l, x2: m.l + pw, y1: yOf(v), y2: yOf(v), 'class': v === 0 ? 'axisline' : 'gridline' }));
+        var tl = s('text', { x: m.l - 6, y: yOf(v) + 3.5, 'text-anchor': 'end', 'class': 'tick' }); tl.textContent = nf0.format(v); svg.appendChild(tl);
+      }
+      idx.forEach(function (i, k) {
+        var y = eYears[i], x = xOfY(y);
+        svg.appendChild(s('line', { x1: x, x2: x, y1: m.t + ph, y2: m.t + ph + 4, 'class': 'yeartick' }));
+        if (k === 0 || k === last || (y % 10 === 0 && y1 - y > 6 && y - y0 > 6)) {
+          var tx = s('text', { x: x, y: CH - 5, 'text-anchor': 'middle', 'class': 'tick' }); tx.textContent = y; svg.appendChild(tx);
+        }
+      });
+      series.forEach(function (sr) {
+        var d = '', pen = false;
+        sr.values.forEach(function (val, k) {
+          if (val === null) { pen = false; return; }
+          d += (pen ? 'L' : 'M') + xOfY(eYears[idx[k]]).toFixed(1) + ',' + yOf(val).toFixed(1); pen = true;
+        });
+        svg.appendChild(s('path', { d: d, 'class': 'line ' + sr.cls }));
+      });
+      // End labels: only where no other series ends close by. Crowded ends are left to the tooltip and table.
+      var ends = series.map(function (sr) { return sr.values[last] === null ? null : yOf(sr.values[last]); });
+      series.forEach(function (sr, j) {
+        if (ends[j] === null) return;
+        svg.appendChild(s('circle', { cx: xOfY(y1), cy: ends[j], r: 4, 'class': 'dot ' + sr.cls }));
+        var free = ends.every(function (cy, k) { return k === j || cy === null || Math.abs(cy - ends[j]) >= 13; });
+        if (free) {
+          var el = s('text', { x: xOfY(y1) + 8, y: ends[j] + 4, 'class': 'endlabel' });
+          el.textContent = sr.values[last] < 10 ? nf1.format(sr.values[last]) : nf0.format(sr.values[last]); svg.appendChild(el);
+        }
+      });
+
+      var cross = s('line', { 'class': 'cross', y1: m.t, y2: m.t + ph, visibility: 'hidden' }); svg.appendChild(cross);
+      var dots = series.map(function (sr) { var c = s('circle', { r: 4, 'class': 'dot ' + sr.cls, visibility: 'hidden' }); svg.appendChild(c); return c; });
+      var cur = last;
+      function at(k, cx, cy) {
+        cur = k; var x = xOfY(eYears[idx[k]]);
+        cross.setAttribute('x1', x); cross.setAttribute('x2', x); cross.setAttribute('visibility', 'visible');
+        series.forEach(function (sr, j) {
+          var val = sr.values[k];
+          if (val === null) { dots[j].setAttribute('visibility', 'hidden'); return; }
+          dots[j].setAttribute('cx', x); dots[j].setAttribute('cy', yOf(val)); dots[j].setAttribute('visibility', 'visible');
+        });
+        showTip(cx, cy, function (elx) {
+          elx.appendChild(h('div', 't', sub.label_nl + ', ' + eYears[idx[k]]));
+          series.forEach(function (sr) { tipRow(elx, 'lk' + (sr.cls === 's1' ? '' : ' ' + sr.cls), fmtTon(sr.values[k]), sr.name); });
+          elx.appendChild(h('div', 'x', 'Totaal: ' + fmtTon(totals[k])));
+        });
+      }
+      function off() { cross.setAttribute('visibility', 'hidden'); dots.forEach(function (c) { c.setAttribute('visibility', 'hidden'); }); hideTip(); }
+      function fromPointer(e) {
+        var r = svg.getBoundingClientRect(), year = y0 + ((e.clientX - r.left) / r.width * CW - m.l) / pw * (y1 - y0), best = 0;
+        idx.forEach(function (i, k) { if (Math.abs(eYears[i] - year) < Math.abs(eYears[idx[best]] - year)) best = k; });
+        at(best, e.clientX, e.clientY);
+      }
+      function fromKeyboard() { var r = svg.getBoundingClientRect(); at(cur, r.left + xOfY(eYears[idx[cur]]) / CW * r.width, r.top + r.height * 0.3); }
+      svg.addEventListener('pointermove', fromPointer);
+      svg.addEventListener('pointerdown', fromPointer);
+      svg.addEventListener('pointerleave', off);
+      svg.addEventListener('focus', fromKeyboard);
+      svg.addEventListener('blur', off);
+      svg.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') cur = Math.max(0, cur - 1);
+        else if (e.key === 'ArrowRight') cur = Math.min(last, cur + 1);
+        else if (e.key === 'Escape') { off(); return; }
+        else return;
+        e.preventDefault(); fromKeyboard();
+      });
+      card.appendChild(svg);
+      if (skip.length) {
+        var ul = h('ul', 'foot'), li = document.createElement('li');
+        li.appendChild(h('span', null, 'Voor ' + skip.join(' en ') + ' bevat de export op gemeenteniveau geen cijfer voor de sector ' + sub.dominant_sector.toLowerCase() + '. De grafiek begint daarom in ' + y0 + '.'));
+        ul.appendChild(li); card.appendChild(ul);
+      }
+    };
+
+    Object.keys(EM.substances).forEach(function (key) {
+      var sub = EM.substances[key], card = h('div', 'chart-card');
+      $('#em-charts').appendChild(card);
+      drawEmission(card, sub);
+      // table view
+      $('#em-tables').appendChild(h('div', 'em-table-title', sub.label_nl + ' (' + sub.unit_nl + ' per jaar)'));
+      var wrap = h('div', 'table-scroll'), tb = document.createElement('table');
+      row(tb, ['Sector'].concat(eYears.map(function (y) { return { text: String(y), n: 1 }; })), true);
+      var cellTxt = function (kg) { return kg === null ? '–' : nf1.format(kg / 1000); };
+      Object.keys(sub.sectors).forEach(function (sec) { row(tb, [sec].concat(sub.sectors[sec].map(function (v) { return { text: cellTxt(v), n: 1 }; }))); });
+      row(tb, ['Totaal'].concat(sub.total.map(function (v) { return { text: cellTxt(v), n: 1 }; })));
+      wrap.appendChild(tb); $('#em-tables').appendChild(wrap);
+    });
+    // A drop that is much larger here than in all municipalities together is flagged, not explained.
+    Object.keys(EM.substances).forEach(function (key) {
+      var sub = EM.substances[key], all = sub.all_municipalities_total;
+      if (!all) return;
+      for (var i = 1; i < eYears.length; i++) {
+        var a0 = sub.total[i - 1], a1 = sub.total[i], b0 = all[i - 1], b1 = all[i];
+        if (a0 === null || a1 === null || !b0 || b1 === null) continue;
+        var own = (a1 / a0 - 1) * 100, ref = (b1 / b0 - 1) * 100;
+        if (own < -25 && own < ref - 15) {
+          var li = document.createElement('li');
+          li.appendChild(h('strong', null, sub.label_nl + ', ' + eYears[i - 1] + '–' + eYears[i] + '.'));
+          li.appendChild(document.createTextNode(' De emissie in ' + EM.area.name + ' daalt in deze periode met ' + nf0.format(-own) + '%, tegenover ' + nf0.format(-ref) + '% voor alle gemeenten samen. Of dat een werkelijke verandering is of met de ruimtelijke toedeling samenhangt, is uit deze cijfers niet af te leiden.'));
+          $('#em-notes').appendChild(li);
+        }
+      }
+    });
+    var emNote = document.createElement('li');
+    emNote.appendChild(h('strong', null, 'Reeks.'));
+    emNote.appendChild(document.createTextNode(' Cijfers uit “' + EM.source.dataset + '”. Elke jaarlijkse publicatie herberekent ook eerdere jaren; cijfers uit verschillende reeksen zijn niet zonder meer vergelijkbaar. Een streepje in de tabel betekent dat de export voor die sector en dat jaar geen cijfer bevat.'));
+    $('#em-notes').appendChild(emNote);
+  }
+
+  // =====================================================================
   // 4. Sources
   // =====================================================================
   var src = $('#src-table');
@@ -872,12 +1053,13 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   row(src, ['Grenzen Natura 2000', 'RVO, via PDOK', link('https://www.pdok.nl/', 'Natura 2000 (WFS), licentie ' + D.natura2000.source.licence), 'Actueel', nlDate(D.natura2000.source.fetched_on), status('In gebruik', true)]);
   row(src, ['Gemeentegrens', 'Kadaster, via PDOK', link('https://www.pdok.nl/', 'Bestuurlijke Gebieden (WFS)'), 'Actueel', nlDate(D.boundary.source.fetched_on), status('In gebruik', true)]);
   if (HAB) row(src, ['Stikstofgevoelige habitats en KDW', 'RIVM, AERIUS', link(HAB.source.info, 'Relevante habitatkartering (open data)'), 'Zoals gepubliceerd op de ophaaldatum', nlDate(HAB.source.fetched_on), status('In gebruik', true)]);
-  row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM e.a.)', link('https://www.emissieregistratie.nl/', 'Emissiereeks 1990–2024'), '–', '–', status('Nog niet toegevoegd', false)]);
+  if (EM) row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM, CBS, PBL, WUR, Deltares)', link(EM.source.url, EM.source.dataset + ', per gemeente en sector'), EM.years[0] + '–' + EM.years[EM.years.length - 1], String(EM.source.exported_at || '').slice(0, 10), status('In gebruik', true)]);
+  else row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM e.a.)', link('https://www.emissieregistratie.nl/', 'Emissiereeks 1990–2024'), '–', '–', status('Nog niet toegevoegd', false)]);
 
   var ft = $('#footer');
   ft.appendChild(document.createTextNode('Gemaakt door Hakan Şahin, inwoner van Nijkerk. Broncode en methode: '));
   ft.appendChild(link('https://github.com/Elcebir71/nijkerk-transition-monitor', 'GitHub'));
-  ft.appendChild(document.createTextNode('. Data samengesteld op ' + nlDate(D.built_on) + '. Bronnen: CBS, RIVM, PDOK (RVO, Kadaster). Deze pagina is geen publicatie van de gemeente Nijkerk of van de genoemde bronhouders.'));
+  ft.appendChild(document.createTextNode('. Data samengesteld op ' + nlDate(D.built_on) + '. Bronnen: CBS, RIVM (GDN en AERIUS), Emissieregistratie, PDOK (RVO, Kadaster). Deze pagina is geen publicatie van de gemeente Nijkerk of van de genoemde bronhouders.'));
 })();
 </script>
 </body>

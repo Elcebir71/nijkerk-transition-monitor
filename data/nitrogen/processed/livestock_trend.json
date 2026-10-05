@@ -20,7 +20,8 @@
       "affects": [
         "farms_total"
       ],
-      "note": "Farm population defined via the Handelsregister from 2016; clear break in number of farms."
+      "note": "Farm population defined via the Handelsregister from 2016; clear break in number of farms.",
+      "note_nl": "Vanaf 2016 bepaalt het Handelsregister welke bedrijven meetellen; duidelijke trendbreuk in het aantal bedrijven."
     },
     {
       "year": 2017,
@@ -28,7 +29,8 @@
         "cattle_total",
         "dairy_cows"
       ],
-      "note": "Cattle counts derived from the I&R register instead of the survey."
+      "note": "Cattle counts derived from the I&R register instead of the survey.",
+      "note_nl": "Vanaf 2017 komen de aantallen rundvee uit het I&R-register in plaats van uit de opgave."
     },
     {
       "year": 2018,
@@ -37,7 +39,8 @@
         "pigs_total",
         "chickens_total"
       ],
-      "note": "Goats and poultry derived from I&R registers; pigs and chickens adjusted for temporary vacancy."
+      "note": "Goats and poultry derived from I&R registers; pigs and chickens adjusted for temporary vacancy.",
+      "note_nl": "Vanaf 2018 komen geiten en pluimvee uit I&R-registers; varkens en kippen worden gecorrigeerd voor tijdelijke leegstand."
     }
   ],
   "events": [
@@ -46,7 +49,8 @@
       "affects": [
         "chickens_total"
       ],
-      "note": "Avian influenza (H7N7) outbreak in the Gelderse Vallei, spring 2003; poultry culled around the 1 April count."
+      "note": "Avian influenza (H7N7) outbreak in the Gelderse Vallei, spring 2003; poultry culled around the 1 April count.",
+      "note_nl": "Uitbraak van vogelgriep (H7N7) in de Gelderse Vallei, voorjaar 2003; pluimvee geruimd rond de telling van 1 april."
     }
   ],
   "indicators": {
@@ -61,7 +65,7 @@
       "cbs_column": "RundveeTotaal_84"
     },
     "dairy_cows": {
-      "label_nl": "Melk- en kalfkoeien (>= 2 jaar)",
+      "label_nl": "Melk- en kalfkoeien (2 jaar en ouder)",
       "unit": "dieren",
       "cbs_column": "MelkEnKalfkoeien2Jaar_88"
     },

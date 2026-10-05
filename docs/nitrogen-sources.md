@@ -29,8 +29,8 @@ be Gelderland sources. The main nitrogen-sensitive Natura 2000 context is the
 | Onderwerp | Bron | Dataset | Gebied | Periode | Formaat | Gebruik | Status |
 |---|---|---|---|---|---|---|---|
 | Landbouw (dieren, bedrijven) | CBS | StatLine `80781ned` | Nijkerk (`GM0267`), Gelderland (`PV25`) | 2000–2025 | OData / JSON | Bronanalyse, trend | Verified |
-| NH₃ emissie | Emissieregistratie (RIVM e.a.) | Reeks 1990–2024 | Municipal level to verify | 1990–2024 | CSV (manual export) | Emissie | Partly verified |
-| NOx emissie | Emissieregistratie (RIVM e.a.) | Reeks 1990–2024 | Municipal level to verify | 1990–2024 | CSV (manual export) | Emissie | Partly verified |
+| NH₃ emissie | Emissieregistratie (RIVM e.a.) | ER Reeks 1990-2024 Definitief | Nijkerk (`0267`), per sector | 2000–2024 (agriculture missing before 2000) | XLSX (manual export) | Emissie | Verified |
+| NOx emissie | Emissieregistratie (RIVM e.a.) | ER Reeks 1990-2024 Definitief | Nijkerk (`0267`), per sector | 1990–2024 | XLSX (manual export) | Emissie | Verified |
 | Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National 1x1 km grid, clipped to Nijkerk + 15 km | 2025; prognosis 2030–2040 | Zip with ESRI ASCII grid, EPSG:28992 | Weergave | Verified |
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
 | Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on fetch date (AERIUS 2025) | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
@@ -65,10 +65,23 @@ The land-use row is not needed for v1.
 - **May calculate:** sector shares, change over time.
 - **May not calculate:** emissions of individual farms; comparisons that mix
   different publication series (each yearly release recalculates history).
-- **To verify:** whether the export module offers municipality level for
-  NH₃ and NOx. Older documentation lists municipality, 5x5 km and 1x1 km.
-  If only grid cells are available, clip 5x5 km cells to the Nijkerk boundary.
-- **Script:** `scripts/nitrogen/load_emissions.py` (to write)
+- **Export (by hand, 2026-10-05):** Compartiment Lucht; Stof Ammoniak and
+  Stikstofoxiden (als NO2); Gebiedsindeling Gemeente; Bronniveau Sector; all
+  years. The file contains all municipalities; the script keeps Nijkerk.
+- **Years in the export:** 1990, 1995, 2000, 2005, 2010, 2015, 2019–2024.
+  No 2025 rows at municipal level.
+- **Known gap:** for 1990 and 1995 there is no agricultural NH₃ at municipal
+  level (for any municipality). NH₃ totals for those years are left empty.
+- **Result for Nijkerk, 2024:** NH₃ 352 t, 93% agriculture. NOx 317 t (as
+  NO₂), 65% traffic and transport, 25% agriculture.
+- **Unexplained:** NH₃ in Nijkerk drops 37% between 2000 and 2005, against
+  12% for all municipalities together. Could be real or an effect of the
+  spatial allocation. Shown on the page as a note, not explained.
+- **Units:** kg of the substance per year; NOx expressed as NO₂. Not
+  comparable with deposition in mol N.
+- **Terms of use (from the export):** reuse allowed with source attribution;
+  no rights can be derived from the data.
+- **Script:** `scripts/nitrogen/load_emissions.py` (needs `openpyxl`)
 
 ### 3. RIVM GDN: grootschalige depositiekaarten
 
@@ -138,7 +151,7 @@ The land-use row is not needed for v1.
 
 ## The page
 
-`nitrogen.html` shows the four working layers. It reads one file,
+`nitrogen.html` shows the five working layers. It reads one file,
 `data/nitrogen/processed/nitrogen_data.js`, which `scripts/nitrogen/build_page_data.py`
 makes by copying the processed files as they are. Run order:
 
@@ -146,11 +159,11 @@ makes by copying the processed files as they are. Run order:
 2. `fetch_natura2000.py`
 3. `fetch_rivm_deposition.py`
 4. `fetch_aerius_habitats.py`
-5. `build_page_data.py`
+5. `load_emissions.py` (after a manual export, see the script)
+6. `build_page_data.py`
 
 The map area is the bounding box of the municipality plus 15 km. Natura 2000
-areas are listed when they intersect that area. The Emissieregistratie layer
-is shown on the page as "not added yet".
+areas are listed when they intersect that area.
 
 ## Still needed
 

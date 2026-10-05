@@ -24,6 +24,7 @@ INPUTS = {
     "natura2000": ("natura2000_nearby.geojson", "fetch_natura2000.py"),
     "deposition": ("deposition_grid.geojson", "fetch_rivm_deposition.py"),
     "habitats": ("nitrogen_sensitive_habitats.geojson", "fetch_aerius_habitats.py"),
+    "emissions": ("emissions_by_sector.json", "load_emissions.py"),
 }
 
 
