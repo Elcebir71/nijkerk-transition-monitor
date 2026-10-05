@@ -85,19 +85,65 @@ only: the two numbers come from different sources and years, the emission
 figure also contains fertilizer, and emissions are counted where they are
 released, not where the animals are.
 
-### Technology by pathway
+### Technology matrix: which N flow, which pathway
 
-| Technology | Housing and storage | Application | Note |
-|---|---|---|---|
-| Nitrification-denitrification | No effect | Less mineral N applied | Not quantified in the sources checked |
-| Anammox-based deammonification | No effect | Less mineral N applied | Not quantified in the sources checked |
-| Stripping + scrubbing | No effect | Lower: about -45% against raw slurry (WUR model) | Adds a small processing emission |
-| Gas-permeable membrane | No effect on barn air | Lower, by the share of TAN removed | Pilot was fed from the manure storage pit, outside the barn |
-| Electrochemical recovery | No effect | Unknown | Lab only |
-| Digestion alone (for reference) | No direct effect | Higher: about +24% (WUR model) | Digestate has more TAN and a higher pH |
+Two different flows, not to be mixed up:
 
-"No effect" on housing follows from where the process sits: it starts after
-the manure has left the barn. Housing and storage is the largest pathway.
+- NH3 emission -> atmosphere -> deposition (what the Stikstofmonitor shows)
+- N in manure/digestate -> stripping or recovery -> recovered N product
+
+How to read the matrix:
+
+- Housing / Storage / Application: does the technology lower NH3 emission on
+  that pathway (yes, no, higher, or not reported).
+- "NH3 reduction" is relative to that one pathway, not to total emission.
+  A 45% cut on application is not a 45% cut overall.
+- "As reported" means the figure is copied from the source named in the row.
+  Official emission factors and field measurements are marked as such.
+  WLR = Wageningen Livestock Research report number.
+- The national inventory model NEMA works on the TAN-flow principle (RIVM
+  2024-0015): N that is not lost in the barn stays in the manure and moves on
+  to storage and application. A barn measure without a step behind it
+  therefore shifts part of the emission downstream.
+
+| Technology | Input | N flow it acts on | Housing | Storage | Application | NH3 reduction (as reported) | N recovery |
+|---|---|---|---|---|---|---|---|
+| Chemical air scrubber | Exhaust air of the barn | NH3 already in the barn air, bound with sulphuric acid | Yes | No | No | 70-95% of housing emission (official factors, IPLO) | Yes, ammonium sulphate in the discharge water |
+| Biological / combi air scrubber | Exhaust air of the barn | NH3 in barn air, converted by bacteria to nitrite/nitrate | Yes | No | No | 70-85% official (biological). Combi scrubbers on pig farms measured 41-67% against 85% required (WLR 1337) | Partly, N leaves as nitrite/nitrate in discharge water |
+| Faeces/urine separation with air extraction (Lely Sphere) | Dairy barn floor and pit air | NH3 formed under and just above the floor, captured in a filter | Yes | Not reported | Not reported | 77%: 3 against 13 kg NH3 per animal place per year, 4 farms (as reported by NCM) | Yes, liquid fertilizer substitute |
+| Daily removal on a closed floor with scraper | Fresh manure | Less time for TAN to volatilise in the barn | Yes | Yes, when the manure goes straight to a digester | No: more TAN arrives at application | Housing -42% (calculated from WLR 1449 Table 3, dairy, model) | No |
+| Slurry acidification in the barn | Slurry in the pit, sulphuric acid, pH below 5.5 | TAN kept as ammonium in the slurry | Partly: pit only, floor emission unchanged | Not quantified | Yes | Housing: pigs 64% (VERA 2016), dairy about 30%. Application: 49% (VERA 2012, Denmark); Dutch trials 7-24% (all via WLR 1375) | No, N stays in the manure |
+| Low-emission application (injection) | Slurry at spreading | TAN applied to land | No | No | Yes | Emission 2% of TAN (arable injector) against 17% (shallow injection on grassland), as cited by NCM | No |
+| Digestion alone (for reference) | Slurry | Organic N turned into TAN; no N removed | No direct effect | Higher: +47% from stored digestate (study cited by NCM) | Higher: +24% (WLR 1449, model) | Negative unless combined with other steps | No |
+| Stripping + scrubbing (e.g. Colsen AMFER) | Digestate or its liquid fraction | TAN in digestate -> ammonium sulphate/nitrate | No | Not reported | Yes | Application -45% against raw slurry (WLR 1449, model). Vendor documents give N removal only (typically 50% of mineral N, >85% possible) and make no emission claim | Yes |
+| Gas-permeable membrane | Stored raw slurry (pilot) | TAN in slurry -> ammonium sulphate | No | Not measured | Not measured | None reported as emission; 14-49% TAN removal | Yes |
+| Nitrification-denitrification | Liquid fraction; in this region veal calf slurry | TAN -> N2 gas | No | No | Less mineral N to apply; not quantified | Not a reduction figure: process emission NH3-N 0.3% and N2O-N 5.0% of total N in the incoming manure (WLR 962 Table 2, veal calf slurry, estimate) | No, N is destroyed |
+| Anammox-based deammonification | Ammonium-rich liquid | TAN -> N2 gas | No | No | Less mineral N to apply; not quantified | Not found for manure in the sources checked | No, N is destroyed |
+| Electrochemical recovery | Manure wastewater (lab) | NH4+ captured on an electrode | No | Unknown | Unknown | None reported | Yes (lab) |
+
+What the matrix shows:
+
+1. Only the first five rows touch housing, the largest pathway. None of them
+   is a treatment technology from the comparison table above.
+2. The technologies that recover N (stripping, membrane, electrochemical) act
+   on application at most. Their vendor documents report N removal, not
+   emission reduction.
+3. Technologies that destroy N (nitrification-denitrification, anammox)
+   shrink the manure surplus, not the barn emission, and nitrification-
+   denitrification has its own N2O emission.
+4. Acidification conflicts with the biogas chain: according to WLR 1375,
+   central digesters do not accept acidified manure. The same report lists
+   sulphur load and damage to concrete as obstacles in the Netherlands.
+5. Official scrubber percentages and measured ones differ. Use both, labelled.
+
+### Already operating nearby
+
+Stichting Mestverwerking Gelderland treats veal calf slurry biologically at
+four plants on the Veluwe (Putten, Elspeet, Ede, Stroe): 660,000 t per year
+from about 450 calf farms, as stated on its website. A 2007 article describes
+the process as nitrification followed by denitrification to N2 gas. Whether
+and how much Nijkerk veal slurry goes there is not known here. Nijkerk had
+8,421 veal calves in 2023 (`data/generation_summary.json`).
 
 ### What a full chain looks like (WUR, modelled)
 
@@ -127,11 +173,11 @@ of digestion on emissions.
 ### Consequences for this project
 
 - Treatment is not a stand-alone answer to deposition. It needs a barn-side
-  step in front of it. Barn-side measures (low-emission floors, air
-  scrubbers) are outside these notes, and their performance in practice is
-  disputed: a CBS study (2019) and a Wageningen Livestock Research
-  verification found no difference in N loss between dairy barns with and
-  without a low-emission floor.
+  step in front of it.
+- Barn-side performance in practice is disputed. A CBS study (2019) and a
+  Wageningen Livestock Research verification found no difference in N loss
+  between dairy barns with and without a low-emission floor, and combi air
+  scrubbers measured well below their official percentage (see the matrix).
 - The useful link to the biogas work is the chain, not the digester:
   daily removal -> digestion -> stripping.
 - The recovered ammonium sulphate is itself applied to land. NCM reports very
@@ -171,6 +217,16 @@ Caveats (important):
   poultry; report 1449 covers dairy only.
 - Check soil type (calcareous or not) for land where recovered ammonium
   sulphate would be applied.
+- Still to verify for the matrix:
+  - application emission factors per technique from the primary source
+    (RIVM 2024-0015, chapter on agricultural soils; only the first chapters
+    could be read, the 2% and 17% come from NCM);
+  - the official emission factor and legal status of the Lely Sphere from
+    the regulation itself, not from a news item;
+  - current capacity and N removal of the SMG plants, and whether Nijkerk
+    farms deliver there;
+  - how many Nijkerk barns already have an air scrubber (not in any dataset
+    used in this repo).
 
 ## Sources
 
@@ -194,3 +250,16 @@ Emission pathways (checked 2026-10-06):
 - [WUR (2020), report WPR-840: Mestvergisting als onderdeel van duurzame kringlopen](https://edepot.wur.nl/524221)
 - [NCM (2026), Hoe zit het met monomestvergisting en stikstof?](https://www.mestverwaarding.nl/kenniscentrum/5627/hoe-zit-het-met-monomestvergisting-en-stikstof)
 - [NCM (2023), Ammoniakemissie bij emissiearme stallen wordt onderschat (on the CBS 2019 study and the WLR verification)](https://www.mestverwaarding.nl/kenniscentrum/3588/ammoniakemissie-bij-emissiearme-stallen-wordt-onderschat)
+
+Technology matrix (checked 2026-10-06):
+
+- [RIVM (2024), Methodology for the calculation of emissions from agriculture (NEMA), report 2024-0015](https://www.rivm.nl/bibliotheek/rapporten/2024-0015.pdf)
+- [IPLO: Chemische wasser](https://iplo.nl/thema/toepassing-regels-praktijk/veehouderijen/stalsystemen-aanvullende-technieken/luchtwassers/typen-luchtwassers/chemische-wasser/)
+- [IPLO: Biologische wasser](https://iplo.nl/thema/toepassing-regels-praktijk/veehouderijen/stalsystemen-aanvullende-technieken/luchtwassers/typen-luchtwassers/biologische-wasser/)
+- [Wageningen Livestock Research (2021), report 1337: Onderzoek naar verbeterpunten voor combi-luchtwassers in de praktijk](https://edepot.wur.nl/554345)
+- [Wageningen Livestock Research (2022), report 1375: Perspectief van het aanzuren van mest in Nederland om methaan- en ammoniakemissie te reduceren](https://edepot.wur.nl/572080)
+- [Wageningen Livestock Research (2016), report 962: Emissiefactoren mestbewerking](https://edepot.wur.nl/386801)
+- [NCM (2023), Lely Sphere heeft definitieve emissiefactor voor ammoniak](https://www.mestverwaarding.nl/kenniscentrum/3343/lely-sphere-heeft-definitieve-emissiefactor-voor-ammoniak)
+- [Stichting Mestverwerking Gelderland](https://www.smg.nl/)
+- [Mestverwerking Gelderland maakt van kalvergier bruikbare eindproducten, Nutswerk 2007](https://edepot.wur.nl/674370)
+- Vendor documents for AMFER: the Colsen, Newtrient and Nutriman pages listed above.
