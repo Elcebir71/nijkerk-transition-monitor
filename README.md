@@ -1,19 +1,100 @@
 # Nijkerk Agricultural Transition Monitor
 
-Interactive prototype for gemeente Nijkerk: a manure/nitrogen/biogas-potential
-dashboard with a scenario engine, built on a **fully synthetic** demo dataset
-of 75 fictional farms.
+Two dashboards about agriculture and nitrogen in gemeente Nijkerk, in one repo.
+They are kept strictly apart:
 
-**Live dashboard:** open [`index.html`](index.html) in a browser, or enable
-GitHub Pages for this repo (Settings → Pages → Source: `main` / root) to get
-a shareable link.
+| | Page | Data |
+|---|---|---|
+| **Stikstofmonitor Nijkerk** | [`nitrogen.html`](nitrogen.html) | Real open government data only |
+| **Transitie Monitor (prototype)** | [`index.html`](index.html) | Fully synthetic demo data |
+
+Open either file in a browser. No server is needed. To get a shareable link,
+enable GitHub Pages for this repo (Settings → Pages → Source: `main` / root).
+
+---
+
+## Stikstofmonitor Nijkerk: real open data
+
+An independent data project by a resident of Nijkerk. It brings published
+figures on livestock, nitrogen emissions, nitrogen deposition and nature in
+and around Nijkerk together on one page, with the source, reference date and
+limitations next to every figure. The page is in Dutch.
+
+<p>
+  <img src="docs/screenshot-stikstofmonitor.png" alt="Stikstofmonitor Nijkerk: key figures and the RIVM deposition map with the municipal boundary, Natura 2000 areas and nitrogen-sensitive habitat" width="100%">
+</p>
+<p>
+  <img src="docs/screenshot-emissies.png" alt="Ammonia and nitrogen oxide emissions in Nijkerk by sector, from the Emissieregistratie" width="100%">
+</p>
+
+### What it shows
+
+| Layer | Source | What is shown |
+|---|---|---|
+| Livestock and farms | CBS Landbouwtelling (StatLine 80781ned) | Counts 2000–2025, indexed against Gelderland, with method breaks marked |
+| NH₃ and NOx emissions | Emissieregistratie, series 1990–2024 | Emissions in Nijkerk by sector |
+| Nitrogen deposition | RIVM GDN maps, 2025 | 1×1 km map (total N, NHx, NOy) and the area-weighted mean for Nijkerk |
+| Natura 2000 boundaries | RVO via PDOK | Areas in and around Nijkerk, distance and overlap |
+| Nitrogen-sensitive habitat | RIVM AERIUS open data | Mapped habitat types with their critical deposition value (KDW) |
+
+Figures on the page as of October 2026:
+
+- Mean nitrogen deposition in Nijkerk, 2025: about 1,158 mol N/ha/year
+  (uncertainty per grid cell 30–35%); about 70% of it is reduced nitrogen (NHx).
+- 14% of the municipality is Natura 2000, almost all of it Arkemheen (a
+  Birds Directive area).
+- According to the AERIUS habitat map there is no nitrogen-sensitive habitat
+  inside the municipality; the nearest lies about 0.7 km outside it, in the
+  Veluwe.
+- Emissions in Nijkerk, 2024: 352 t NH₃ (93% agriculture) and 317 t NOx
+  (65% traffic and transport).
+
+### What it deliberately does not do
+
+- No own deposition modelling and no scenarios.
+- No link drawn between animal numbers and deposition.
+- No conversion from emissions to deposition.
+- No own comparison of deposition with critical deposition values.
+- No individual farms.
+- No cost estimates.
+
+Each source, what may and may not be calculated from it, and what is still
+unverified is written down in [`docs/nitrogen-sources.md`](docs/nitrogen-sources.md).
+
+### Rebuilding the data
+
+```bash
+pip install requests shapely pyproj openpyxl
+```
+
+Run from the repo root, in this order:
+
+```bash
+python scripts/nitrogen/fetch_cbs_livestock.py     # CBS livestock and farms
+python scripts/nitrogen/fetch_natura2000.py        # municipal boundary + Natura 2000 (PDOK)
+python scripts/nitrogen/fetch_rivm_deposition.py   # RIVM deposition grid
+python scripts/nitrogen/fetch_aerius_habitats.py   # AERIUS nitrogen-sensitive habitat
+python scripts/nitrogen/load_emissions.py          # Emissieregistratie (needs a manual export, see the script)
+python scripts/nitrogen/build_page_data.py         # bundles everything for nitrogen.html
+```
+
+Downloads are kept in `data/nitrogen/raw/` (not committed). The processed
+files that the page reads are in `data/nitrogen/processed/`.
+
+---
+
+## Transitie Monitor (prototype): synthetic data
+
+Interactive prototype: a manure/nitrogen/biogas-potential dashboard with a
+scenario engine, built on a **fully synthetic** demo dataset of 75 fictional
+farms.
 
 <p>
   <img src="docs/screenshot-kaart.png" alt="Map view: farm locations, scenario slider and KPI tiles" width="49%">
   <img src="docs/screenshot-tabel.png" alt="Table view: searchable/filterable farm list with detail panel" width="49%">
 </p>
 
-## What this is
+### What this is
 
 Grew out of an earlier feasibility analysis for a Nijkerk "Biogas Hub"
 (manure-to-biogas co-digestion facility). That analysis showed the hub's
@@ -24,7 +105,7 @@ GIS / cloud engineering): a reusable **monitoring and scenario-planning
 tool** for the municipality's agricultural transition, of which the biogas
 question is just one input.
 
-## What it does
+### What it does
 
 - Map + searchable table of 75 synthetic farms (7 archetypes: melkvee,
   vleeskalveren, varkens, pluimvee, geiten/schapen, paarden, gemengd)
@@ -36,7 +117,7 @@ question is just one input.
   literature approximation), not a single blanket label per farm
 - Ammonia-inhibition flag for poultry-heavy manure mixes
 
-## Data & methodology — read before using this for anything real
+### Data & methodology — read before using this for anything real
 
 **Every farm, location and animal count in this dataset is entirely
 fictional.** Nothing here describes a real business, address or parcel.
@@ -65,30 +146,7 @@ fictional.** Nothing here describes a real business, address or parcel.
 This is a demonstration prototype, not a policy instrument, and not a
 replacement for the underlying emission-reduction report.
 
-## Repo layout
-
-```
-index.html            the dashboard (self-contained HTML/CSS/JS)
-data/
-  nijkerk_synthetic_farms_2023.csv   full 75-row dataset
-  farms_data.json                    compact JSON embedded in index.html
-  generation_summary.json            real vs. synthetic totals per category
-scripts/
-  constants.py           SINGLE SOURCE OF TRUTH for all coefficients
-                          (N-excretion, manure, biogas yield, density,
-                          scenario sectors, data-quality tiers)
-  generate.py             builds data/*.csv + generation_summary.json
-  build_compact_json.py   builds data/farms_data.json from the CSV
-  sync_js_constants.py    regenerates index.html's embedded JS constants
-                          from constants.py (keeps dashboard in sync with
-                          the Python generator — never hand-edit those
-                          JS blocks in index.html)
-  build_doc_xlsx.py       builds docs/*.xlsx methodology documentation
-docs/
-  Nijkerk_Synthetische_Demodata_Documentatie.xlsx   full methodology + data-quality tables
-```
-
-### Regenerating the data
+### Regenerating the synthetic data
 
 If a coefficient in `scripts/constants.py` changes, run in order from
 `scripts/`:
@@ -100,14 +158,48 @@ python3 sync_js_constants.py   # re-syncs index.html's embedded JS
 python3 build_doc_xlsx.py      # rebuilds the documentation workbook
 ```
 
-## Roadmap / possible next phases
+---
 
-1. Replace synthetic data with real (anonymized, validated) farm-level data,
-   with the municipality's or RVO's cooperation.
-2. Real Natura 2000 boundary polygons (PDOK WFS/OGC) instead of the
-   indicative reference point, for actual distance-to-boundary analysis.
-3. An NH₃ emission-factor module (RVO stal-type emission factors) for a real
-   air-quality layer, beyond the current qualitative ammonia-inhibition flag.
+## Repo layout
 
-With those three, this stops being a demo and becomes a genuine
-municipal policy-support tool.
+```
+nitrogen.html         Stikstofmonitor (real open data)
+index.html            Transitie Monitor prototype (synthetic data)
+data/
+  nitrogen/processed/                the files nitrogen.html reads (committed)
+  nitrogen/raw/                      downloads (not committed)
+  nijkerk_synthetic_farms_2023.csv   synthetic: full 75-row dataset
+  farms_data.json                    synthetic: compact JSON embedded in index.html
+  generation_summary.json            synthetic: real vs. synthetic totals per category
+scripts/
+  nitrogen/               one script per real data source, plus config.py
+                          and build_page_data.py
+  constants.py            synthetic: single source of truth for all coefficients
+  generate.py             synthetic: builds data/*.csv + generation_summary.json
+  build_compact_json.py   synthetic: builds data/farms_data.json from the CSV
+  sync_js_constants.py    synthetic: regenerates index.html's embedded JS constants
+  build_doc_xlsx.py       synthetic: builds docs/*.xlsx methodology documentation
+docs/
+  nitrogen-sources.md     source register for the Stikstofmonitor
+  Nijkerk_Synthetische_Demodata_Documentatie.xlsx   synthetic: methodology + data-quality tables
+```
+
+## Roadmap
+
+Done since the first version of this repo: real Natura 2000 boundaries from
+PDOK, and official NH₃ and NOx emission figures in place of an own
+emission-factor estimate.
+
+Possible next steps:
+
+1. Add the exceedance flags that AERIUS publishes per hexagon, once their
+   definitions have been checked against the AERIUS documentation.
+2. Compare the deposition in Nijkerk with the Gelderland average.
+3. For the prototype: replace synthetic data with real (anonymized,
+   validated) farm-level data, with the municipality's or RVO's cooperation.
+
+## Sources and terms
+
+CBS, RIVM (GDN maps and AERIUS), Emissieregistratie, and PDOK (RVO,
+Kadaster). This project is not a publication of gemeente Nijkerk or of any
+of these organisations.

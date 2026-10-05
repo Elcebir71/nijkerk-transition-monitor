@@ -177,6 +177,42 @@ footer{font-size:.76rem;color:var(--ink-dim);line-height:1.6;padding:0 2px 8px}
 .tip .x{margin-top:5px;color:var(--ink-dim);font-size:.74rem;white-space:normal}
 .missing{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
 code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
+.print-only{display:none}
+
+/* Print / PDF: always light, no controls, and no card, tile or table row split over two pages. */
+@media print{
+  :root, :root:not([data-theme="light"]), :root[data-theme="dark"]{
+    --bg:#ffffff; --panel:#ffffff; --ink:#1c2620; --ink-dim:#5a6a5e;
+    --line:#d9d4c4; --accent:#4a6b4f; --accent-3:#3e5c76;
+    --chip-bg:#eef0e6; --info-bg:#e8eef2; --info-fg:#2f4a61;
+    --grid:#e9e5d8; --axis:#c9c4b3; --muted:#898781;
+    --seq-1:#fde3c9; --seq-2:#f7c795; --seq-3:#e8a455; --seq-4:#c8801f; --seq-5:#9b5f00; --seq-6:#6e4100;
+    --series-1:#2a78d6; --series-2:#eb6834; --nature:#1f5c3a;
+    color-scheme:light;
+  }
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{padding:0;font-size:11pt}
+  .wrap{max-width:none}
+  .panel{border:none;padding:0;border-radius:0}
+  .controls,.backlink,.tip,.screen-only{display:none !important}
+  .print-only{display:block}
+  .kpi,.chart-card,.principle,.legend,.comp,.two > div,.notes li,tr,.map-grid > div:first-child{break-inside:avoid;page-break-inside:avoid}
+  h2,h3,.lede,.chart-legend{break-after:avoid;page-break-after:avoid}
+  .table-scroll{overflow:visible}
+  details .table-scroll{max-height:none}
+  a{color:inherit}
+  /* layout for A4: tiles on one row, a smaller map, charts two across, main sections on a new page */
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  .kpi{padding:8px 10px}
+  .kpi .num{font-size:1.35rem}
+  .map-svg{max-width:125mm}
+  .map-label{font-size:19px !important}
+  .scale text{font-size:17px !important}
+  .charts,.charts.em-charts{grid-template-columns:1fr 1fr}
+  .em-charts{break-inside:avoid;page-break-inside:avoid}
+  p,li{break-inside:avoid;page-break-inside:avoid}
+  #emissies,#veestapel{break-before:page;page-break-before:always}
+}
 </style>
 </head>
 <body>
@@ -184,7 +220,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   <header class="top">
     <div>
       <h1>Stikstofmonitor Nijkerk</h1>
-      <div class="subtitle">Openbare cijfers over veestapel, stikstofemissies, stikstofdepositie en natuur in en rond Nijkerk, overzichtelijk en controleerbaar bij elkaar gebracht. Een onafhankelijk dataproject van een inwoner.</div>
+      <div class="subtitle">Openbare cijfers over veestapel, stikstofemissies, stikstofdepositie en natuur in en rond Nijkerk, overzichtelijk en controleerbaar bij elkaar gebracht. Een onafhankelijk dataproject, gemaakt door een inwoner van Nijkerk.</div>
     </div>
     <a class="backlink" href="index.html">Naar de Transitie Monitor (synthetische demodata)</a>
   </header>
@@ -209,7 +245,8 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     <div class="map-grid">
       <div>
         <svg class="map-svg" id="map" role="img" aria-label="Kaart van de stikstofdepositie per vak van 1 bij 1 kilometer rond Nijkerk, met gemeentegrens en Natura 2000-gebieden. De cijfers staan ook in de tabellen op deze pagina."></svg>
-        <p class="note" style="margin-top:8px">Wijs een vak aan voor de waarden. Alle vakken staan in <a href="data/nitrogen/processed/deposition_grid.geojson">deposition_grid.geojson</a>.</p>
+        <p class="note screen-only" style="margin-top:8px">Wijs een vak aan voor de waarden. Alle vakken staan in <a href="data/nitrogen/processed/deposition_grid.geojson">deposition_grid.geojson</a>.</p>
+        <p class="note print-only" style="margin-top:8px">De kaart toont de RIVM-depositie per vak van 1×1 km. De onderliggende griddata zijn beschikbaar als GeoJSON in de repository.</p>
       </div>
       <div class="side">
         <div>
@@ -363,6 +400,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     (head ? (table.tHead || table.createTHead()) : (table.tBodies[0] || table.createTBody())).appendChild(tr);
   }
   function link(href, text) { var a = h('a', null, text); a.href = href; return a; }
+  function listNl(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' en ' + a[a.length - 1]; }
   function nlDate(iso) { var p = String(iso).slice(0, 10).split('-'); return p.length === 3 ? p[2] + '-' + p[1] + '-' + p[0] : iso; }
 
   // ---------- tooltip ----------
@@ -647,7 +685,6 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
       habStats.names.push(p.natura2000_area);
       if (typeof p.distance_to_municipality_km === 'number' && (habStats.nearest === null || p.distance_to_municipality_km < habStats.nearest.km)) habStats.nearest = { km: p.distance_to_municipality_km, name: p.natura2000_area };
     });
-    function listNl(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' en ' + a[a.length - 1]; }
     var without = n2kAreas.map(function (a) { return a.name; }).filter(function (n) { return habStats.names.indexOf(n) < 0; });
     var txt = habStats.inMuni >= 0.05
       ? 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS ' + nf1.format(habStats.inMuni) + ' ha stikstofgevoelig habitat.'
@@ -684,12 +721,13 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     'Ongeveer ' + nf1.format(sum.ntot.mean_kg_n_per_ha) + ' kg N/ha/jaar. RIVM GDN; onzekerheid per vak 30–35%.');
   if (nhxShare !== null) kpi('Aandeel gereduceerd stikstof (NHx)', nf0.format(nhxShare) + '%', '',
     'Van wat in Nijkerk neerkomt; de rest is NOy. Zegt niets over waar de uitstoot plaatsvond.');
-  var arkem = n2kAreas.filter(function (a) { return a.overlap > 0; }).sort(function (x, y) { return y.overlap - x.overlap; })[0];
+  var insideParts = n2kAreas.filter(function (a) { return a.overlap >= 0.5; }).sort(function (x, y) { return y.overlap - x.overlap; })
+    .map(function (a) { return a.name + ' (' + nf0.format(a.overlap) + ' ha)'; });
   kpi('Natura 2000 binnen de gemeente', nf0.format(insideHa / muni.properties.area_ha * 100) + '%', '',
-    nf0.format(insideHa) + ' ha van ' + nf0.format(muni.properties.area_ha) + ' ha' + (arkem ? ', vrijwel geheel ' + arkem.name + ' (' + protectionLabel(arkem.main.properties.protection_code) + ').' : '.'));
+    nf0.format(insideHa) + ' ha van ' + nf0.format(muni.properties.area_ha) + ' ha' + (insideParts.length ? ': ' + listNl(insideParts) + '.' : '.'));
   var veluwe = n2kAreas.filter(function (a) { return a.name === 'Veluwe'; })[0];
-  if (habStats) kpi('Stikstofgevoelig habitat binnen de gemeente', habStats.inMuni < 10 ? nf1.format(habStats.inMuni).replace(',0', '') : nf0.format(habStats.inMuni), 'ha',
-    'Volgens AERIUS, binnen Natura 2000. In het kaartgebied: ' + nf0.format(habStats.inMap) + ' ha' + (habStats.nearest ? ', het dichtstbijzijnde op ' + nf1.format(habStats.nearest.km) + ' km (' + habStats.nearest.name + ').' : '.'));
+  if (habStats) kpi('Stikstofgevoelig habitat binnen de gemeente (AERIUS)', habStats.inMuni < 10 ? nf1.format(habStats.inMuni).replace(',0', '') : nf0.format(habStats.inMuni), 'ha',
+    'Volgens de habitatkartering van AERIUS, binnen Natura 2000. In het kaartgebied: ' + nf0.format(habStats.inMap) + ' ha' + (habStats.nearest ? ', het dichtstbijzijnde op ' + nf1.format(habStats.nearest.km) + ' km (' + habStats.nearest.name + ').' : '.'));
   else if (veluwe) kpi('Afstand tot de Veluwe', nf1.format(veluwe.distance), 'km',
     'Kortste afstand tussen de gemeentegrens en het Natura 2000-gebied Veluwe.');
 
