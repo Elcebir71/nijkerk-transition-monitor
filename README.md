@@ -181,6 +181,7 @@ scripts/
   build_doc_xlsx.py       synthetic: builds docs/*.xlsx methodology documentation
 docs/
   nitrogen-sources.md     source register for the Stikstofmonitor
+  nitrogen-technology-research.md   desk research: manure N treatment technologies (exploratory, prototype side)
   Nijkerk_Synthetische_Demodata_Documentatie.xlsx   synthetic: methodology + data-quality tables
 ```
 

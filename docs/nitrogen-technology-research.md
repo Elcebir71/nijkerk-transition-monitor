@@ -22,6 +22,25 @@ remove or recover N from manure/digestate. Candidate for a roadmap module.
   crop side; does not address the livestock manure surplus. Complementary at
   best.
 
+## Important limitation: recovered N is not avoided NH3 emission
+
+The technologies below treat N that is already in collected manure or
+digestate. They do not by themselves reduce ammonia emission or deposition.
+
+- Emissieregistratie (see `nitrogen-sources.md`): Nijkerk 2024 NH3 = 352 t,
+  93% agriculture, i.e. ~327 t NH3, roughly 270 t N (NH3 is 14/17 N).
+- The ~1,295 t N/yr used below is total excreted N. Only about one fifth of
+  that figure leaves as agricultural NH3 (rough own calculation).
+- Stripping and similar treatment acts after housing and storage, so the
+  emission that already occurred in the stable and storage is not undone.
+- Still missing: a per-technology breakdown of which emission pathway it
+  touches (housing, storage, field application), with WUR/RIVM sources.
+  Until then, the euro-per-tonne-N figures below are a nutrient-valorisation
+  view, not an emission-reduction cost.
+- These notes use CBS-calibrated totals and US reference prices. They belong
+  to the prototype side of the repo, not to the Stikstofmonitor, which uses
+  no synthetic data and makes no cost estimates.
+
 ## Technology comparison
 
 | Technology | Maturity | What it does | Key figures (as reported) |
