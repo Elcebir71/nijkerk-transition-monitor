@@ -106,6 +106,21 @@ The last two rows are not needed for v1.
   (VR+HR) lies about 0.7 km outside the boundary.
 - **Script:** `scripts/nitrogen/fetch_natura2000.py`
 
+## The page
+
+`nitrogen.html` shows the three working layers. It reads one file,
+`data/nitrogen/processed/nitrogen_data.js`, which `scripts/nitrogen/build_page_data.py`
+makes by copying the processed files as they are. Run order:
+
+1. `fetch_cbs_livestock.py`
+2. `fetch_natura2000.py`
+3. `fetch_rivm_deposition.py`
+4. `build_page_data.py`
+
+The map area is the bounding box of the municipality plus 15 km. Natura 2000
+areas are listed when they intersect that area. The Emissieregistratie layer
+is shown on the page as "not added yet".
+
 ## Still needed
 
 - A cited source for which nearby Natura 2000 areas are nitrogen-sensitive.

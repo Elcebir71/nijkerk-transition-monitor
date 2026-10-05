@@ -21,7 +21,7 @@ CBS_STATLINE_URL = f"https://opendata.cbs.nl/statline/#/CBS/nl/dataset/{CBS_TABL
 CBS_INDICATORS = {
     "AantalLandbouwbedrijvenTotaal_1": {"id": "farms_total", "label_nl": "Landbouwbedrijven, totaal", "unit": "bedrijven"},
     "RundveeTotaal_84": {"id": "cattle_total", "label_nl": "Rundvee, totaal", "unit": "dieren"},
-    "MelkEnKalfkoeien2Jaar_88": {"id": "dairy_cows", "label_nl": "Melk- en kalfkoeien (>= 2 jaar)", "unit": "dieren"},
+    "MelkEnKalfkoeien2Jaar_88": {"id": "dairy_cows", "label_nl": "Melk- en kalfkoeien (2 jaar en ouder)", "unit": "dieren"},
     "GeitenTotaal_96": {"id": "goats_total", "label_nl": "Geiten, totaal", "unit": "dieren"},
     "VarkensTotaal_121": {"id": "pigs_total", "label_nl": "Varkens, totaal", "unit": "dieren"},
     "KippenTotaal_125": {"id": "chickens_total", "label_nl": "Kippen, totaal", "unit": "dieren"},
@@ -30,17 +30,21 @@ CBS_INDICATORS = {
 # Method changes documented by CBS for this table. Show them on every trend chart.
 CBS_TREND_BREAKS = [
     {"year": 2016, "affects": ["farms_total"],
-     "note": "Farm population defined via the Handelsregister from 2016; clear break in number of farms."},
+     "note": "Farm population defined via the Handelsregister from 2016; clear break in number of farms.",
+     "note_nl": "Vanaf 2016 bepaalt het Handelsregister welke bedrijven meetellen; duidelijke trendbreuk in het aantal bedrijven."},
     {"year": 2017, "affects": ["cattle_total", "dairy_cows"],
-     "note": "Cattle counts derived from the I&R register instead of the survey."},
+     "note": "Cattle counts derived from the I&R register instead of the survey.",
+     "note_nl": "Vanaf 2017 komen de aantallen rundvee uit het I&R-register in plaats van uit de opgave."},
     {"year": 2018, "affects": ["goats_total", "pigs_total", "chickens_total"],
-     "note": "Goats and poultry derived from I&R registers; pigs and chickens adjusted for temporary vacancy."},
+     "note": "Goats and poultry derived from I&R registers; pigs and chickens adjusted for temporary vacancy.",
+     "note_nl": "Vanaf 2018 komen geiten en pluimvee uit I&R-registers; varkens en kippen worden gecorrigeerd voor tijdelijke leegstand."},
 ]
 
 # Real-world events that explain a visible jump. Not method changes: keep them separate.
 CBS_EVENTS = [
     {"year": 2003, "affects": ["chickens_total"],
-     "note": "Avian influenza (H7N7) outbreak in the Gelderse Vallei, spring 2003; poultry culled around the 1 April count."},
+     "note": "Avian influenza (H7N7) outbreak in the Gelderse Vallei, spring 2003; poultry culled around the 1 April count.",
+     "note_nl": "Uitbraak van vogelgriep (H7N7) in de Gelderse Vallei, voorjaar 2003; pluimvee geruimd rond de telling van 1 april."},
 ]
 
 CBS_METHOD = "Landbouwtelling (yearly agricultural census)"
@@ -87,6 +91,5 @@ MUNICIPALITY_SEED_BBOX = (157000, 465000, 163000, 472000)
 # PDOK: Natura 2000 boundaries (RVO). Licence CC0.
 PDOK_NATURA2000_WFS = "https://service.pdok.nl/rvo/natura2000/wfs/v1_0"
 PDOK_NATURA2000_LAYER = "natura2000:natura2000"
-NATURA2000_SEARCH_RADIUS_M = SURROUNDINGS_RADIUS_M
 # Codes used in the "beschermin" attribute. Unknown codes are passed through unchanged.
-NATURA2000_PROTECTION_LABELS = {"VR": "Vogelrichtlijn", "HR": "Habitatrichtlijn"}
+NATURA2000_PROTECTION_LABELS = {"VR": "Vogelrichtlijn", "HR": "Habitatrichtlijn", "VR+HR": "Vogel- en Habitatrichtlijn"}

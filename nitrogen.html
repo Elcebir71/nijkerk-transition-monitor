@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stikstofmonitor Nijkerk</title>
+<meta name="description" content="Openbare cijfers over veestapel, stikstofdepositie en natuur in en rond Nijkerk, met bron en beperkingen.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Same design tokens as index.html (Transitie Monitor), plus chart colours.
+   Real open data only on this page. No basemap tiles: the map is drawn as SVG. */
+:root{
+  --bg:#f5f3ec; --panel:#ffffff; --ink:#1c2620; --ink-dim:#5a6a5e;
+  --line:#d9d4c4; --accent:#4a6b4f; --accent-3:#3e5c76;
+  --chip-bg:#eef0e6; --info-bg:#e8eef2; --info-fg:#2f4a61;
+  --grid:#e9e5d8; --axis:#c9c4b3; --muted:#898781;
+  /* map: one hue, light to dark (more deposition = darker) */
+  --seq-1:#fde3c9; --seq-2:#f7c795; --seq-3:#e8a455; --seq-4:#c8801f; --seq-5:#9b5f00; --seq-6:#6e4100;
+  /* series */
+  --series-1:#2a78d6; --series-2:#eb6834;
+  --nature:#1f5c3a;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141a15; --panel:#1c241d; --ink:#eef1ea; --ink-dim:#9fae9f;
+    --line:#33402f; --accent:#8fbf94; --accent-3:#7fa3c4;
+    --chip-bg:#26301f; --info-bg:#1f2b33; --info-fg:#b9d0e3;
+    --grid:#2a3428; --axis:#44523f; --muted:#898781;
+    /* map: anchor flips in dark (more deposition = lighter) */
+    --seq-1:#49331a; --seq-2:#6c4618; --seq-3:#935f1a; --seq-4:#bd7c28; --seq-5:#e29e4f; --seq-6:#fbc68d;
+    --series-1:#3987e5; --series-2:#d95926;
+    --nature:#9be0b4;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141a15; --panel:#1c241d; --ink:#eef1ea; --ink-dim:#9fae9f;
+  --line:#33402f; --accent:#8fbf94; --accent-3:#7fa3c4;
+  --chip-bg:#26301f; --info-bg:#1f2b33; --info-fg:#b9d0e3;
+  --grid:#2a3428; --axis:#44523f; --muted:#898781;
+  --seq-1:#49331a; --seq-2:#6c4618; --seq-3:#935f1a; --seq-4:#bd7c28; --seq-5:#e29e4f; --seq-6:#fbc68d;
+  --series-1:#3987e5; --series-2:#d95926;
+  --nature:#9be0b4;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:16px;line-height:1.5}
+h1,h2,h3{font-family:"Fraunces","IBM Plex Sans",serif;font-weight:600;margin:0 0 4px;text-wrap:balance}
+h1{font-size:1.6rem}
+h2{font-size:1.25rem}
+h3{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim);margin:0 0 8px}
+p{margin:0 0 10px}
+a{color:var(--accent-3)}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.top{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:flex-end;justify-content:space-between}
+.subtitle{color:var(--ink-dim);font-size:.92rem;max-width:68ch}
+.backlink{font-size:.82rem;white-space:nowrap}
+.principle{background:var(--info-bg);color:var(--info-fg);border:1px solid color-mix(in srgb,var(--info-fg) 25%,transparent);border-radius:10px;padding:10px 14px;font-size:.88rem}
+.principle strong{font-weight:600}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.lede{color:var(--ink-dim);font-size:.9rem;max-width:80ch}
+
+/* stat tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .lbl{font-size:.78rem;color:var(--ink-dim)}
+.kpi .num{font-size:1.9rem;font-weight:600;line-height:1.15;margin:2px 0}
+.kpi .unit{font-size:.85rem;font-weight:500;color:var(--ink-dim);margin-left:4px}
+.kpi .sub{font-size:.76rem;color:var(--ink-dim);line-height:1.4}
+
+/* segmented control */
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:12px 0}
+.controls .ctl-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-dim)}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px;background:var(--chip-bg);border:1px solid var(--line);border-radius:11px;padding:3px}
+.seg button{border:none;background:transparent;color:var(--ink-dim);font:600 .82rem "IBM Plex Sans",system-ui,sans-serif;padding:7px 12px;border-radius:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--panel)}
+.seg button:focus-visible,.chart-svg:focus-visible{outline:2px solid var(--accent-3);outline-offset:2px}
+
+/* map */
+.map-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.map-grid{grid-template-columns:1fr}}
+.map-svg{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:12px;background:var(--chip-bg);touch-action:pan-y}
+.cell{stroke-width:.7}
+.n2k-halo{fill:none;stroke:var(--panel);stroke-width:4;stroke-linejoin:round;opacity:.85}
+.n2k{fill:none;stroke:var(--nature);stroke-width:1.8;stroke-linejoin:round}
+.n2k.vr{stroke-dasharray:6 4}
+.muni-halo{fill:none;stroke:var(--panel);stroke-width:5;stroke-linejoin:round;opacity:.9}
+.muni{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linejoin:round}
+.cell-hover{fill:none;stroke:var(--ink);stroke-width:2;pointer-events:none}
+.map-label{font:600 15px "IBM Plex Sans",system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:3.5px;stroke-linejoin:round;pointer-events:none}
+
+.scale text{font:500 14px "IBM Plex Sans",system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:3px}
+.scale line{stroke:var(--ink);stroke-width:2}
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.legend{display:flex;flex-direction:column;gap:5px;font-size:.84rem}
+.legend-row{display:flex;align-items:center;gap:9px}
+.sw{width:22px;height:14px;border-radius:3px;flex:0 0 auto;border:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
+.key{width:22px;height:0;flex:0 0 auto;border-top:2.2px solid var(--ink)}
+.key.n2k-key{border-top-color:var(--nature)}
+.key.n2k-key.vr{border-top-style:dashed}
+.legend .gap{height:6px}
+.note{font-size:.8rem;color:var(--ink-dim)}
+.notes{margin:0;padding-left:18px;font-size:.82rem;color:var(--ink-dim);display:flex;flex-direction:column;gap:5px}
+.notes strong{color:var(--ink);font-weight:600}
+
+/* composition bar */
+.comp{display:flex;gap:2px;height:16px;border-radius:4px;overflow:hidden;margin-bottom:8px}
+.comp span{display:block;height:100%}
+.comp .nhx{background:var(--series-1)}
+.comp .noy{background:var(--series-2)}
+.sw.nhx{background:var(--series-1)} .sw.noy{background:var(--series-2)}
+.legend-row .val{margin-left:auto;font-weight:600;white-space:nowrap}
+
+/* tables */
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:none}
+thead th{background:var(--chip-bg);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-dim);white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.status{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--chip-bg);color:var(--ink-dim);white-space:nowrap}
+.status.on{color:var(--accent)}
+
+/* small multiples */
+.chart-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.82rem;color:var(--ink-dim);margin-bottom:10px}
+.chart-legend span{display:inline-flex;align-items:center;gap:7px}
+.lk{width:18px;height:0;border-top:2px solid var(--series-1);display:inline-block}
+.lk.ctx{border-top-color:var(--muted)}
+.glyph{width:9px;height:9px;display:inline-block;background:var(--ink-dim)}
+.glyph.brk{transform:rotate(45deg)}
+.glyph.evt{border-radius:50%}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.chart-card{border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;min-width:0}
+.chart-card h4{margin:0;font:600 .92rem "IBM Plex Sans",system-ui,sans-serif}
+.chart-card .now{font-size:.8rem;color:var(--ink-dim);margin-bottom:4px}
+.chart-card .now b{color:var(--ink);font-weight:600}
+.chart-svg{width:100%;height:auto;display:block;touch-action:pan-y}
+.gridline{stroke:var(--grid);stroke-width:1}
+.axisline{stroke:var(--axis);stroke-width:1}
+.tick{font:400 10.5px "IBM Plex Sans",system-ui,sans-serif;fill:var(--muted);font-variant-numeric:tabular-nums}
+.line{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.line.s1{stroke:var(--series-1)} .line.ctx{stroke:var(--muted)}
+.dot.s1{fill:var(--series-1)} .dot.ctx{fill:var(--muted)}
+.dot{stroke:var(--panel);stroke-width:2}
+.endlabel{font:600 11px "IBM Plex Sans",system-ui,sans-serif;fill:var(--ink)}
+.marker line{stroke:var(--ink-dim);stroke-width:1;stroke-dasharray:3 3}
+.marker .g{fill:var(--ink-dim)}
+.cross{stroke:var(--ink-dim);stroke-width:1}
+.foot{margin:6px 0 0;padding:0;list-style:none;font-size:.74rem;color:var(--ink-dim);display:flex;flex-direction:column;gap:3px}
+.foot li{display:flex;gap:6px;align-items:baseline}
+.foot .glyph{flex:0 0 auto;width:7px;height:7px;position:relative;top:-1px}
+details{margin-top:12px}
+summary{cursor:pointer;font-size:.86rem;font-weight:600;color:var(--accent-3)}
+details .table-scroll{margin-top:8px;max-height:420px;overflow:auto}
+details thead th{position:sticky;top:0}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.two ul{margin:0;padding-left:18px;font-size:.86rem;display:flex;flex-direction:column;gap:4px}
+footer{font-size:.76rem;color:var(--ink-dim);line-height:1.6;padding:0 2px 8px}
+
+/* tooltip */
+.tip{position:fixed;z-index:10;pointer-events:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:.8rem;box-shadow:0 6px 18px rgba(0,0,0,.16);max-width:270px}
+.tip .t{font-weight:600;margin-bottom:4px}
+.tip .r{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.tip .r b{font-weight:600}
+.tip .r .nm{color:var(--ink-dim)}
+.tip .x{margin-top:5px;color:var(--ink-dim);font-size:.74rem;white-space:normal}
+.missing{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Stikstofmonitor Nijkerk</h1>
+      <div class="subtitle">Openbare cijfers over veestapel, stikstofdepositie en natuur in en rond Nijkerk, overzichtelijk en controleerbaar bij elkaar gebracht. Een onafhankelijk dataproject van een inwoner.</div>
+    </div>
+    <a class="backlink" href="index.html">Naar de Transitie Monitor (synthetische demodata)</a>
+  </header>
+
+  <div class="principle"><strong>Alleen echte, openbare data.</strong> Deze pagina toont cijfers zoals CBS, RIVM en PDOK ze publiceren, met bron, peildatum en beperkingen erbij. Ik reken niet zelf aan depositie en leg geen verband tussen dieraantallen en depositie.</div>
+
+  <div class="missing" id="missing" hidden>
+    <strong>Het databestand ontbreekt.</strong> Voer in de map van het project <code>python scripts/nitrogen/build_page_data.py</code> uit en laad deze pagina opnieuw.
+  </div>
+
+  <main id="main" hidden style="display:contents">
+  <section class="kpis" id="kpis" aria-label="Kerncijfers"></section>
+
+  <section class="panel" id="depositie">
+    <h2>Stikstofdepositie en natuur, <span id="dep-year"></span></h2>
+    <p class="lede">De kaart toont de grootschalige depositiekaart (GDN) van het RIVM: de berekende jaargemiddelde stikstofdepositie per vak van 1×1 km, in mol stikstof per hectare per jaar. De lijnen zijn de gemeentegrens en de Natura 2000-gebieden in het kaartgebied, tot ongeveer 15 km rond de gemeente.</p>
+    <div class="controls">
+      <span class="ctl-label" id="comp-label">Kaart toont</span>
+      <div class="seg" id="comp-seg" role="group" aria-labelledby="comp-label"></div>
+    </div>
+    <div class="map-grid">
+      <div>
+        <svg class="map-svg" id="map" role="img" aria-label="Kaart van de stikstofdepositie per vak van 1 bij 1 kilometer rond Nijkerk, met gemeentegrens en Natura 2000-gebieden. De cijfers staan ook in de tabellen op deze pagina."></svg>
+        <p class="note" style="margin-top:8px">Wijs een vak aan voor de waarden. Alle vakken staan in <a href="data/nitrogen/processed/deposition_grid.geojson">deposition_grid.geojson</a>.</p>
+      </div>
+      <div class="side">
+        <div>
+          <h3 id="legend-title">Depositie (mol N/ha/jaar)</h3>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div>
+          <h3>Gemiddeld in de gemeente Nijkerk</h3>
+          <div class="table-scroll"><table id="dep-table"></table></div>
+          <p class="note" id="dep-table-note" style="margin-top:6px"></p>
+        </div>
+        <div>
+          <h3>Samenstelling van de depositie</h3>
+          <div class="comp" id="comp-bar" role="img"></div>
+          <div class="legend" id="comp-legend"></div>
+          <p class="note" style="margin-top:6px">NHx is afkomstig van ammoniak (NH₃), NOy van stikstofoxiden (NOx). Dit is de samenstelling van wat in Nijkerk neerkomt. Het zegt niet waar de uitstoot plaatsvond: een deel komt van buiten de gemeente.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:18px">Zo leest u deze kaart</h3>
+    <ul class="notes" id="dep-notes"></ul>
+
+    <h3 style="margin-top:18px">Natura 2000-gebieden in het kaartgebied</h3>
+    <div class="table-scroll"><table id="n2k-table"></table></div>
+    <p class="note" style="margin-top:6px">Een Natura 2000-status betekent niet automatisch dat een gebied stikstofgevoelig is. Welke gebieden stikstofgevoelige habitats hebben, staat niet in deze grenzenbron en is hier bewust niet ingevuld.</p>
+  </section>
+
+  <section class="panel" id="veestapel">
+    <h2>Veestapel en landbouwbedrijven, <span id="ls-period"></span></h2>
+    <p class="lede">Cijfers uit de Landbouwtelling van het CBS. Let op de formulering: het CBS telt dieren bij landbouwbedrijven met hun hoofdvestiging in Nijkerk; de dieren zelf kunnen elders staan. Peildatum is 1 april.</p>
+    <div class="controls">
+      <span class="ctl-label" id="view-label">Weergave</span>
+      <div class="seg" id="view-seg" role="group" aria-labelledby="view-label"></div>
+    </div>
+    <div class="chart-legend" id="chart-legend"></div>
+    <div class="charts" id="charts"></div>
+    <ul class="notes" style="margin-top:14px">
+      <li><strong>Dit zijn dieraantallen, geen emissies.</strong> De uitstoot per dier verschilt sterk per diersoort en stalsysteem; vergelijk diersoorten daarom niet op aantal.</li>
+      <li><strong>Kippen:</strong> de telling is een momentopname op één dag. Door leegstand tussen rondes schommelt het aantal sterk; lees alleen de lange termijn.</li>
+      <li><strong>Melkkoeien:</strong> in 2016 en 2019 maakt het aantal in Nijkerk een sprong die in Gelderland veel kleiner is. De oorzaak is niet uit deze cijfers af te leiden.</li>
+    </ul>
+    <details>
+      <summary>Tabel met alle cijfers voor Nijkerk</summary>
+      <div class="table-scroll"><table id="ls-table"></table></div>
+    </details>
+  </section>
+
+  <section class="panel" id="bronnen">
+    <h2>Bronnen en beperkingen</h2>
+    <div class="table-scroll" style="margin-top:8px"><table id="src-table"></table></div>
+    <div class="two">
+      <div>
+        <h3>Wat deze pagina doet</h3>
+        <ul>
+          <li>Gepubliceerde cijfers tonen, met bron en peildatum.</li>
+          <li>Eenvoudige afgeleiden berekenen: het gebiedsgemiddelde van gepubliceerde kaartwaarden, een index en een aandeel.</li>
+          <li>Methodebreuken en bijzondere gebeurtenissen zichtbaar markeren.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Wat deze pagina niet doet</h3>
+        <ul>
+          <li>Geen eigen depositieberekening en geen scenario's.</li>
+          <li>Geen verband leggen tussen dieraantallen en depositie.</li>
+          <li>Geen individuele bedrijven tonen.</li>
+          <li>Geen uitspraak over welke natuur stikstofgevoelig is.</li>
+          <li>Geen kostenberekeningen.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note" style="margin-top:12px">De volledige verantwoording per bron staat in <a href="https://github.com/Elcebir71/nijkerk-transition-monitor/blob/main/docs/nitrogen-sources.md">docs/nitrogen-sources.md</a>.</p>
+  </section>
+  </main>
+
+  <footer id="footer"></footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script src="data/nitrogen/processed/nitrogen_data.js"></script>
+<script>
+(function () {
+  'use strict';
+  var D = window.NITROGEN_DATA;
+  var $ = function (sel) { return document.querySelector(sel); };
+  if (!D) { $('#missing').hidden = false; return; }
+  $('#main').hidden = false;
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var nf0 = new Intl.NumberFormat('nl-NL', { maximumFractionDigits: 0 });
+  var nf1 = new Intl.NumberFormat('nl-NL', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  var nf2 = new Intl.NumberFormat('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // Small DOM helpers. All data-derived text goes in through textContent.
+  function h(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined && text !== null) e.textContent = text;
+    return e;
+  }
+  function s(tag, attrs) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function row(table, cells, head) {
+    var tr = document.createElement('tr');
+    cells.forEach(function (c) {
+      var cell = document.createElement(head ? 'th' : 'td');
+      if (c && c.nodeType) cell.appendChild(c);
+      else if (c && typeof c === 'object') { cell.textContent = c.text; if (c.n) cell.className = 'n'; }
+      else cell.textContent = c;
+      tr.appendChild(cell);
+    });
+    (head ? (table.tHead || table.createTHead()) : (table.tBodies[0] || table.createTBody())).appendChild(tr);
+  }
+  function link(href, text) { var a = h('a', null, text); a.href = href; return a; }
+  function nlDate(iso) { var p = String(iso).slice(0, 10).split('-'); return p.length === 3 ? p[2] + '-' + p[1] + '-' + p[0] : iso; }
+
+  // ---------- tooltip ----------
+  var tip = $('#tip');
+  function showTip(x, y, build) {
+    tip.textContent = '';
+    build(tip);
+    tip.hidden = false;
+    var w = tip.offsetWidth, ht = tip.offsetHeight;
+    var left = x + 14, top = y + 14;
+    if (left + w > window.innerWidth - 8) left = Math.max(8, x - w - 14);
+    if (top + ht > window.innerHeight - 8) top = Math.max(8, y - ht - 14);
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+  function hideTip() { tip.hidden = true; }
+  function tipRow(parent, keyClass, value, name) {
+    var r = h('div', 'r');
+    if (keyClass) r.appendChild(h('span', keyClass));
+    r.appendChild(h('b', null, value));
+    r.appendChild(h('span', 'nm', name));
+    parent.appendChild(r);
+  }
+
+  // =====================================================================
+  // 1. Deposition map (RIVM GDN) with Natura 2000 and municipal boundary
+  // =====================================================================
+  var dep = D.deposition, cells = dep.features, sum = dep.municipality_summary;
+  var muni = D.boundary.features[0];
+  var COMPONENTS = [
+    { id: 'ntot', label: 'Totaal stikstof', short: 'Totaal N', breaks: [800, 1000, 1200, 1500, 2000] },
+    { id: 'nhx', label: 'NHx (gereduceerd)', short: 'NHx', breaks: [500, 700, 900, 1200, 1600] },
+    { id: 'noy', label: 'NOy (geoxideerd)', short: 'NOy', breaks: [250, 300, 350, 400, 500] }
+  ].filter(function (c) { return sum[c.id]; });
+  var compState = COMPONENTS[0];
+  var PROTECTION = { 'VR': 'Vogelrichtlijn', 'HR': 'Habitatrichtlijn', 'VR+HR': 'Vogel- en Habitatrichtlijn' };
+
+  $('#dep-year').textContent = dep.source.year;
+
+  // Projection: local equirectangular, good enough for a 45 km wide map.
+  var minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
+  cells.forEach(function (f) {
+    f.geometry.coordinates[0].forEach(function (c) {
+      if (c[0] < minLon) minLon = c[0]; if (c[0] > maxLon) maxLon = c[0];
+      if (c[1] < minLat) minLat = c[1]; if (c[1] > maxLat) maxLat = c[1];
+    });
+  });
+  var kx = Math.cos((minLat + maxLat) / 2 * Math.PI / 180);
+  var MW = 900, SC = MW / ((maxLon - minLon) * kx), MH = Math.round((maxLat - minLat) * SC);
+  function P(c) { return [(c[0] - minLon) * kx * SC, (maxLat - c[1]) * SC]; }
+  function ringPath(ring) {
+    return 'M' + ring.map(function (c) { var p = P(c); return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join('L') + 'Z';
+  }
+  function polygons(g) { return g.type === 'Polygon' ? [g.coordinates] : g.coordinates; }
+  function geomPath(g) {
+    return polygons(g).map(function (poly) { return poly.map(ringPath).join(''); }).join('');
+  }
+  function ringAreaCentroid(ring) {
+    var a = 0, cx = 0, cy = 0;
+    for (var i = 0; i < ring.length - 1; i++) {
+      var p = P(ring[i]), q = P(ring[i + 1]), cr = p[0] * q[1] - q[0] * p[1];
+      a += cr; cx += (p[0] + q[0]) * cr; cy += (p[1] + q[1]) * cr;
+    }
+    a /= 2;
+    return a === 0 ? null : { area: Math.abs(a), x: cx / (6 * a), y: cy / (6 * a) };
+  }
+  function labelPoint(g) {
+    var best = null;
+    polygons(g).forEach(function (poly) {
+      var c = ringAreaCentroid(poly[0]);
+      if (c && (!best || c.area > best.area)) best = c;
+    });
+    return best;
+  }
+
+  var map = $('#map');
+  map.setAttribute('viewBox', '0 0 ' + MW + ' ' + MH);
+  var gCells = s('g', {});
+  var cellEls = cells.map(function (f, i) {
+    var p = s('path', { d: ringPath(f.geometry.coordinates[0]), 'class': 'cell', 'data-i': i });
+    gCells.appendChild(p);
+    return p;
+  });
+  map.appendChild(gCells);
+
+  var n2k = D.natura2000.features;
+  // One Natura 2000 area can come as several features (parts with a different
+  // designation). Lines are drawn per feature; labels and the table use one entry per name.
+  var n2kAreas = [];
+  n2k.forEach(function (f) {
+    var p = f.properties, a = n2kAreas.filter(function (x) { return x.name === p.name; })[0];
+    if (!a) { a = { name: p.name, parts: [], distance: Infinity, overlap: 0, total: 0, main: f }; n2kAreas.push(a); }
+    a.parts.push(f);
+    a.distance = Math.min(a.distance, p.distance_to_municipality_km);
+    a.overlap += p.overlap_with_municipality_ha;
+    a.total += p.area_total_ha;
+    if (p.area_total_ha > a.main.properties.area_total_ha) a.main = f;
+  });
+  n2kAreas.sort(function (x, y) { return x.distance - y.distance; });
+  n2k.forEach(function (f) {
+    var d = geomPath(f.geometry);
+    map.appendChild(s('path', { d: d, 'class': 'n2k-halo' }));
+    map.appendChild(s('path', { d: d, 'class': 'n2k' + (f.properties.protection_code === 'VR' ? ' vr' : '') }));
+  });
+  var muniPath = geomPath(muni.geometry);
+  map.appendChild(s('path', { d: muniPath, 'class': 'muni-halo' }));
+  map.appendChild(s('path', { d: muniPath, 'class': 'muni' }));
+  var hover = s('path', { 'class': 'cell-hover', d: '' });
+  map.appendChild(hover);
+
+  // Labels and scale bar. Text is sized in map units, so it is scaled up on
+  // narrow screens to stay readable (about 11 px on screen at minimum).
+  var gLabels = s('g', {});
+  map.appendChild(gLabels);
+  function drawLabels() {
+    gLabels.textContent = '';
+    var px = MW / (map.clientWidth || MW), fs = Math.max(15, 11 * px);
+    function mapLabel(text, x, y, size) {
+      var half = text.length * size * 0.3 + 8;
+      var t = s('text', { x: Math.min(MW - half, Math.max(half, x)).toFixed(0), y: Math.min(MH - 12, Math.max(size + 4, y)).toFixed(0), 'text-anchor': 'middle', 'class': 'map-label' });
+      t.style.fontSize = size.toFixed(1) + 'px';
+      t.textContent = text;
+      gLabels.appendChild(t);
+    }
+    n2kAreas.forEach(function (a) { var c = labelPoint(a.main.geometry); if (c) mapLabel(a.name, c.x, c.y, fs); });
+    var mc = labelPoint(muni.geometry);
+    if (mc) mapLabel(muni.properties.name, mc.x, mc.y + fs * 0.4, fs * 1.2);
+
+    var km5 = 5 / 111.2 * SC, gScale = s('g', { 'class': 'scale', transform: 'translate(18,' + (MH - 18) + ')' });
+    gScale.appendChild(s('line', { x1: 0, y1: 0, x2: km5.toFixed(0), y2: 0 }));
+    var st = s('text', { x: 0, y: -7 }); st.style.fontSize = (fs * 0.9).toFixed(1) + 'px'; st.textContent = '5 km';
+    gScale.appendChild(st);
+    gLabels.appendChild(gScale);
+  }
+  drawLabels();
+  var resizeTimer = null;
+  window.addEventListener('resize', function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(drawLabels, 150); });
+
+  function binOf(v, breaks) {
+    for (var i = 0; i < breaks.length; i++) if (v < breaks[i]) return i;
+    return breaks.length;
+  }
+  function paintMap() {
+    cells.forEach(function (f, i) {
+      var v = f.properties[compState.id];
+      var col = (v === null || v === undefined) ? 'var(--chip-bg)' : 'var(--seq-' + (binOf(v, compState.breaks) + 1) + ')';
+      cellEls[i].style.fill = col;
+      cellEls[i].style.stroke = col;
+    });
+    var lg = $('#legend'); lg.textContent = '';
+    $('#legend-title').textContent = compState.short + ' (mol N/ha/jaar)';
+    var b = compState.breaks;
+    for (var i = 0; i <= b.length; i++) {
+      var r = h('div', 'legend-row'), sw = h('span', 'sw');
+      sw.style.background = 'var(--seq-' + (i + 1) + ')';
+      r.appendChild(sw);
+      r.appendChild(h('span', null, i === 0 ? 'minder dan ' + nf0.format(b[0]) : i === b.length ? nf0.format(b[i - 1]) + ' of meer' : nf0.format(b[i - 1]) + ' tot ' + nf0.format(b[i])));
+      lg.appendChild(r);
+    }
+    lg.appendChild(h('div', 'gap'));
+    [['key', 'Gemeentegrens ' + muni.properties.name], ['key n2k-key', 'Natura 2000: Vogel- en Habitatrichtlijn'], ['key n2k-key vr', 'Natura 2000: alleen Vogelrichtlijn']].forEach(function (k) {
+      var r = h('div', 'legend-row'); r.appendChild(h('span', k[0])); r.appendChild(h('span', null, k[1])); lg.appendChild(r);
+    });
+  }
+
+  var compSeg = $('#comp-seg');
+  COMPONENTS.forEach(function (c) {
+    var btn = h('button', null, c.label);
+    btn.type = 'button';
+    btn.setAttribute('aria-pressed', c === compState ? 'true' : 'false');
+    btn.addEventListener('click', function () {
+      compState = c;
+      Array.prototype.forEach.call(compSeg.children, function (x) { x.setAttribute('aria-pressed', x === btn ? 'true' : 'false'); });
+      paintMap();
+    });
+    compSeg.appendChild(btn);
+  });
+  paintMap();
+
+  function cellTip(e) {
+    var t = e.target.closest ? e.target.closest('.cell') : null;
+    if (!t) { hideTip(); hover.setAttribute('d', ''); return; }
+    var f = cells[+t.getAttribute('data-i')], p = f.properties;
+    hover.setAttribute('d', t.getAttribute('d'));
+    showTip(e.clientX, e.clientY, function (el) {
+      el.appendChild(h('div', 't', 'Vak van 1×1 km'));
+      COMPONENTS.forEach(function (c) {
+        var v = p[c.id];
+        tipRow(el, null, v === null || v === undefined ? 'geen waarde' : nf0.format(v) + ' mol', c.short);
+      });
+      var share = p.share_in_municipality;
+      el.appendChild(h('div', 'x', share > 0 ? nf0.format(share * 100) + '% van dit vak ligt in ' + muni.properties.name : 'Buiten de gemeente ' + muni.properties.name));
+    });
+  }
+  gCells.addEventListener('pointermove', cellTip);
+  gCells.addEventListener('pointerdown', cellTip);
+  map.addEventListener('pointerleave', function () { hideTip(); hover.setAttribute('d', ''); });
+
+  // Summary table
+  var depTable = $('#dep-table');
+  row(depTable, ['Component', { text: 'mol N/ha', n: 1 }, { text: 'kg N/ha', n: 1 }, { text: 'Laagste–hoogste vak', n: 1 }], true);
+  COMPONENTS.forEach(function (c) {
+    var m = sum[c.id];
+    row(depTable, [m.label_nl, { text: nf0.format(m.mean_mol_per_ha), n: 1 }, { text: nf1.format(m.mean_kg_n_per_ha), n: 1 }, { text: nf0.format(m.lowest_cell_mol_per_ha) + '–' + nf0.format(m.highest_cell_mol_per_ha), n: 1 }]);
+  });
+  $('#dep-table-note').textContent = 'Per jaar. Gemiddelde gewogen naar het deel van elk vak dat binnen de gemeentegrens ligt (' + sum.ntot.cells + ' vakken). Laagste en hoogste: vakken die voor minstens de helft in de gemeente liggen.';
+
+  // Composition bar (NHx + NOy add up to the total)
+  var nhxShare = null;
+  if (sum.nhx && sum.noy) {
+    var tot = sum.nhx.mean_mol_per_ha + sum.noy.mean_mol_per_ha;
+    nhxShare = sum.nhx.mean_mol_per_ha / tot * 100;
+    var bar = $('#comp-bar');
+    var a = h('span', 'nhx'), b2 = h('span', 'noy');
+    a.style.width = nhxShare + '%'; b2.style.width = (100 - nhxShare) + '%';
+    bar.appendChild(a); bar.appendChild(b2);
+    bar.setAttribute('aria-label', 'NHx ' + nf0.format(nhxShare) + ' procent, NOy ' + nf0.format(100 - nhxShare) + ' procent');
+    [['nhx', 'NHx, gereduceerd stikstof', nhxShare, sum.nhx], ['noy', 'NOy, geoxideerd stikstof', 100 - nhxShare, sum.noy]].forEach(function (x) {
+      var r = h('div', 'legend-row');
+      r.appendChild(h('span', 'sw ' + x[0]));
+      r.appendChild(h('span', null, x[1]));
+      r.appendChild(h('span', 'val', nf0.format(x[2]) + '% · ' + nf0.format(x[3].mean_mol_per_ha) + ' mol'));
+      $('#comp-legend').appendChild(r);
+    });
+  }
+
+  // Reading notes
+  [
+    ['Onzekerheid.', 'Het RIVM geeft per vak een onzekerheid van 30–35% (σ). Verschillen tussen buurvakken zijn daardoor vaak niet betekenisvol.'],
+    ['Wat “' + dep.source.year + '” betekent.', 'De kaart gebruikt meteorologie en metingen van 2025, landelijke emissietotalen van 2024 en de ruimtelijke verdeling van bronnen van 2023.'],
+    ['Geen vergunningsinstrument.', 'De kaart is niet bedoeld voor uitspraken over afzonderlijke locaties of vergunningen; daarvoor wordt AERIUS gebruikt.'],
+    ['Natuurgebieden.', 'Voor de depositie op natuurgebieden verwijst het RIVM naar de “Monitor stikstofdepositie in Natura 2000-gebieden”. Deze pagina berekent daarom geen eigen gemiddelden per natuurgebied.']
+  ].forEach(function (n) {
+    var li = document.createElement('li');
+    li.appendChild(h('strong', null, n[0]));
+    li.appendChild(document.createTextNode(' ' + n[1]));
+    $('#dep-notes').appendChild(li);
+  });
+
+  // Natura 2000 table
+  var n2kTable = $('#n2k-table');
+  row(n2kTable, ['Gebied', 'Aanwijzing', { text: 'Afstand tot gemeentegrens', n: 1 }, { text: 'Binnen Nijkerk', n: 1 }, { text: 'Totale oppervlakte', n: 1 }], true);
+  var insideHa = 0;
+  function protectionLabel(code) { return PROTECTION[code] || code; }
+  n2kAreas.forEach(function (a) {
+    insideHa += a.overlap;
+    var mainCode = a.main.properties.protection_code, others = [];
+    a.parts.forEach(function (f) {
+      var c = f.properties.protection_code;
+      if (c !== mainCode && others.indexOf(protectionLabel(c)) < 0) others.push(protectionLabel(c));
+    });
+    row(n2kTable, [
+      a.name,
+      protectionLabel(mainCode) + (others.length ? ' (een klein deel: alleen ' + others.join(', ') + ')' : ''),
+      { text: a.distance > 0 ? nf1.format(a.distance) + ' km' : 'grenst aan of overlapt', n: 1 },
+      { text: a.overlap > 0 ? nf0.format(a.overlap) + ' ha' : 'nee', n: 1 },
+      { text: nf0.format(a.total) + ' ha', n: 1 }
+    ]);
+  });
+
+  // =====================================================================
+  // 2. Stat tiles
+  // =====================================================================
+  function kpi(label, value, unit, sub) {
+    var el = h('div', 'kpi');
+    el.appendChild(h('div', 'lbl', label));
+    var num = h('div', 'num', value);
+    if (unit) num.appendChild(h('span', 'unit', unit));
+    el.appendChild(num);
+    el.appendChild(h('div', 'sub', sub));
+    $('#kpis').appendChild(el);
+  }
+  kpi('Gemiddelde stikstofdepositie, ' + dep.source.year, nf0.format(sum.ntot.mean_mol_per_ha), 'mol N/ha/jaar',
+    'Ongeveer ' + nf1.format(sum.ntot.mean_kg_n_per_ha) + ' kg N/ha/jaar. RIVM GDN; onzekerheid per vak 30–35%.');
+  if (nhxShare !== null) kpi('Aandeel gereduceerd stikstof (NHx)', nf0.format(nhxShare) + '%', '',
+    'Van wat in Nijkerk neerkomt; de rest is NOy. Zegt niets over waar de uitstoot plaatsvond.');
+  var arkem = n2kAreas.filter(function (a) { return a.overlap > 0; }).sort(function (x, y) { return y.overlap - x.overlap; })[0];
+  kpi('Natura 2000 binnen de gemeente', nf0.format(insideHa / muni.properties.area_ha * 100) + '%', '',
+    nf0.format(insideHa) + ' ha van ' + nf0.format(muni.properties.area_ha) + ' ha' + (arkem ? ', vrijwel geheel ' + arkem.name + ' (' + protectionLabel(arkem.main.properties.protection_code) + ').' : '.'));
+  var veluwe = n2kAreas.filter(function (a) { return a.name === 'Veluwe'; })[0];
+  if (veluwe) kpi('Afstand tot de Veluwe', nf1.format(veluwe.distance), 'km',
+    'Kortste afstand tussen de gemeentegrens en het Natura 2000-gebied Veluwe.');
+
+  // =====================================================================
+  // 3. Livestock small multiples (CBS)
+  // =====================================================================
+  var L = D.livestock, years = L.years, ids = Object.keys(L.indicators);
+  var regionKeys = Object.keys(L.regions);
+  var mKey = regionKeys.filter(function (k) { return k.indexOf('GM') === 0; })[0] || regionKeys[0];
+  var pKey = regionKeys.filter(function (k) { return k !== mKey; })[0];
+  var M = L.regions[mKey], PR = L.regions[pKey], SHARE = L.municipality_share_of_province_pct || {};
+  var lastI = years.length - 1;
+  $('#ls-period').textContent = years[0] + '–' + years[lastI];
+
+  var VIEWS = [
+    { id: 'count', label: 'Aantal' },
+    { id: 'index', label: 'Index (' + years[0] + ' = 100), met ' + PR.name },
+    { id: 'share', label: 'Aandeel in ' + PR.name }
+  ];
+  var viewState = VIEWS[0];
+
+  function fmtTick(v, view) {
+    if (view === 'share') return (v % 1 === 0 ? nf0.format(v) : nf1.format(v)) + '%';
+    if (v >= 1e6) return (v / 1e6 % 1 === 0 ? nf0.format(v / 1e6) : nf1.format(v / 1e6)) + ' mln';
+    return nf0.format(v);
+  }
+  function fmtVal(v, view) {
+    if (v === null || v === undefined) return 'geen cijfer';
+    if (view === 'share') return nf2.format(v) + '%';
+    return nf0.format(v);
+  }
+  function niceStep(max) {
+    var raw = max / 3.2, mag = Math.pow(10, Math.floor(Math.log10(raw))), n = raw / mag;
+    return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * mag;
+  }
+  function seriesFor(id) {
+    if (viewState.id === 'count') return [{ name: M.name, cls: 's1', values: M.values[id] }];
+    if (viewState.id === 'share') return [{ name: M.name + ' als deel van ' + PR.name, cls: 's1', values: SHARE[id] || [] }];
+    function idx(a) { return a.map(function (v) { return v === null || a[0] === null ? null : v / a[0] * 100; }); }
+    return [{ name: PR.name, cls: 'ctx', values: idx(PR.values[id]) }, { name: M.name, cls: 's1', values: idx(M.values[id]) }];
+  }
+  function markersFor(id) {
+    var out = [];
+    (L.trend_breaks || []).forEach(function (b) { if (b.affects.indexOf(id) >= 0) out.push({ year: b.year, kind: 'brk', word: 'methodebreuk', note: b.note_nl || b.note }); });
+    (L.events || []).forEach(function (b) { if (b.affects.indexOf(id) >= 0) out.push({ year: b.year, kind: 'evt', word: 'gebeurtenis', note: b.note_nl || b.note }); });
+    return out.sort(function (a, b) { return a.year - b.year; });
+  }
+
+  var CW = 340, CH = 196, m = { l: 52, r: 56, t: 16, b: 24 };
+  var pw = CW - m.l - m.r, ph = CH - m.t - m.b;
+  function xOf(i) { return m.l + pw * i / lastI; }
+
+  function drawChart(card, id) {
+    var meta = L.indicators[id], series = seriesFor(id), marks = markersFor(id), view = viewState.id;
+    var max = 0;
+    series.forEach(function (sr) { sr.values.forEach(function (v) { if (v !== null && v > max) max = v; }); });
+    var step = niceStep(max || 1), top = Math.ceil(max / step) * step;
+    function yOf(v) { return m.t + ph - ph * v / top; }
+
+    card.textContent = '';
+    card.appendChild(h('h4', null, meta.label_nl));
+    var now = h('div', 'now');
+    var main = series[series.length - 1];
+    if (view === 'index') {
+      now.appendChild(document.createTextNode(years[lastI] + ': ' + M.name + ' '));
+      now.appendChild(h('b', null, fmtVal(main.values[lastI], view)));
+      now.appendChild(document.createTextNode(', ' + PR.name + ' ' + fmtVal(series[0].values[lastI], view)));
+    } else {
+      now.appendChild(document.createTextNode(years[lastI] + ': '));
+      now.appendChild(h('b', null, fmtVal(main.values[lastI], view)));
+      now.appendChild(document.createTextNode(view === 'count' ? ' ' + meta.unit : ' van ' + PR.name));
+    }
+    card.appendChild(now);
+
+    var svg = s('svg', { viewBox: '0 0 ' + CW + ' ' + CH, 'class': 'chart-svg', tabindex: '0', role: 'img' });
+    svg.setAttribute('aria-label', meta.label_nl + ', ' + years[0] + ' tot ' + years[lastI] + '. Gebruik de pijltjestoetsen om per jaar te lezen; alle cijfers staan ook in de tabel onder de grafieken.');
+    for (var v = 0; v <= top + 1e-9; v += step) {
+      svg.appendChild(s('line', { x1: m.l, x2: m.l + pw, y1: yOf(v), y2: yOf(v), 'class': v === 0 ? 'axisline' : 'gridline' }));
+      var tl = s('text', { x: m.l - 6, y: yOf(v) + 3.5, 'text-anchor': 'end', 'class': 'tick' });
+      tl.textContent = fmtTick(v, view); svg.appendChild(tl);
+    }
+    years.forEach(function (y, i) {
+      if (y % 10 === 0 || i === lastI) {
+        var tx = s('text', { x: xOf(i), y: CH - 7, 'text-anchor': 'middle', 'class': 'tick' });
+        tx.textContent = y; svg.appendChild(tx);
+      }
+    });
+    marks.forEach(function (mk) {
+      var i = years.indexOf(mk.year); if (i < 0) return;
+      var g = s('g', { 'class': 'marker' }), x = xOf(i);
+      g.appendChild(s('line', { x1: x, x2: x, y1: m.t - 2, y2: m.t + ph }));
+      g.appendChild(mk.kind === 'brk'
+        ? s('rect', { x: x - 3.5, y: m.t - 10.5, width: 7, height: 7, transform: 'rotate(45 ' + x + ' ' + (m.t - 7) + ')', 'class': 'g' })
+        : s('circle', { cx: x, cy: m.t - 7, r: 3.8, 'class': 'g' }));
+      svg.appendChild(g);
+    });
+    series.forEach(function (sr) {
+      var d = '', pen = false;
+      sr.values.forEach(function (val, i) {
+        if (val === null || val === undefined) { pen = false; return; }
+        d += (pen ? 'L' : 'M') + xOf(i).toFixed(1) + ',' + yOf(val).toFixed(1); pen = true;
+      });
+      svg.appendChild(s('path', { d: d, 'class': 'line ' + sr.cls }));
+    });
+    var endV = main.values[lastI];
+    if (endV !== null && endV !== undefined) {
+      svg.appendChild(s('circle', { cx: xOf(lastI), cy: yOf(endV), r: 4, 'class': 'dot ' + main.cls }));
+      var el = s('text', { x: xOf(lastI) + 8, y: yOf(endV) + 4, 'class': 'endlabel' });
+      el.textContent = fmtVal(endV, view); svg.appendChild(el);
+    }
+
+    // Hover layer: crosshair snaps to the nearest year, one tooltip for all series.
+    var cross = s('line', { 'class': 'cross', y1: m.t, y2: m.t + ph, visibility: 'hidden' });
+    svg.appendChild(cross);
+    var dots = series.map(function (sr) { var c = s('circle', { r: 4, 'class': 'dot ' + sr.cls, visibility: 'hidden' }); svg.appendChild(c); return c; });
+    var cur = lastI;
+    function at(i, cx, cy) {
+      cur = i;
+      cross.setAttribute('x1', xOf(i)); cross.setAttribute('x2', xOf(i)); cross.setAttribute('visibility', 'visible');
+      series.forEach(function (sr, k) {
+        var val = sr.values[i];
+        if (val === null || val === undefined) { dots[k].setAttribute('visibility', 'hidden'); return; }
+        dots[k].setAttribute('cx', xOf(i)); dots[k].setAttribute('cy', yOf(val)); dots[k].setAttribute('visibility', 'visible');
+      });
+      showTip(cx, cy, function (elx) {
+        elx.appendChild(h('div', 't', meta.label_nl + ', ' + years[i]));
+        series.slice().reverse().forEach(function (sr) { tipRow(elx, 'lk' + (sr.cls === 'ctx' ? ' ctx' : ''), fmtVal(sr.values[i], view), sr.name); });
+        marks.forEach(function (mk) { if (mk.year === years[i]) elx.appendChild(h('div', 'x', mk.word.charAt(0).toUpperCase() + mk.word.slice(1) + ': ' + mk.note)); });
+      });
+    }
+    function off() { cross.setAttribute('visibility', 'hidden'); dots.forEach(function (c) { c.setAttribute('visibility', 'hidden'); }); hideTip(); }
+    function fromPointer(e) {
+      var r = svg.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * CW;
+      at(Math.max(0, Math.min(lastI, Math.round((x - m.l) / pw * lastI))), e.clientX, e.clientY);
+    }
+    function fromKeyboard() { var r = svg.getBoundingClientRect(); at(cur, r.left + xOf(cur) / CW * r.width, r.top + r.height * 0.3); }
+    svg.addEventListener('pointermove', fromPointer);
+    svg.addEventListener('pointerdown', fromPointer);
+    svg.addEventListener('pointerleave', off);
+    svg.addEventListener('focus', fromKeyboard);
+    svg.addEventListener('blur', off);
+    svg.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') cur = Math.max(0, cur - 1);
+      else if (e.key === 'ArrowRight') cur = Math.min(lastI, cur + 1);
+      else if (e.key === 'Escape') { off(); return; }
+      else return;
+      e.preventDefault(); fromKeyboard();
+    });
+    card.appendChild(svg);
+
+    if (marks.length) {
+      var ul = h('ul', 'foot');
+      marks.forEach(function (mk) {
+        var li = document.createElement('li');
+        li.appendChild(h('span', 'glyph ' + mk.kind));
+        li.appendChild(h('span', null, mk.year + ', ' + mk.word + ': ' + mk.note));
+        ul.appendChild(li);
+      });
+      card.appendChild(ul);
+    }
+  }
+
+  var chartsEl = $('#charts'), cards = {};
+  ids.forEach(function (id) { cards[id] = h('div', 'chart-card'); chartsEl.appendChild(cards[id]); });
+  function drawAll() {
+    ids.forEach(function (id) { drawChart(cards[id], id); });
+    var lg = $('#chart-legend'); lg.textContent = '';
+    function item(cls, text) { var sp = document.createElement('span'); sp.appendChild(h('span', cls)); sp.appendChild(document.createTextNode(text)); lg.appendChild(sp); }
+    if (viewState.id === 'index') { item('lk', M.name); item('lk ctx', PR.name); }
+    item('glyph brk', 'methodebreuk bij het CBS');
+    item('glyph evt', 'bijzondere gebeurtenis');
+  }
+  var viewSeg = $('#view-seg');
+  VIEWS.forEach(function (vw) {
+    var btn = h('button', null, vw.label);
+    btn.type = 'button';
+    btn.setAttribute('aria-pressed', vw === viewState ? 'true' : 'false');
+    btn.addEventListener('click', function () {
+      viewState = vw;
+      Array.prototype.forEach.call(viewSeg.children, function (x) { x.setAttribute('aria-pressed', x === btn ? 'true' : 'false'); });
+      drawAll();
+    });
+    viewSeg.appendChild(btn);
+  });
+  drawAll();
+
+  // Table view of the livestock figures
+  var lsTable = $('#ls-table');
+  row(lsTable, ['Jaar'].concat(ids.map(function (id) { return { text: L.indicators[id].label_nl, n: 1 }; })), true);
+  years.forEach(function (y, i) {
+    row(lsTable, [String(y)].concat(ids.map(function (id) { var v = M.values[id][i]; return { text: v === null ? '–' : nf0.format(v), n: 1 }; })));
+  });
+
+  // =====================================================================
+  // 4. Sources
+  // =====================================================================
+  var src = $('#src-table');
+  function status(text, on) { return h('span', 'status' + (on ? ' on' : ''), text); }
+  row(src, ['Onderwerp', 'Bronhouder', 'Dataset', 'Periode', 'Opgehaald', 'Status'], true);
+  row(src, ['Veestapel en landbouwbedrijven', 'CBS', link(L.source.url, 'Landbouwtelling, StatLine ' + L.source.table_id), years[0] + '–' + years[lastI] + ', peildatum 1 april', nlDate(L.source.fetched_on), status('In gebruik', true)]);
+  row(src, ['Stikstofdepositie', 'RIVM', link(dep.source.url, 'GDN-depositiekaarten, 1×1 km, release ' + dep.source.release), String(dep.source.year), nlDate(dep.source.fetched_on), status('In gebruik', true)]);
+  row(src, ['Grenzen Natura 2000', 'RVO, via PDOK', link('https://www.pdok.nl/', 'Natura 2000 (WFS), licentie ' + D.natura2000.source.licence), 'Actueel', nlDate(D.natura2000.source.fetched_on), status('In gebruik', true)]);
+  row(src, ['Gemeentegrens', 'Kadaster, via PDOK', link('https://www.pdok.nl/', 'Bestuurlijke Gebieden (WFS)'), 'Actueel', nlDate(D.boundary.source.fetched_on), status('In gebruik', true)]);
+  row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM e.a.)', link('https://www.emissieregistratie.nl/', 'Emissiereeks 1990–2024'), '–', '–', status('Nog niet toegevoegd', false)]);
+
+  var ft = $('#footer');
+  ft.appendChild(document.createTextNode('Gemaakt door Hakan Şahin, inwoner van Nijkerk. Broncode en methode: '));
+  ft.appendChild(link('https://github.com/Elcebir71/nijkerk-transition-monitor', 'GitHub'));
+  ft.appendChild(document.createTextNode('. Data samengesteld op ' + nlDate(D.built_on) + '. Bronnen: CBS, RIVM, PDOK (RVO, Kadaster). Deze pagina is geen publicatie van de gemeente Nijkerk of van de genoemde bronhouders.'));
+})();
+</script>
+</body>
+</html>

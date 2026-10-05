@@ -20,13 +20,15 @@ from datetime import date
 import requests
 from pyproj import Transformer
 from shapely import make_valid
-from shapely.geometry import MultiPolygon, mapping, shape
+from shapely.geometry import MultiPolygon, box, mapping, shape
 from shapely.ops import transform
 
 import config
 
 TIMEOUT_S = 60
 SIMPLIFY_TOLERANCE_M = 20
+# Areas are cut off a little outside the map area, so the cut never shows as a line on the map.
+CLIP_MARGIN_M = 2500
 RD_TO_WGS84 = Transformer.from_crs("EPSG:28992", "EPSG:4326", always_xy=True)
 
 
@@ -82,15 +84,15 @@ def find_municipality(features: list[dict]):
     sys.exit(f"Municipality code {config.PDOK_MUNICIPALITY_CODE} not found. PDOK returned: {found}")
 
 
-def describe_areas(features: list[dict], municipality, radius_m: float) -> list[dict]:
-    """Keep areas within the radius and add distance and overlap."""
-    search_area = municipality.buffer(radius_m)
+def describe_areas(features: list[dict], municipality, map_area) -> list[dict]:
+    """Keep areas that intersect the map area and add distance and overlap."""
+    clip_area = map_area.buffer(CLIP_MARGIN_M)
     areas = []
     for feature in features:
         geometry = to_geometry(feature)
-        distance_m = municipality.distance(geometry)
-        if distance_m > radius_m:
+        if not geometry.intersects(map_area):
             continue
+        distance_m = municipality.distance(geometry)
         props = feature["properties"]
         code = props.get("beschermin")
         areas.append({
@@ -104,11 +106,11 @@ def describe_areas(features: list[dict], municipality, radius_m: float) -> list[
                 "distance_to_municipality_km": round(distance_m / 1000, 1),
                 "overlap_with_municipality_ha": round(municipality.intersection(geometry).area / 10000, 1),
                 "area_total_ha": round(geometry.area / 10000),
-                "geometry_clipped_to_search_area": True,
+                "geometry_clipped_to_map_area": True,
                 "nitrogen_sensitive": None,
             },
-            # Only the part inside the search area is kept, to limit file size.
-            "geometry": to_wgs84_geojson(geometry.intersection(search_area)),
+            # Only the part in and just around the map area is kept, to limit file size.
+            "geometry": to_wgs84_geojson(geometry.intersection(clip_area)),
         })
     return sorted(areas, key=lambda a: (a["properties"]["distance_to_municipality_km"], a["properties"]["name"] or ""))
 
@@ -130,14 +132,15 @@ def main() -> None:
     municipality = find_municipality(
         wfs_features(config.PDOK_MUNICIPALITY_WFS, config.PDOK_MUNICIPALITY_LAYER, config.MUNICIPALITY_SEED_BBOX)
     )
-    radius_m = config.NATURA2000_SEARCH_RADIUS_M
-    search_bbox = municipality.buffer(radius_m).bounds
+    radius_m = config.SURROUNDINGS_RADIUS_M
+    # Same rectangle as the deposition map: the municipality plus the radius, as a bounding box.
+    map_area = box(*municipality.buffer(radius_m).bounds)
     areas = describe_areas(
-        wfs_features(config.PDOK_NATURA2000_WFS, config.PDOK_NATURA2000_LAYER, search_bbox),
-        municipality, radius_m,
+        wfs_features(config.PDOK_NATURA2000_WFS, config.PDOK_NATURA2000_LAYER, map_area.bounds),
+        municipality, map_area,
     )
     if not areas:
-        sys.exit("No Natura 2000 areas found. Check the search radius and the PDOK service.")
+        sys.exit("No Natura 2000 areas found. Check the radius and the PDOK service.")
 
     write_geojson(
         "municipality_boundary.geojson",
@@ -153,8 +156,8 @@ def main() -> None:
         "natura2000_nearby.geojson",
         source_block("Natura 2000", "RVO via PDOK", config.PDOK_NATURA2000_WFS,
                      config.PDOK_NATURA2000_LAYER, "CC0"),
-        [f"Areas within {radius_m / 1000:.0f} km of the {config.MUNICIPALITY_NAME} boundary.",
-         "Geometries are clipped to that search area; area_total_ha refers to the whole area.",
+        [f"Areas that intersect the map area: the bounding box of {config.MUNICIPALITY_NAME} plus {radius_m / 1000:.0f} km.",
+         "Geometries are cut off just outside that map area; area_total_ha refers to the whole area.",
          "nitrogen_sensitive is empty on purpose: this dataset does not contain that information.",
          "One Natura 2000 area can appear as more than one feature."],
         areas,
