@@ -31,7 +31,7 @@ be Gelderland sources. The main nitrogen-sensitive Natura 2000 context is the
 | Landbouw (dieren, bedrijven) | CBS | StatLine `80781ned` | Nijkerk (`GM0267`), Gelderland (`PV25`) | 2000–2025 | OData / JSON | Bronanalyse, trend | Verified |
 | NH₃ emissie | Emissieregistratie (RIVM e.a.) | Reeks 1990–2024 | Municipal level to verify | 1990–2024 | CSV (manual export) | Emissie | Partly verified |
 | NOx emissie | Emissieregistratie (RIVM e.a.) | Reeks 1990–2024 | Municipal level to verify | 1990–2024 | CSV (manual export) | Emissie | Partly verified |
-| Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National grid, clipped to Nijkerk + Veluwe | 2025; prognosis 2030–2040 | Zip (grid file) | Weergave | Verified; file format to confirm from README |
+| Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National 1x1 km grid, clipped to Nijkerk + 15 km | 2025; prognosis 2030–2040 | Zip with ESRI ASCII grid, EPSG:28992 | Weergave | Verified |
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
 | Depositie per habitat | AERIUS Monitor | To determine | Veluwe | – | – | Weergave | Not checked |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
@@ -80,8 +80,17 @@ The last two rows are not needed for v1.
 - **May not calculate:** the effect of a local measure on deposition. That
   requires the atmospheric dispersion model behind AERIUS. Not suitable for
   permit-level statements either.
-- **To confirm from the README in the zip:** grid resolution and unit.
-- **Script:** `scripts/nitrogen/fetch_rivm_deposition.py` (to write)
+- **Format (from the metadata in the zip):** 1x1 km grid, RD New (EPSG:28992),
+  unit mol N per ha per year, total deposition (dry + wet), model OPS-pro
+  5.3.1.0 calibrated on measurements. Release 1.0 of 10-08-2026.
+- **Uncertainty:** RIVM gives sigma = 30–35% per grid cell. Differences between
+  neighbouring cells are often not meaningful; say so next to the map.
+- **Inputs behind the 2025 map:** 2025 meteorology and measurements, 2024
+  national emission totals, 2023 spatial distribution of Dutch sources.
+- **Nature areas:** RIVM refers to its report "Monitor stikstofdepositie in
+  Natura 2000-gebieden" for deposition on nature areas. Do not publish own
+  per-area averages as if they were that monitor.
+- **Script:** `scripts/nitrogen/fetch_rivm_deposition.py`
 
 ### 4. PDOK: Natura 2000 boundaries
 
@@ -92,12 +101,13 @@ The last two rows are not needed for v1.
 - **May not calculate:** whether an area is nitrogen-sensitive. The boundary
   data does not say this. Not every Natura 2000 area is designated for
   nitrogen-sensitive habitats, so that label needs its own source.
-- **To verify:** attribute names in the layer.
-- **Script:** `scripts/nitrogen/fetch_natura2000.py` (to write)
+- **Result for Nijkerk (2026-10-04):** Arkemheen (VR) overlaps the municipality
+  for about 1,004 ha; Veluwerandmeren (VR+HR) for about 23 ha; the Veluwe
+  (VR+HR) lies about 0.7 km outside the boundary.
+- **Script:** `scripts/nitrogen/fetch_natura2000.py`
 
 ## Still needed
 
-- Nijkerk municipal boundary (PDOK), for clipping layers 2–4.
 - A cited source for which nearby Natura 2000 areas are nitrogen-sensitive.
 - Province of Gelderland policy documents, to replace the Utrecht references
   in the original project sketch.

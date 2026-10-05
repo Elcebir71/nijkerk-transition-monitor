@@ -52,8 +52,31 @@ CBS_CAVEATS = [
 ]
 
 # Other sources (used by later scripts)
+# Radius around the municipality that the map layers cover.
+SURROUNDINGS_RADIUS_M = 15000
+
+# RIVM GDN: large-scale deposition maps. ESRI ASCII grid, 1x1 km, EPSG:28992.
 RIVM_GDN_BASE_URL = "https://data.rivm.nl/data/gcn"
-RIVM_GDN_FILES = ["depo_NTOT_2025.zip", "depo_NHx_2025.zip", "depo_NOy_2025.zip"]
+RIVM_GDN_DOWNLOAD_PAGE = "https://www.rivm.nl/gcn-gdn-kaarten/depositiekaarten/downloaden"
+RIVM_GDN_YEAR = 2025
+# The total is required; the two components are added when their files are available.
+RIVM_GDN_COMPONENTS = {
+    "ntot": {"file": f"depo_NTOT_{RIVM_GDN_YEAR}", "label_nl": "Totaal stikstof (N)", "required": True},
+    "nhx": {"file": f"depo_NHx_{RIVM_GDN_YEAR}", "label_nl": "Gereduceerd stikstof (NHx)", "required": False},
+    "noy": {"file": f"depo_NOy_{RIVM_GDN_YEAR}", "label_nl": "Geoxideerd stikstof (NOy)", "required": False},
+}
+# Taken from Metadata_depo_NTOT_2025.pdf inside the RIVM zip.
+RIVM_GDN_METADATA = {
+    "description_nl": "Jaargemiddelde depositie totaal stikstof in Nederland (droog + nat)",
+    "scenario_nl": "Feitelijke omstandigheden",
+    "unit": "mol N per ha per year",
+    "resolution": "1x1 km",
+    "model": "OPS-pro 5.3.1.0, calibrated on measurements",
+    "accuracy": "sigma = 30-35% per grid cell",
+    "release": "1.0, 10-08-2026 (productie 2602)",
+    "report": "Mijnen-Visser et al., Grootschalige concentratie- en depositiekaarten Nederland, Rapportage juni 2026",
+}
+MOL_N_TO_KG = 14.007 / 1000
 # PDOK: municipal boundary (Kadaster, Bestuurlijke Gebieden). Coordinates are EPSG:28992 (metres).
 PDOK_MUNICIPALITY_WFS = "https://service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0"
 PDOK_MUNICIPALITY_LAYER = "bestuurlijkegebieden:Gemeentegebied"
@@ -64,6 +87,6 @@ MUNICIPALITY_SEED_BBOX = (157000, 465000, 163000, 472000)
 # PDOK: Natura 2000 boundaries (RVO). Licence CC0.
 PDOK_NATURA2000_WFS = "https://service.pdok.nl/rvo/natura2000/wfs/v1_0"
 PDOK_NATURA2000_LAYER = "natura2000:natura2000"
-NATURA2000_SEARCH_RADIUS_M = 15000
+NATURA2000_SEARCH_RADIUS_M = SURROUNDINGS_RADIUS_M
 # Codes used in the "beschermin" attribute. Unknown codes are passed through unchanged.
 NATURA2000_PROTECTION_LABELS = {"VR": "Vogelrichtlijn", "HR": "Habitatrichtlijn"}
