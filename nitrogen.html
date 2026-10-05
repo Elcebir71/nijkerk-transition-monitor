@@ -240,7 +240,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     <div class="controls">
       <span class="ctl-label" id="comp-label">Kaart toont</span>
       <div class="seg" id="comp-seg" role="group" aria-labelledby="comp-label"></div>
-      <label class="check" id="hab-check" hidden><input type="checkbox" id="hab-toggle" checked> Stikstofgevoelig habitat tonen (AERIUS)</label>
+      <label class="check" id="hab-check" hidden><input type="checkbox" id="hab-toggle" checked> Relevante stikstofgevoelige habitattypen tonen (AERIUS)</label>
     </div>
     <div class="map-grid">
       <div>
@@ -272,13 +272,13 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
 
     <h3 style="margin-top:18px">Natura 2000-gebieden in het kaartgebied</h3>
     <div class="table-scroll"><table id="n2k-table"></table></div>
-    <p class="note" style="margin-top:6px">Een Natura 2000-status betekent niet automatisch dat een gebied stikstofgevoelig is. Welke gebieden stikstofgevoelige habitats hebben, staat niet in deze grenzenbron; zie daarvoor de kartering van AERIUS hieronder.</p>
+    <p class="note" style="margin-top:6px">Een Natura 2000-status betekent niet automatisch dat een gebied stikstofgevoelig is. Welke gebieden relevante stikstofgevoelige habitattypen hebben, staat niet in deze grenzenbron; zie daarvoor de kartering van AERIUS hieronder.</p>
 
     <div id="hab-block" hidden>
-      <h3 style="margin-top:18px">Stikstofgevoelige natuur volgens AERIUS</h3>
+      <h3 style="margin-top:18px">Relevante stikstofgevoelige habitattypen volgens AERIUS</h3>
       <p id="hab-summary" style="max-width:90ch"></p>
       <ul class="notes">
-        <li><strong>Wat “stikstofgevoelig” hier betekent.</strong> De kaart toont de habitattypen die AERIUS als relevant aanmerkt: stikstofgevoelige typen die volgens de beleidscriteria op die plek meetellen. De indeling is van AERIUS, niet van deze pagina.</li>
+        <li><strong>Wat “relevant” betekent.</strong> AERIUS spreekt van “relevante habitattypen”: stikstofgevoelige typen die volgens de beleidscriteria op die plek meetellen. De indeling is van AERIUS, niet van deze pagina.</li>
         <li><strong>Alleen Natura 2000.</strong> De kartering gaat over habitats binnen Natura 2000-gebieden. Over natuur daarbuiten zegt ze niets.</li>
         <li><strong>KDW.</strong> De kritische depositiewaarde is de grens waarboven het risico bestaat dat de kwaliteit van het habitat significant wordt aangetast door stikstofdepositie. De waarden hieronder zijn overgenomen uit AERIUS.</li>
         <li><strong>Geen eigen vergelijking.</strong> Deze pagina legt de KDW niet naast de depositiekaart hierboven. Die kaart heeft vakken van 1×1 km; AERIUS Monitor maakt de vergelijking per hectare en is daarvoor de aangewezen bron.</li>
@@ -573,7 +573,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
       lg.appendChild(r);
     }
     lg.appendChild(h('div', 'gap'));
-    if (HAB) { var hr = h('div', 'legend-row'); hr.appendChild(h('span', 'sw hab-sw')); hr.appendChild(h('span', null, 'Stikstofgevoelig habitat (AERIUS)')); lg.appendChild(hr); }
+    if (HAB) { var hr = h('div', 'legend-row'); hr.appendChild(h('span', 'sw hab-sw')); hr.appendChild(h('span', null, 'Relevante stikstofgevoelige habitattypen (AERIUS)')); lg.appendChild(hr); }
     [['key', 'Gemeentegrens ' + muni.properties.name], ['key n2k-key', 'Natura 2000: Vogel- en Habitatrichtlijn'], ['key n2k-key vr', 'Natura 2000: alleen Vogelrichtlijn']].forEach(function (k) {
       var r = h('div', 'legend-row'); r.appendChild(h('span', k[0])); r.appendChild(h('span', null, k[1])); lg.appendChild(r);
     });
@@ -687,11 +687,11 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     });
     var without = n2kAreas.map(function (a) { return a.name; }).filter(function (n) { return habStats.names.indexOf(n) < 0; });
     var txt = habStats.inMuni >= 0.05
-      ? 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS ' + nf1.format(habStats.inMuni) + ' ha stikstofgevoelig habitat.'
-      : 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS geen stikstofgevoelig habitat.';
+      ? 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS ' + nf1.format(habStats.inMuni) + ' ha relevant stikstofgevoelig habitat.'
+      : 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS geen relevant stikstofgevoelig habitat.';
     txt += ' In het kaartgebied gaat het om ' + nf0.format(habStats.inMap) + ' ha, ' + (habStats.names.length === 1 ? 'geheel in het Natura 2000-gebied ' + habStats.names[0] : 'verdeeld over ' + listNl(habStats.names)) + ', met ' + hRows.length + ' habitattypen en leefgebieden.';
     if (habStats.nearest && habStats.inMuni < 0.05) txt += ' Het dichtstbijzijnde ligt op ongeveer ' + nf1.format(habStats.nearest.km) + ' km van de gemeentegrens.';
-    if (without.length) txt += ' Voor ' + listNl(without) + ' bevat deze kartering binnen het kaartgebied geen stikstofgevoelige typen.';
+    if (without.length) txt += ' Voor ' + listNl(without) + ' bevat deze kartering binnen het kaartgebied geen relevante typen.';
     if (habStats.inMuni < 0.05) txt += ' Dit betekent niet dat stikstofdepositie geen effect kan hebben op natuur buiten de gemeentegrens.';
     $('#hab-summary').textContent = txt;
     var habTable = $('#hab-table');
@@ -726,7 +726,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   kpi('Natura 2000 binnen de gemeente', nf0.format(insideHa / muni.properties.area_ha * 100) + '%', '',
     nf0.format(insideHa) + ' ha van ' + nf0.format(muni.properties.area_ha) + ' ha' + (insideParts.length ? ': ' + listNl(insideParts) + '.' : '.'));
   var veluwe = n2kAreas.filter(function (a) { return a.name === 'Veluwe'; })[0];
-  if (habStats) kpi('Stikstofgevoelig habitat binnen de gemeente (AERIUS)', habStats.inMuni < 10 ? nf1.format(habStats.inMuni).replace(',0', '') : nf0.format(habStats.inMuni), 'ha',
+  if (habStats) kpi('Relevant stikstofgevoelig habitat binnen de gemeente (AERIUS)', habStats.inMuni < 10 ? nf1.format(habStats.inMuni).replace(',0', '') : nf0.format(habStats.inMuni), 'ha',
     'Volgens de habitatkartering van AERIUS, binnen Natura 2000. In het kaartgebied: ' + nf0.format(habStats.inMap) + ' ha' + (habStats.nearest ? ', het dichtstbijzijnde op ' + nf1.format(habStats.nearest.km) + ' km (' + habStats.nearest.name + ').' : '.'));
   else if (veluwe) kpi('Afstand tot de Veluwe', nf1.format(veluwe.distance), 'km',
     'Kortste afstand tussen de gemeentegrens en het Natura 2000-gebied Veluwe.');
@@ -1090,7 +1090,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   row(src, ['Stikstofdepositie', 'RIVM', link(dep.source.url, 'GDN-depositiekaarten, 1×1 km, release ' + dep.source.release), String(dep.source.year), nlDate(dep.source.fetched_on), status('In gebruik', true)]);
   row(src, ['Grenzen Natura 2000', 'RVO, via PDOK', link('https://www.pdok.nl/', 'Natura 2000 (WFS), licentie ' + D.natura2000.source.licence), 'Actueel', nlDate(D.natura2000.source.fetched_on), status('In gebruik', true)]);
   row(src, ['Gemeentegrens', 'Kadaster, via PDOK', link('https://www.pdok.nl/', 'Bestuurlijke Gebieden (WFS)'), 'Actueel', nlDate(D.boundary.source.fetched_on), status('In gebruik', true)]);
-  if (HAB) row(src, ['Stikstofgevoelige habitats en KDW', 'RIVM, AERIUS', link(HAB.source.info, 'Relevante habitatkartering (open data)'), 'Zoals gepubliceerd op de ophaaldatum', nlDate(HAB.source.fetched_on), status('In gebruik', true)]);
+  if (HAB) row(src, ['Relevante stikstofgevoelige habitattypen en KDW', 'RIVM, AERIUS', link(HAB.source.info, 'Relevante habitatkartering (open data)'), 'Zoals gepubliceerd op de ophaaldatum', nlDate(HAB.source.fetched_on), status('In gebruik', true)]);
   if (EM) row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM, CBS, PBL, WUR, Deltares)', link(EM.source.url, EM.source.dataset + ', per gemeente en sector'), EM.years[0] + '–' + EM.years[EM.years.length - 1], String(EM.source.exported_at || '').slice(0, 10), status('In gebruik', true)]);
   else row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM e.a.)', link('https://www.emissieregistratie.nl/', 'Emissiereeks 1990–2024'), '–', '–', status('Nog niet toegevoegd', false)]);
 
