@@ -182,7 +182,7 @@ the map area. The statuses in the table are the outcome after all three.
 |---|---|---|---|
 | 1 | What does "relevant" mean in `relevant_habitats`? | Verified for hexagons; applied to the habitat layer by its metadata | See 1 below |
 | 2 | Is nitrogen-sensitive a KDW below 2,400 mol? | Verified | See 2 below |
-| 3 | What is code `L4030`? | A habitat-of-species type, per a provincial source; species list from secondary sources only | See 3 below |
+| 3 | What is code `L4030`? | Defined in a provincial source: a leefgebiedtype, with its species | See 3 below |
 | 4 | What does hexagon field `exceeding` mean? | Fits the data; no official field definition | Deposition above KDW minus 70 mol. See "Field test" below |
 | 5 | What does hexagon field `above_cl` mean? | Fits the data; no official field definition | Deposition above the KDW. See "Field test" below |
 | 6 | How do hexagon area and habitat coverage relate? | Hexagon and `surface` confirmed on the data; `coverage` narrowed down, not defined | See "Field test" below |
@@ -239,6 +239,25 @@ definition and no species list in the part read (first 41 pages), and the
 Natuurdoelanalyse Veluwe (2023) does not mention it in its first 16 pages.
 The species list therefore still rests on the two consultancy reports.
 Asked of the AERIUS helpdesk on 2026-10-06.
+
+Settled later on 2026-10-06 from the full text of that same PAS-gebiedsanalyse
+(252 pages, PDF supplied by the author). Section 5.18, p. 110, lists the
+seven leefgebiedtypen of the Veluwe that have a KDW of their own, among them
+"Lgt 4030 Weinig vergraste heide en stuifzandheide (kdw 1071)". It explains
+that the habitat (leefgebied) of a species can consist of nitrogen-sensitive
+habitat types, nitrogen-sensitive leefgebiedtypen and parts that are not
+nitrogen-sensitive. Table 2 (p. 110-111) gives Lgt 4030 as nitrogen-sensitive
+leefgebied of seven designated bird species: tapuit, nachtzwaluw,
+boomleeuwerik, draaihals, roodborsttapuit, wespendief and grauwe klauwier.
+Table 5a (p. 114) gives 2,143 ha of LGt4030 in the Veluwe.
+
+So `L4030` is the leefgebiedtype "weinig vergraste heide en stuifzandheide":
+heath that is habitat of these bird species without being mapped as habitat
+type H4030. Two differences with the present data, both expected: AERIUS
+labels it "Droge heiden", and its KDW is now 714 where the 2017 document
+says 1,071 (the KDW values were revised in 2023). The earlier text of this
+point said the document gives no definition; that was based on a partial
+reading and is superseded by this paragraph.
 
 **4 and 5. `exceeding` and `above_cl`.** No public document was found that
 defines these field names (Handboek Data 2025, Handboek Calculator 2025,
@@ -739,6 +758,14 @@ draft 2026 amendment of the Omgevingsverordening Gelderland:
   September 2026 with strips of at most 500 m, and this repo's own figure
   (nearest relevant habitat about 0.7 km outside the municipal boundary)
   agrees with it. The adopted map itself was not opened.
+- A geometric check is prepared but not run yet:
+  `scripts/nitrogen/inspect_reduction_area.py` reads a zone layer from the
+  provincial map service and reports the overlap with the municipal boundary,
+  or else the shortest distance. Its default is layer 141 of the service
+  "Omgevingsverordening", said to be the restriction area of the preparatory
+  decision (voorbereidingsbesluit). That is not necessarily the zone of the
+  adopted regulation; the script lists the other nitrogen layers of the
+  service. Record the layer name and the result here once it has been run.
 
 Keep two things apart:
 
