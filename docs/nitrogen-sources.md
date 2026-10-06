@@ -459,6 +459,57 @@ Dashboard" and a breakdown of KDW exceedance by categories of nature
 (p. 33). Neither was read in this check. The XLSX with the figure data
 holds national series only (read for the 2025 edition; no row per area).
 
+**A figure for the Veluwe, aggregated here from RIVM's hexagon data.** RIVM
+publishes the data behind its exceedance map as a GeoPackage. The file
+`RIVM-MIL_M25-Deposities_Overbelastingsklasse_20260401.gpkg` (Monitor 2025
+data; supplied by the author, read on 2026-10-06) has one row per 16 ha
+hexagon and year, with the Natura 2000 area name, `cartographic_surface`,
+`deposition` and `distance_to_kdw`. Adding up the surface per class, with
+`scripts/nitrogen/inspect_rivm_monitor_classes.py`:
+
+| Veluwe | Below the KDW | 0-250 | 250-500 | 500-750 | 750-1000 | >1000 | Mean deposition | Mean exceedance |
+|---|---|---|---|---|---|---|---|---|
+| 2023 (reference) | 0.1% | 4.2% | 18.1% | 44.7% | 29.6% | 3.3% | 1,657 | 660 |
+| 2030 (prognosis) | 0.6% | 19.4% | 58.8% | 20.4% | 0.8% | 0.0% | 1,390 | 393 |
+| 2035 (prognosis) | 3.5% | 25.9% | 64.6% | 5.9% | 0.1% | 0.0% | 1,296 | 300 |
+
+Shares are of the mapped nitrogen-sensitive surface; classes and means are
+in mol N/ha/year above the KDW. In 2023, 77 of the 6,496 hexagons of the
+Veluwe have a deposition at or below the KDW.
+
+How far this can be trusted:
+
+- It is an aggregation made here from RIVM values, not a figure published by
+  RIVM. Say so wherever it is used.
+- Check on the national total, same method against the 2025 report's own
+  figure data:
+
+  | Netherlands | Below the KDW, here | In the report | Mean deposition, here | In the report |
+  |---|---|---|---|---|
+  | 2023 | 30.3% | 29.6% | 1,364 | 1,365 |
+  | 2030 | 33.2% | 32.7% | 1,153 | 1,154 |
+  | 2035 | 35.9% | 35.4% | 1,076 | 1,077 |
+
+  Class shares differ by at most 1.5 percentage points. The small gap is
+  expected: RIVM works per habitat inside a hexagon, this file has one value
+  per hexagon.
+- It is the 2025 edition: reference year 2023, prognoses from that edition.
+  The 2026 edition reports on 2024 and did not renew the prognoses; it notes
+  that fewer farms take part in the buy-out schemes than assumed (p. 56), so
+  the prognoses may be too favourable.
+- The file also stores a class per row (`kdw_class`). In 13,782 of 137,700
+  rows it differs from the class that follows from the row's own
+  `distance_to_kdw`. What the stored class is based on is not documented in
+  the file, so it is not used here. For the Veluwe the difference is small
+  (55 of 6,496 rows in 2023).
+- The Veluwe surface adds up to more than the area of its hexagons, because
+  habitat types that overlap are each counted. RIVM's mean deposition is
+  reproduced with this weight, so it appears to be the weight RIVM uses.
+- Arkemheen and Veluwerandmeren do not occur in the file, in line with the
+  AERIUS habitat layer.
+- Still to record: the title and licence of the catalogue record this file
+  comes from.
+
 **Resolution matters little at national level.** Annex figure B.1 (p. 88),
 for 2024 with average weather:
 
@@ -686,9 +737,8 @@ Sources for this section:
   2026.
 - Confirm whether Nijkerk is a party to the Aanpak Veluwe.
 - The answer of the AERIUS helpdesk (asked 2026-10-06).
-- A regional figure, if one is wanted: the RIVM dashboard gives results per
-  province (Gelderland), not per Natura 2000 area. A Veluwe figure would
-  have to come from the open data behind the dashboard or from AERIUS
-  Monitor.
+- For the Veluwe figure: the title and licence of the RIVMdata catalogue
+  record of the GeoPackage, and whether a Monitor 2026 version of the file
+  exists (reference year 2024).
 - Counts or shares per class for the Veluwe from AERIUS Monitor, if the
   Monitor shows them, and how it aggregates hexagons on its map.
