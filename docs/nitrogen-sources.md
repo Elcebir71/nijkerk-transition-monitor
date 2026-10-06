@@ -7,6 +7,9 @@ Last checked: 2026-10-04 (AERIUS definitions: 2026-10-06)
 An independent data project that makes public information about nitrogen,
 emissions and nature in Nijkerk easy to find, check and understand.
 
+For the method in two pages, see [`methodology.md`](methodology.md). This
+register is the evidence behind it.
+
 > Ik reken niet zelf aan depositie. Ik maak bestaande, betrouwbare
 > overheidsdata toegankelijk en transparant.
 
