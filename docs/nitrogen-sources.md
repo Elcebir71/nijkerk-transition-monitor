@@ -182,7 +182,7 @@ the map area. The statuses in the table are the outcome after all three.
 |---|---|---|---|
 | 1 | What does "relevant" mean in `relevant_habitats`? | Verified for hexagons; applied to the habitat layer by its metadata | See 1 below |
 | 2 | Is nitrogen-sensitive a KDW below 2,400 mol? | Verified | See 2 below |
-| 3 | What is code `L4030`? | Secondary sources only | See 3 below |
+| 3 | What is code `L4030`? | A habitat-of-species type, per a provincial source; species list from secondary sources only | See 3 below |
 | 4 | What does hexagon field `exceeding` mean? | Fits the data; no official field definition | Deposition above KDW minus 70 mol. See "Field test" below |
 | 5 | What does hexagon field `above_cl` mean? | Fits the data; no official field definition | Deposition above the KDW. See "Field test" below |
 | 6 | How do hexagon area and habitat coverage relate? | Hexagon and `surface` confirmed on the data; `coverage` narrowed down, not defined | See "Field test" below |
@@ -228,8 +228,17 @@ Methodiekdocument (2015), or in the first 41 pages of the Beheerplan Natura
 Reading: dry heath that counts as habitat (leefgebied) of bird species, not
 as habitat type H4030. This fits the Birds Directive rule under 1, and in
 the data `L4030` has coverage 1.0 like the Lg types. It is 2,097 ha in the
-map area, so it matters for the table. Still needed: the definition from a
-provincial or AERIUS source.
+map area, so it matters for the table.
+
+Added on 2026-10-06 from a primary provincial source: the PAS-gebiedsanalyse
+057 Veluwe (Provincie Gelderland, 15 December 2017) uses "LGt4030" and "ZG
+LGt4030" next to LGt01, LGt09, LGt13 and LGt14 in its nitrogen load figures
+(Figure 3.4a; text on p. 15). So the province itself treats it as a
+leefgebiedtype, separate from habitat type H4030. That document gives no
+definition and no species list in the part read (first 41 pages), and the
+Natuurdoelanalyse Veluwe (2023) does not mention it in its first 16 pages.
+The species list therefore still rests on the two consultancy reports.
+Asked of the AERIUS helpdesk on 2026-10-06.
 
 **4 and 5. `exceeding` and `above_cl`.** No public document was found that
 defines these field names (Handboek Data 2025, Handboek Calculator 2025,
@@ -410,7 +419,82 @@ makes by copying the processed files as they are. Run order:
 The map area is the bounding box of the municipality plus 15 km. Natura 2000
 areas are listed when they intersect that area.
 
+## Provincial policy context (Gelderland)
+
+Checked on 2026-10-06. This is a reference list, not content for the page:
+the Stikstofmonitor shows data, not policy. The original project sketch
+with Utrecht references is not in this repo, so nothing was replaced here.
+Policy in this field changes fast; recheck before quoting any of it.
+
+"Check" says how far each row was verified: *official* = read on a
+government site or in the published regulation; *reported* = from news
+coverage only.
+
+| Document or programme | Body and date | What it is | Check |
+|---|---|---|---|
+| Stikstofreductiegebieden (strokenbeleid), in the Omgevingsverordening Gelderland | Provinciale Staten, adopted 23 or 24 September 2026 (sources differ); in force from October 2026 | "Stikstofgevoelige natuur die overbelast is en stroken van maximaal 500 meter eromheen", in four areas: Veluwe, Landgoederen Brummen, Bekendelle, Willinks Weust | Definition and areas: official. Dates and rules: reported |
+| Versnellingsaanpak Stikstof | Province; follows the Gelderse Maatregelen Stikstof (from 2019) after the 2024 progress report | Four tracks: source measures (including the strips), extra nature measures, permits and enforcement, information and monitoring | Official |
+| Aanpak Veluwe | Rijk, province, 2 water boards, 21 municipalities; at least 10 years, to 2035; implementation started June 2026 | "Herstel van de natuur én ruimte voor wonen, werken en ondernemen" on and around the Veluwe | Programme: official. Start, budget and target: reported |
+| Beleidsregels salderen Gelderland 2026 | Gedeputeerde Staten, adopted 27 January 2026; in force 10 February 2026; amended version in force 18 July 2026 | Rules for internal and external netting (salderen) when a nature permit is granted. Province-wide | Official (CVDR756662). Percentages not recorded here: two readings gave different numbers |
+| Vitaal landelijk gebied Gelderland (VLGG) | Gedeputeerde Staten decided at the end of September 2024 not to adopt it for now | Concept programme for the rural area. Shelved after the cabinet withdrew the Transitiefonds and the NPLG. Named Veluwe and Gelderse Vallei among its priority areas | Official for 2024; later status not checked |
+| Natuurdoelanalyse Veluwe | Provincie Gelderland, final concept 5 June 2023 | State of the nature goals of the Veluwe, with KDW exceedance per habitat type | Official |
+| Advice on the Natuurdoelanalyse Veluwe | Ecologische Autoriteit, 25 April 2024 | "Vermindering van de stikstofbelasting voor de Veluwe een harde voorwaarde is voor natuurherstel" | Official |
+| Beheerplan Natura 2000 Veluwe; PAS-gebiedsanalyse 057 Veluwe | Provincie Gelderland, December 2017 | Older management plan and nitrogen analysis. Useful for definitions (see `L4030`), not for current policy | Official |
+| Gelderse gebiedsagenda Foodvalley | Province with eight municipalities, Nijkerk among them | Regional agenda; names "de transitie van het landelijk gebied (gericht op onder andere stikstof, bodem, water, landbouw, natuur, klimaat)" | Official; no date on the page |
+| Gelderse Stikstofbank | Province | "Wij nemen op dit moment geen nieuwe aanvragen in behandeling" | Official |
+
+Rules in the stikstofreductiegebieden, as reported (Nieuwe Oogst, 24
+September 2026; not read in the regulation itself): no new livestock farms
+and no new combustion installations from the entry into force; no nitrogen
+fertilizer from 2030; emission requirements for barns and combustion
+installations and emission-free mobile machinery from 2035, for governments
+from 2028.
+
+### What this means for Nijkerk
+
+- **Is Nijkerk inside a strip?** Not checked on the provincial map. By this
+  repo's own figure the nearest relevant nitrogen-sensitive habitat is about
+  0.7 km outside the municipal boundary, which is more than 500 m. On that
+  figure the strip would not reach the municipality. The figure is rounded
+  to 0.1 km and uses the AERIUS habitat layer, and the province draws its
+  own boundary, so this needs to be looked up on the provincial map before
+  it is stated anywhere.
+- **Province-wide rules apply.** The Beleidsregels salderen hold for every
+  nature permit in Gelderland, Nijkerk included.
+- **Aanpak Veluwe.** Whether Nijkerk is one of the 21 municipalities was not
+  confirmed from an official list. Two council groups in Nijkerk (CDA,
+  CU-SGP) put questions to the college about it (StadNijkerk, 3 October
+  2026). Reported, without a named source document: a target of at least
+  65% less nitrogen emission in and around the Veluwe against 2019, and 300
+  million euro from the Rijk for the first phase.
+- **Regional setting.** Nijkerk is part of Regio Foodvalley, which spans
+  Gelderland and Utrecht. This may be where the Utrecht references in the
+  first sketch came from. Provincial rules for Nijkerk are Gelderland rules.
+
+Sources for this section:
+
+- [Provincie Gelderland: Stikstof (overview)](https://www.gelderland.nl/themas/stikstof)
+- [Provincie Gelderland: Stikstofreductiegebieden](https://www.gelderland.nl/themas/stikstof/stikstofreductiegebieden)
+- [Provincial map of the stikstofreductiegebieden (geoportaal)](https://geoportaal.gelderland.nl/portaal/apps/experiencebuilder/experience/?id=08388c65b5174fd696babce99b50d253)
+- [Provincie Gelderland: Versnellingsaanpak Stikstof](https://www.gelderland.nl/themas/stikstof/versnellingsaanpak-stikstof)
+- [Provincie Gelderland: Aanpak Veluwe](https://www.gelderland.nl/themas/organisatie/samenwerkingen/aanpak-veluwe)
+- [Beleidsregels salderen Gelderland 2026 (CVDR756662)](https://lokaleregelgeving.overheid.nl/CVDR756662)
+- [Provincie Gelderland: Voortgang programma Vitaal landelijk gebied Gelderland](https://www.gelderland.nl/voortgang-programma-vitaal-landelijk-gebied-gelderland-1)
+- [Ecologische Autoriteit: Veluwe, provincie Gelderland (analysis and advice)](https://www.ecologischeautoriteit.nl/advies/veluwe-provincie-gelderland/)
+- [PAS-gebiedsanalyse 057 Veluwe (Provincie Gelderland, 2017)](https://www.natura2000.nl/sites/default/files/PAS/Gebiedsanalyses_vigerend/057_Veluwe_gebiedsanalyse_15-12-2017_GL.pdf)
+- [Gelderse gebiedsagenda Foodvalley](https://provincie.gelderland.nl/geldersegebiedsagenda/foodvalley)
+- [Nieuwe Oogst, 24 September 2026: Groen licht Gelderse stikstofaanpak](https://www.nieuweoogst.nl/nieuws/2026/09/24/groen-licht-gelderse-stikstofaanpak-verbod-op-nieuwvestiging-in-zones-gaat-in)
+- [Binnenlands Bestuur: Gelderland legt als eerste provincie stikstofstroken vast](https://www.binnenlandsbestuur.nl/ruimte-en-milieu/gelderland-legt-als-eerste-provincie-stikstofstroken-vast)
+- [Veluwe FM: Gelderland stelt stikstofmaatregelen voor Veluwe vast](https://veluwefm.nl/gelderland-stelt-stikstofmaatregelen-voor-veluwe-vast/)
+- [Gemeente Putten: Zonering (stikstof)](https://www.putten.nl/Milieu_Natuur/Milieu/Zonering)
+- [StadNijkerk, 17 June 2026: Grote gebiedsaanpak Veluwe van start](https://www.stadnijkerk.nl/lokaal/duurzaamheid/1286784/grote-gebiedsaanpak-veluwe-van-start-overheden-werken-aan-sti)
+- [StadNijkerk, 3 October 2026: CDA en CU/SGP over Aanpak Veluwe](https://www.stadnijkerk.nl/lokaal/politiek/1315615/cda-en-cu-sgp-willen-naadje-van-de-kous-weten-rond-plan-aanpa)
+
 ## Still needed
 
-- Province of Gelderland policy documents, to replace the Utrecht references
-  in the original project sketch.
+- Look up on the provincial map whether any part of Nijkerk lies in a
+  stikstofreductiegebied.
+- Read the adopted text of the Omgevingsverordening for the rules and dates
+  now taken from news coverage.
+- Confirm whether Nijkerk is a party to the Aanpak Veluwe.
+- The answer of the AERIUS helpdesk (asked 2026-10-06).
