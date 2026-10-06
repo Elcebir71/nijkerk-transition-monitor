@@ -457,9 +457,11 @@ municipality says so itself in its formal response (zienswijze) to the
 draft 2026 amendment of the Omgevingsverordening Gelderland:
 
 - Burgemeester en wethouders van Nijkerk to Gedeputeerde Staten van
-  Gelderland, 31 March 2026, reference 2091532: "onze gemeente volledig
-  buiten dit stikstofreductiegebied ligt", and so "deze regels geen of
-  slechts een beperkte impact heeft op ons".
+  Gelderland, 31 March 2026, reference 2091532, on the draft laid open on
+  12 February 2026: "Wij concluderen dat onze gemeente volledig buiten dit
+  stikstofreductiegebied ligt", and so "deze regels geen of slechts een
+  beperkte impact heeft op ons als gemeente". Read in the letter itself
+  (4 pages). The letter does not mention the Aanpak Veluwe.
 - The statement is about the draft. The amendment was adopted on 23
   September 2026 with strips of at most 500 m, and this repo's own figure
   (nearest relevant habitat about 0.7 km outside the municipal boundary)
@@ -487,10 +489,11 @@ Keep two things apart:
   million euro from the Rijk for the first phase.
 - **Regional setting.** Nijkerk is part of Regio Foodvalley, which spans
   Gelderland and Utrecht. This may be where the Utrecht references in the
-  first sketch came from. The province made a similar slip: Nijkerk's
-  zienswijze points out that the draft placed Nijkerk in a Utrecht housing
-  region instead of Foodvalley. Provincial rules for Nijkerk are Gelderland
-  rules.
+  first sketch came from. The province made a similar slip: according to
+  Nijkerk's zienswijze, the explanatory note to article 5.62a of the draft
+  said that Nijkerk "aanhaakt bij de naastgelegen Utrechtse
+  woningbouwregio", which the municipality calls incorrect: it belongs to
+  the Foodvalley region. Provincial rules for Nijkerk are Gelderland rules.
 
 Sources for this section:
 
