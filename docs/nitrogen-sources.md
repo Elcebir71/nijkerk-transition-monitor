@@ -1224,7 +1224,15 @@ Sources for this section:
     service, or it changed nothing in this map area; which of the two is
     not known.
   - Not rechecked: the habitat layer shown on the page
-    (`relevant_habitats`), which that script does not download.
+    (`relevant_habitats`), which that script does not download. Its
+    record in the Nationaal Georegister, as seen by the author on 6
+    October 2026 at 22:16 CEST, describes the layer as the habitat types
+    "die ook daadwerkelijk relevant zijn bevonden voor AERIUS 2026". The
+    layer on the page was fetched on 5 October 2026, the day before
+    AERIUS 2026 was published, and its metadata note still refers to the
+    AERIUS 2025 release. So the page may show the previous version of
+    this layer. Fetch it again and compare the habitat types, areas and
+    KDW values before rebuilding the page data.
   - Check again some days later. The script now writes into its report
     whether each layer was downloaded in that run, and when; `--refresh`
     downloads again.

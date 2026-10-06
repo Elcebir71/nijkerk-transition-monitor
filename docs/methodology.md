@@ -114,8 +114,10 @@ territory of Nijkerk, not on the habitats of the Veluwe.
   Nijkerk: inside the municipality AERIUS maps no relevant
   nitrogen-sensitive habitat. The figure is copied by hand and has to be
   updated by hand.
-- **The AERIUS version of the habitat layer is not stated by the service.**
-  It is shown as served on the fetch date [Still needed].
+- **The habitat layer was fetched one day before AERIUS 2026 appeared.**
+  The service does not state a version; the layer is shown as served on 5
+  October 2026. Its catalogue record now describes AERIUS 2026, so the
+  layer has to be fetched again and compared [Still needed].
 
 ## Checked, but not on the page
 
