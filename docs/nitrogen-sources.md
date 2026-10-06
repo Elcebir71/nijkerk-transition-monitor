@@ -432,7 +432,7 @@ coverage only.
 
 | Document or programme | Body and date | What it is | Check |
 |---|---|---|---|
-| Stikstofreductiegebieden (strokenbeleid), in the Omgevingsverordening Gelderland | Provinciale Staten, adopted 23 or 24 September 2026 (sources differ); in force from October 2026 | "Stikstofgevoelige natuur die overbelast is en stroken van maximaal 500 meter eromheen", in four areas: Veluwe, Landgoederen Brummen, Bekendelle, Willinks Weust | Definition and areas: official. Dates and rules: reported |
+| Stikstofreductiegebieden (strokenbeleid), in the Omgevingsverordening Gelderland | Provinciale Staten, adopted 23 September 2026; in force 23 October 2026 | "Stikstofgevoelige natuur die overbelast is en stroken van maximaal 500 meter eromheen", in four areas: Veluwe, Landgoederen Brummen, Bekendelle, Willinks Weust | Definition, areas and dates: official. Rules: reported |
 | Versnellingsaanpak Stikstof | Province; follows the Gelderse Maatregelen Stikstof (from 2019) after the 2024 progress report | Four tracks: source measures (including the strips), extra nature measures, permits and enforcement, information and monitoring | Official |
 | Aanpak Veluwe | Rijk, province, 2 water boards, 21 municipalities; at least 10 years, to 2035; implementation started June 2026 | "Herstel van de natuur én ruimte voor wonen, werken en ondernemen" on and around the Veluwe | Programme: official. Start, budget and target: reported |
 | Beleidsregels salderen Gelderland 2026 | Gedeputeerde Staten, adopted 27 January 2026; in force 10 February 2026; amended version in force 18 July 2026 | Rules for internal and external netting (salderen) when a nature permit is granted. Province-wide | Official (CVDR756662). Percentages not recorded here: two readings gave different numbers |
@@ -450,15 +450,33 @@ fertilizer from 2030; emission requirements for barns and combustion
 installations and emission-free mobile machinery from 2035, for governments
 from 2028.
 
-### What this means for Nijkerk
+### Nijkerk's position relative to the stikstofreductiegebieden
 
-- **Is Nijkerk inside a strip?** Not checked on the provincial map. By this
-  repo's own figure the nearest relevant nitrogen-sensitive habitat is about
-  0.7 km outside the municipal boundary, which is more than 500 m. On that
-  figure the strip would not reach the municipality. The figure is rounded
-  to 0.1 km and uses the AERIUS habitat layer, and the province draws its
-  own boundary, so this needs to be looked up on the provincial map before
-  it is stated anywhere.
+Nijkerk lies entirely outside the Gelderland stikstofreductiegebieden. The
+municipality says so itself in its formal response (zienswijze) to the
+draft 2026 amendment of the Omgevingsverordening Gelderland:
+
+- Burgemeester en wethouders van Nijkerk to Gedeputeerde Staten van
+  Gelderland, 31 March 2026, reference 2091532: "onze gemeente volledig
+  buiten dit stikstofreductiegebied ligt", and so "deze regels geen of
+  slechts een beperkte impact heeft op ons".
+- The statement is about the draft. The amendment was adopted on 23
+  September 2026 with strips of at most 500 m, and this repo's own figure
+  (nearest relevant habitat about 0.7 km outside the municipal boundary)
+  agrees with it. The adopted map itself was not opened.
+
+Keep two things apart:
+
+- Outside the stikstofreductiegebied: the zone rules (no new livestock
+  farms, later requirements for barns and fertilizer) do not apply in
+  Nijkerk.
+- Not outside the nitrogen question: emissions in Nijkerk and deposition on
+  the nearby Veluwe are what the Stikstofmonitor shows, and nearly all
+  relevant hexagons in the map area are above their KDW (see "Field test").
+  Being outside the zone says nothing about that.
+
+### What else this means for Nijkerk
+
 - **Province-wide rules apply.** The Beleidsregels salderen hold for every
   nature permit in Gelderland, Nijkerk included.
 - **Aanpak Veluwe.** Whether Nijkerk is one of the 21 municipalities was not
@@ -469,12 +487,19 @@ from 2028.
   million euro from the Rijk for the first phase.
 - **Regional setting.** Nijkerk is part of Regio Foodvalley, which spans
   Gelderland and Utrecht. This may be where the Utrecht references in the
-  first sketch came from. Provincial rules for Nijkerk are Gelderland rules.
+  first sketch came from. The province made a similar slip: Nijkerk's
+  zienswijze points out that the draft placed Nijkerk in a Utrecht housing
+  region instead of Foodvalley. Provincial rules for Nijkerk are Gelderland
+  rules.
 
 Sources for this section:
 
 - [Provincie Gelderland: Stikstof (overview)](https://www.gelderland.nl/themas/stikstof)
 - [Provincie Gelderland: Stikstofreductiegebieden](https://www.gelderland.nl/themas/stikstof/stikstofreductiegebieden)
+- [Gemeente Nijkerk, zienswijze op ontwerp Omgevingsverordening Provincie Gelderland 2025-2026, 31 March 2026](https://nijkerk.bestuurlijkeinformatie.nl/Document/View/92fbd1f1-7848-4ef8-a22b-767cf84a7c77)
+- [Provincie Gelderland: Omgevingsverordening (adoption and entry into force)](https://www.gelderland.nl/themas/omgeving/omgevingsverordening)
+- [Omgevingsverordening Gelderland on Regels op de kaart](https://omgevingswet.overheid.nl/regels-op-de-kaart/documenten/_akn_nl_act_pv25_2023_omgevingsverordening_akn_nl_bill_pv25_2026_2026_000561/overzicht)
+- [Omgevingsverordening Gelderland, legal text (CVDR705323)](https://lokaleregelgeving.overheid.nl/CVDR705323/10)
 - [Provincial map of the stikstofreductiegebieden (geoportaal)](https://geoportaal.gelderland.nl/portaal/apps/experiencebuilder/experience/?id=08388c65b5174fd696babce99b50d253)
 - [Provincie Gelderland: Versnellingsaanpak Stikstof](https://www.gelderland.nl/themas/stikstof/versnellingsaanpak-stikstof)
 - [Provincie Gelderland: Aanpak Veluwe](https://www.gelderland.nl/themas/organisatie/samenwerkingen/aanpak-veluwe)
@@ -492,9 +517,9 @@ Sources for this section:
 
 ## Still needed
 
-- Look up on the provincial map whether any part of Nijkerk lies in a
-  stikstofreductiegebied.
-- Read the adopted text of the Omgevingsverordening for the rules and dates
-  now taken from news coverage.
+- Read the adopted text of the Omgevingsverordening for the zone rules now
+  taken from news coverage. On 2026-10-06 the published legal text was still
+  the version of 14 November 2025; the new one takes effect on 23 October
+  2026.
 - Confirm whether Nijkerk is a party to the Aanpak Veluwe.
 - The answer of the AERIUS helpdesk (asked 2026-10-06).
