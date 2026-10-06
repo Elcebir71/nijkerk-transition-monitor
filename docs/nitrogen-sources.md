@@ -300,8 +300,9 @@ What this changes:
 
 All features of three layers in the map area (bounding box of Nijkerk plus
 15 km) were downloaded and compared: 71,442 hexagons, 46,826 deposition
-values, 81,522 hexagon-habitat rows. Run by the author on 2026-10-06 with a
-one-off script, `inspect_aerius_fields.py`.
+values, 81,522 hexagon-habitat rows. Run by the author on 2026-10-06 with
+`scripts/nitrogen/inspect_aerius_fields.py`, which only reads from the
+service and writes a report to `data/nitrogen/raw/` (not committed).
 
 A rule that fits the data is not an official definition. It shows which
 reading is consistent with what the service publishes.
