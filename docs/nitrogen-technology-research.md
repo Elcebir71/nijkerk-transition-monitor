@@ -25,7 +25,10 @@ remove or recover N from manure/digestate. Candidate for a roadmap module.
 ## Important limitation: recovered N is not avoided NH3 emission
 
 The technologies below treat N that is already in collected manure or
-digestate. They do not by themselves reduce ammonia emission or deposition.
+digestate. They do not undo ammonia emission that has already occurred in
+housing or storage. Depending on where they sit in the manure chain, they
+can lower emission at a later step, in the sources checked mainly at field
+application (see the matrix below).
 
 - Emissieregistratie (see `nitrogen-sources.md`): Nijkerk 2024 NH3 = 352 t,
   93% agriculture, i.e. ~327 t NH3, roughly 270 t N (NH3 is 14/17 N).
@@ -202,7 +205,10 @@ Caveats (important):
 2. Reference prices are US digestate economics, not Dutch energy/fertilizer
    markets or subsidy regimes.
 3. Not all excreted N becomes processable slurry (grazing, storage losses),
-   so ~1,295 t N/yr is an upper bound, not the treatable amount.
+   so ~1,295 t N/yr is an upper bound, not the treatable amount. If the
+   figure is ever shown in the prototype, word it as: "De geschatte totale
+   N-excretie bedraagt circa 1.295 ton N per jaar; dit is geen schatting van
+   de behandelbare hoeveelheid."
 4. The membrane figure (EUR 2.07 / kg N = ~EUR 2,070 / t N) is a pilot-scale
    net cost and is not directly comparable to the US reference numbers.
 
