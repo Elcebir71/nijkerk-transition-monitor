@@ -758,14 +758,29 @@ draft 2026 amendment of the Omgevingsverordening Gelderland:
   September 2026 with strips of at most 500 m, and this repo's own figure
   (nearest relevant habitat about 0.7 km outside the municipal boundary)
   agrees with it. The adopted map itself was not opened.
-- A geometric check is prepared but not run yet:
-  `scripts/nitrogen/inspect_reduction_area.py` reads a zone layer from the
-  provincial map service and reports the overlap with the municipal boundary,
-  or else the shortest distance. Its default is layer 141 of the service
-  "Omgevingsverordening", said to be the restriction area of the preparatory
-  decision (voorbereidingsbesluit). That is not necessarily the zone of the
-  adopted regulation; the script lists the other nitrogen layers of the
-  service. Record the layer name and the result here once it has been run.
+- Geometric check, run by the author on 2026-10-06 with
+  `scripts/nitrogen/inspect_reduction_area.py`: **no overlap**. The shortest
+  distance from the municipal boundary to the zone is 172 m.
+  - Layer tested: 141 of the provincial map service "Omgevingsverordening",
+    "Voorbereidingsbesluit- Beperkingengebied stikstofemissie". Its own
+    description: the nitrogen-sensitive habitats and leefgebieden of the
+    Veluwe, Landgoederen Brummen, Willinks Weust and Bekendelle "met en
+    strook of zone van 500 meter vanaf de grens van de stikstofgevoelige
+    habitats en leefgebieden"; file created on 15 April 2025 for the
+    preparatory decision that Provinciale Staten took on 16 April 2025.
+  - The layer has four features; one (Veluwe) lies within 5 km of Nijkerk.
+    It is the only layer of that service with "stikstof" in its name.
+  - This agrees with the two other pieces of evidence: the municipality's
+    statement, and this repo's distance to the nearest relevant habitat
+    (about 0.7 km, so about 0.2 km to a 500 m strip).
+  - Limits: it is the zone of the preparatory decision, not a layer of the
+    regulation adopted on 23 September 2026, which was not found in the
+    service. The adopted strips are at most 500 m, so they should not reach
+    further. A geometric check on published boundaries is not a legal
+    statement about any parcel.
+- The margin is small. Nijkerk is outside the zone, but at its closest point
+  by less than 200 m. "Entirely outside" is correct; "far from it" would not
+  be.
 
 Keep two things apart:
 
