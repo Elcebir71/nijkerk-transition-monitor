@@ -295,6 +295,30 @@ field definitions by AERIUS itself. Asked on 2026-10-06 through the AERIUS
 contact form (Landelijk Informatiepunt Stikstof en Natura 2000), together
 with the deposition year, `coverage` and `L4030`. Answer pending.
 
+Rechecked later on 2026-10-06, after a claim that the Handboek Data 2025
+defines `exceeding` as "naderend overbelast" and `above_cl` as
+"overbelast". Not confirmed, and not refuted either:
+
+- The Handboek Data AERIUS 2025 now has a version 3 (14 April 2026, 55
+  pages). Its chapter 5 describes the open data services. Of the hexagon
+  grid it says: "Deze webservice bevat ook alle kenmerken zoals of deze
+  relevant is voor vergunningverlening en of er een overbelasting is van
+  een stikstofgevoelig habitat" (p. 48). That names the subject of the
+  flags, not the field names.
+- The reading tool gets the text of this PDF only up to that sentence on
+  p. 48. Pages 49 to 55, with the rest of the service descriptions, were
+  not read. The same limit applies to version 2. So "no public document
+  was found" above does not cover those pages of the Handboek Data. To
+  settle it, read p. 48-55 in the PDF itself.
+- The online documentation of AERIUS Calculator 2025 (Resultaten, Weergave)
+  defines the terms, not the fields: "Er is sprake van bijna overbelasting
+  wanneer de achtergronddepositie minder dan 70 mol onder de KDW ligt",
+  and the selection is "relevante hexagonen waar sprake is van een
+  overbelasting van de meest kritische depositiewaarde, of bijna
+  overbelasting van de meest kritische depositiewaarde". This agrees with
+  the field test: the lowest KDW in the hexagon decides, and the two steps
+  are the KDW and 70 mol below it.
+
 **6. Hexagon area and coverage.**
 
 - A hexagon at the finest level is 1 ha (zoom level 1). Source: RIVM
@@ -438,6 +462,8 @@ Sources for this section:
 - [RIVM-rapport 2020-0174, Impactanalyse Actualisatie AERIUS Calculator 2020](https://www.rivm.nl/bibliotheek/rapporten/2020-0174.pdf)
 - [RIVM metadata: AERIUS koppeltabel hexagonengrid en relevante-habitats](https://data.rivm.nl/meta/srv/metadata/bf6fb96b-16ea-4f30-9ac9-d66a18f674ad)
 - [AERIUS Handboek Data 2025, v2](https://www.aeriusproducten.nl/site/binaries/site-content/collections/documents/2025/12/8/handboek-data-aerius-2025-v2/handboek-data-aerius-2025-v2.pdf)
+- [AERIUS Handboek Data 2025, v3 (14 April 2026)](https://www.aeriusproducten.nl/documenten/2026/04/14/handboek-data-aerius-2025-v3)
+- [AERIUS Calculator 2025, online documentation](https://docs.aerius.nl/downloads/nl/calculator-2025.html)
 - [AERIUS Handboek Werken met Calculator 2025](https://www.aeriusproducten.nl/site/binaries/site-content/collections/documents/2025/12/9/handboek-werken-met-aerius-calculator-2025/handboek-werken-met-calculator-2025.pdf)
 - [BIJ12, Methodiekdocument kartering habitattypen Natura 2000 (2015)](https://www.bij12.nl/wp-content/uploads/2023/11/WW-BIJLAGE-09-%E2%80%93-Methodiekdocument-kartering-habitattypen.pdf)
 - [HaskoningDHV (2020), Compensatieplan stikstofgevoelig habitat Natura 2000-gebied Veluwe](https://zoek.officielebekendmakingen.nl/blg-959322.pdf)
