@@ -54,7 +54,7 @@ whether the KDW is the right yardstick.
 | NOx emissie | Emissieregistratie (RIVM e.a.) | ER Reeks 1990-2024 Definitief | Nijkerk (`0267`), per sector | 1990–2024 | XLSX (manual export) | Emissie | Verified |
 | Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National 1x1 km grid, clipped to Nijkerk + 15 km | 2025; prognosis 2030–2040 | Zip with ESRI ASCII grid, EPSG:28992 | Weergave | Verified |
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
-| Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on fetch date (AERIUS 2025) | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
+| Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on the fetch date, 6 October 2026; the catalogue record then described AERIUS 2026 | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
 | Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | 2024 (the only year in the layer for the map area) | WFS | Not used yet | Fields officially described (Handboek Data AERIUS 2026, p. 47) and confirmed in a test on the data (2026-10-06) |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
 
@@ -159,8 +159,12 @@ The land-use row is not needed for v1.
   value per record. A record is one habitat type in one Natura 2000 area
   (all its polygons together), so the coverage is not per polygon. Covers
   Natura 2000 areas only.
-- **Result for the map area (2026-10-05):** 33 habitat types and species
-  habitats, all in the Veluwe, 39,436 ha mapped; KDW from 500 to 2,399.
+- **Result for the map area (2026-10-06, on the page):** 31 habitat types
+  and species habitats, all in the Veluwe, 39,442 ha mapped; KDW from 500
+  to 2,399. The fetch of 2026-10-05, on the page until then, gave 33 types
+  and 39,436 ha; see "Still needed" for the comparison. Figures elsewhere
+  in this register that describe the layer (such as 2,097 ha for `L4030`)
+  are of the earlier fetch unless a date says otherwise.
   Inside the municipality of Nijkerk: 0 ha. Arkemheen, Veluwerandmeren and
   Eemmeer & Gooimeer Zuidoever have no relevant types in the map area.
 - **May calculate:** area of mapped habitat in the map area and inside the
@@ -1251,8 +1255,10 @@ Sources for this section:
     unchanged. The mapped area changed for 19 types; the largest changes
     are H2330 (2,045 to 1,842 ha), Lg09 (449 to 621 ha) and `L4030` (2,097
     to 2,130 ha). So the service now returns another version of this
-    layer, in line with its catalogue record. The page data has not been
-    rebuilt yet: the page still shows the layer of 5 October.
+    layer, in line with its catalogue record. Confirmed afterwards by
+    comparing the two data files themselves. The page data was rebuilt
+    with the fresh download on 6 October 2026; all other layers in the
+    page data are unchanged.
   - Open: the hexagon layers were identical at 19:35 that evening. Whether
     they have changed since has not been checked.
   - Check again some days later. The script now writes into its report
