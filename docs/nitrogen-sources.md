@@ -245,7 +245,9 @@ defined is the policy term behind them:
 So there are two candidate meanings: deposition above the KDW, and
 deposition above KDW minus 70 mol. The test on the data (see "Field test"
 below) shows which field carries which. Still open: confirmation of the
-field definitions by AERIUS itself, for example from its helpdesk.
+field definitions by AERIUS itself. Asked on 2026-10-06 through the AERIUS
+contact form (Landelijk Informatiepunt Stikstof en Natura 2000), together
+with the deposition year, `coverage` and `L4030`. Answer pending.
 
 **6. Hexagon area and coverage.**
 
