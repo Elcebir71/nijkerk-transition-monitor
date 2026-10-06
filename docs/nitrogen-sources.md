@@ -561,19 +561,29 @@ which did not renew them.
   it is the share of the surface not above the KDW. This is read from the
   drawing; the Monitor does not label the number.
 - The segments carry the class names of the legend recorded under "Classes"
-  below. Three tooltips were read: "Sterke overbelasting (13,5%)" for 2020
-  in M25, and for 2024 in M26 "Sterke overbelasting (3,6%)" and "Geen
-  overbelasting (0,5%)". The other segment values were not read.
+  below. Four tooltips were read: "Sterke overbelasting (13,5%)" for 2020
+  in M25, and for 2024 in M26 "Sterke overbelasting (3,6%)", "Matige
+  overbelasting (95,4%)" and "Geen overbelasting (0,5%)". The other segment
+  values were not read.
 - For 2024 the printed 0,7% is therefore more than "geen overbelasting"
   alone (0,5%). The remaining 0,2 points fit the class "bijna overbelast"
   (at most 70 mol below the KDW), whose tooltip was not read. In 2030, 2035
   and 2040 the part right of the line has two shades of green, which fits
   the same two classes.
-- What follows for the Veluwe in 2024 (M26): 0,5% of the surface is more
-  than 70 mol below the KDW, 0,7% is not above the KDW, 3,6% is at twice
-  the KDW or more. The rest, about 95,7%, is above the KDW but below twice
-  the KDW ("lichte" and "matige overbelasting" together; a subtraction made
-  here, the two values were not read).
+- The Veluwe in 2024 (M26), share of the surface per class:
+
+  | Class | Share | How obtained |
+  |---|---|---|
+  | Sterke overbelasting (≥2x KDW) | 3,6% | tooltip |
+  | Matige overbelasting (>70 mol boven KDW, <2x KDW) | 95,4% | tooltip |
+  | Lichte overbelasting (≤70 mol boven KDW) | about 0,3% | 100 minus the rest |
+  | Bijna overbelast (≤70 mol onder KDW) | about 0,2% | 0,7 minus 0,5 |
+  | Geen overbelasting (>70 mol onder KDW) | 0,5% | tooltip |
+  | Not above the KDW (the last two together) | 0,7% | printed next to the bar |
+
+  The two "about" values are subtractions made here from rounded
+  percentages, so each can be off by 0,1 point. Their tooltips were not
+  read.
 - Name the edition next to any figure. Do not read the step from M25 to M26
   as a trend: each edition recalculates, as RIVM's own series show (see
   "Editions and series differ" below).
@@ -964,6 +974,7 @@ Sources for this section:
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
 - From AERIUS Monitor's chart "Ontwikkeling stikstofbelasting" for the
-  Veluwe in M26: the tooltips of "bijna overbelast", "lichte" and "matige
-  overbelasting" for 2024, and a statement by AERIUS of what the printed
-  percentage is. Also how the Monitor aggregates hexagons on its map.
+  Veluwe in M26: the tooltips of "bijna overbelast" and "lichte
+  overbelasting" for 2024 (now derived by subtraction), and a statement by
+  AERIUS of what the printed percentage is. Also how the Monitor aggregates
+  hexagons on its map.
