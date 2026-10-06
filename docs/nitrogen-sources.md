@@ -24,6 +24,24 @@ Nijkerk is in the province of **Gelderland**. Provincial policy sources must
 be Gelderland sources. The main nitrogen-sensitive Natura 2000 context is the
 **Veluwe**.
 
+## Kinds of sources
+
+Not every source in this register carries the same weight. When a figure is
+quoted, say which kind it comes from.
+
+| Kind | Examples in this register | What it may be used for |
+|---|---|---|
+| Official data | CBS, Emissieregistratie, RIVM GDN, PDOK, AERIUS open data, AERIUS Monitor, RIVM Monitor Natura 2000 | The page. Always with source, edition and reference date |
+| Official evaluation | PBL, WUR and RIVM on the nitrogen programme; Ecologische Autoriteit | Context in these notes. Not a data source for the page |
+| Policy, adopted | Omgevingsverordening Gelderland, Beleidsregels salderen | Reference only. "Official" only once read in the regulation itself |
+| Policy, in preparation | Consultation notes, Kamerbrieven with intentions, a municipality's zienswijze | Reasoning and history. Never as the rule in force |
+| Derived here | Field test on the AERIUS layers, the Veluwe aggregation, distance and overlap checks | Cross-check. If ever quoted, as "calculated here from ..." |
+| Reported | News coverage, a firm's summary of a letter | A pointer, until the primary source has been read. Marked "reported" |
+
+Position papers and opinion pieces on the nitrogen debate are not recorded
+here. The Stikstofmonitor shows published figures and takes no side on
+whether the KDW is the right yardstick.
+
 ## Register
 
 | Onderwerp | Bron | Dataset | Gebied | Periode | Formaat | Gebruik | Status |
@@ -681,6 +699,32 @@ into single hexagons.
 which was provisional then. The 2026 edition gives 31%. Always name the
 edition next to the figure.
 
+**The KDW values themselves were revised in 2023.** RIVM report 2026-0018
+uses the values of Wamelink et al. (2023), see above. A share "below the
+KDW" that was calculated before that revision rests on other thresholds and
+cannot be set next to a current one. An example in this register: the KDW
+of `L4030` is 714 now and was 1,071 in the 2017 document. So older
+forecasts for 2025 or 2030 are not a yardstick for today's figures.
+
+**Independent evaluation: PBL, WUR and RIVM (2026).** "Monitoring en
+evaluatie van het programma Stikstofreductie en Natuurverbetering.
+Syntheserapport 2026", PBL publication 5782, 12 March 2026, made "op
+verzoek van het Ministerie van LVVN". Only the publication page was read on
+2026-10-06, not the report. From that page:
+
+- "De wettelijke doelen voor de verlaging van de stikstofdepositie op
+  Natura 2000-gebieden worden niet gehaald".
+- The share of nitrogen-sensitive nature below the KDW "is gestegen van
+  ongeveer 21 procent in 2005 naar 30 procent in 2023". The 30% agrees with
+  the 2025 monitor (29.6% for 2023, see the national check above).
+- "Voor 2030 wordt 33 procent ingeschat met de meegenomen maatregelen,
+  terwijl het doel voor dat jaar 50 procent is."
+- "Het herstel van de natuur blijft achter bij wat er binnen de Europese
+  Unie is afgesproken."
+
+These are national figures. The page gives nothing for the Veluwe or for
+Gelderland. Still to do if this is ever quoted: read the report itself.
+
 **RIVM's own classes.** In this monitor RIVM classes exceedance in absolute
 mol above the KDW: geen overschrijding, 0-250, 250-500, 500-750, 750-1000,
 more than 1000 mol N/ha/year. These are not the AERIUS Monitor classes
@@ -782,6 +826,7 @@ Sources for this section:
 - [RIVM, dataset bij de Monitor 2026 (XLSX)](https://www.rivm.nl/documenten/dataset-bij-monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
 - [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2025 (report 2025-0021 and its dataset)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2025)
 - [RIVM dashboard Stikstofdepositie in Natura 2000-gebieden](https://stikstofdepositiedata.rivm.nl/)
+- [PBL, WUR and RIVM (2026), Monitoring en evaluatie van het programma Stikstofreductie en Natuurverbetering, Syntheserapport 2026 (publication page)](https://www.pbl.nl/publicaties/monitoring-en-evaluatie-van-het-programma-stikstofreductie-en-natuurverbetering)
 - [AERIUS Monitor (product page; the Monitor itself was read on screen)](https://www.aeriusproducten.nl/producten/aerius-monitor)
 - [Provincie Zuid-Holland, factsheets Gebiedsplan stikstof 0.5 (2022)](https://www.zuid-holland.nl/publish/pages/30032/pzhfactsheetsgebiedsplanstikstof0-5.pdf)
 - [Natuurdoelanalyse Veluwe (Provincie Gelderland, 2023)](https://pas.ecologischeautoriteit.nl/files/ea/5123/013610-5123-natuurdoelanalyse-veluwe.pdf)
