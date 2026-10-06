@@ -449,28 +449,54 @@ and notes (p. 30, footnote 4) that the current deposition is also calculated
 at 1 ha for AERIUS Calculator. That fits the year 2024 in the open data
 layer. A reading, not a statement by AERIUS.
 
-**Classes.** Four classes appear as the legend of AERIUS Monitor maps in a
-provincial document (Provincie Zuid-Holland, Gebiedsplan stikstof 0.5,
-2022, source AERIUS Monitor of 13 January 2022):
+**Classes.** AERIUS Monitor 2026 itself shows five classes, as the legend of
+its map "Afstand tot de KDW" (tab "Stikstofdepositie en natuur", selection
+M26, Veluwe, 2024; read from the screen by the author on 2026-10-06):
 
-| Class | Legend text |
+| Class | Legend text in AERIUS Monitor |
 |---|---|
-| Geen overbelasting | more than 70 mol below the KDW |
-| Naderende overbelasting | less than 70 mol below the KDW |
-| Matige overbelasting | above the KDW |
-| Sterke overbelasting | above 2 x KDW |
+| Geen overbelasting | >70 mol onder KDW |
+| Bijna overbelast KDW | ≤70 mol onder KDW |
+| Lichte overbelasting KDW | ≤70 mol boven KDW |
+| Matige overbelasting KDW | >70 mol boven KDW maar <2x KDW |
+| Sterke overbelasting | ≥2x KDW |
 
-- The Natuurdoelanalyse Veluwe (2023) also uses "licht" ("57% licht tot
-  matig" for H4030), so Gelderland works with a fifth class. Its thresholds
-  were not read in a source that could be opened here.
-- The two hexagon flags give three of these classes without any calculation
-  of our own: neither flag (geen), `exceeding` only (naderend), `above_cl`
-  (above the KDW). In the map area that is 47, 59 and 43,664 hexagons.
-- Splitting "above the KDW" into matig and sterk needs a comparison of
-  deposition with 2 x KDW per hexagon. That is a calculation of our own on
-  two published values, unless a layer is used that already carries the
-  class. The Gelderland geoportaal is said to have one ("KDW overschrijding
-  (Categorieën AERIUS)"); it could not be opened in this check.
+- This settles the class thresholds from the primary source. An older
+  legend (AERIUS Monitor of January 2022, in a Provincie Zuid-Holland
+  document) had four classes, without "licht"; RIVM reports say "(naderend)
+  overbelast" where the Monitor legend says "bijna overbelast".
+- The first two boundaries match the field test: `exceeding` turns true at
+  70 mol below the KDW, `above_cl` at the KDW.
+- AERIUS Monitor has a second map, "Afstand tot de KDW per habitat type",
+  which shows the class for one chosen habitat type.
+- On the Veluwe map for 2024 most hexagons are "matige overbelasting", with
+  scattered "sterke overbelasting" and a few green ones. So at class level
+  the map does show spatial differences. The Monitor draws coarse hexagons
+  at this zoom; how it aggregates the 1 ha values into them is not known,
+  and no counts or shares per class were read.
+- The two hexagon flags in the open data give three steps without any
+  calculation of our own: neither flag (geen), `exceeding` only (bijna),
+  `above_cl` (above the KDW: licht, matig and sterk together). In the map
+  area that is 47, 59 and 43,664 hexagons.
+- Splitting "above the KDW" into licht, matig and sterk needs a comparison
+  of deposition with the KDW per hexagon. With the official thresholds this
+  is applying a published rule to two published values, but it is still a
+  calculation made here. The alternatives are to link to AERIUS Monitor, or
+  to use a layer that already carries the class (the Gelderland geoportaal
+  is said to have one; not opened in this check).
+
+**Other things read from AERIUS Monitor 2026 on the same day.**
+
+- Its habitat type list for the Veluwe has "H4030 - Droge heiden", "L4030 -
+  Droge heiden" and "ZGH4030 - Droge heiden" as three separate entries. So
+  `L4030` is a type of its own in the official product. No definition is
+  shown.
+- Its habitat map legend: "Zeer stikstofgevoelig (KDW < 1400 mol N/ha/j)",
+  "Stikstofgevoelig (KDW 1400 - 2400 mol N/ha/j)", "Beperkt stikstofgevoelig
+  (KDW >= 2400 mol N/ha/j)". This agrees with the 2,400 mol threshold.
+- Its deposition map ("Totale depositie") is in kg N/ha/j, with classes from
+  ≤10 to >32. This repo uses mol N/ha/year; 1 kg N is about 71.4 mol.
+- The year offered for M26 is 2024, the same year as in the open data.
 
 **Three different deposition products.** Do not mix them in one figure:
 
@@ -486,6 +512,7 @@ Sources for this section:
 - [RIVM report 2026-0018 (PDF)](https://www.rivm.nl/bibliotheek/rapporten/2026-0018.pdf)
 - [RIVM, dataset bij de Monitor 2026 (XLSX)](https://www.rivm.nl/documenten/dataset-bij-monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
 - [RIVM dashboard Stikstofdepositie in Natura 2000-gebieden](https://stikstofdepositiedata.rivm.nl/)
+- [AERIUS Monitor (product page; the Monitor itself was read on screen)](https://www.aeriusproducten.nl/producten/aerius-monitor)
 - [Provincie Zuid-Holland, factsheets Gebiedsplan stikstof 0.5 (2022)](https://www.zuid-holland.nl/publish/pages/30032/pzhfactsheetsgebiedsplanstikstof0-5.pdf)
 - [Natuurdoelanalyse Veluwe (Provincie Gelderland, 2023)](https://pas.ecologischeautoriteit.nl/files/ea/5123/013610-5123-natuurdoelanalyse-veluwe.pdf)
 
@@ -595,5 +622,5 @@ Sources for this section:
 - The answer of the AERIUS helpdesk (asked 2026-10-06).
 - The official figure for the Veluwe from the RIVM dashboard or its open
   data (share of nitrogen-sensitive area above the KDW, 2024).
-- The class thresholds as Gelderland uses them (five classes), and whether
-  the provincial map layer with AERIUS classes can serve as the source.
+- Counts or shares per class for the Veluwe from AERIUS Monitor, if the
+  Monitor shows them, and how it aggregates hexagons on its map.
