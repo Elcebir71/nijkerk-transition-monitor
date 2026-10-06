@@ -558,18 +558,21 @@ which did not renew them.
 - What the percentage is: the bar is drawn on both sides of a line marked
   "KDW", on an axis "Oppervlakte (%) met onder-/overbelasting". The printed
   percentage matches the length of the part to the right of that line, so
-  it is the share of the surface not above the KDW. This is read from the
-  drawing; the Monitor does not label the number.
+  it is the share of the surface not above the KDW. The Monitor does not
+  label the number; the reading rests on the drawing and on the segment
+  tooltips below, which add up to it.
 - The segments carry the class names of the legend recorded under "Classes"
-  below. Four tooltips were read: "Sterke overbelasting (13,5%)" for 2020
-  in M25, and for 2024 in M26 "Sterke overbelasting (3,6%)", "Matige
-  overbelasting (95,4%)" and "Geen overbelasting (0,5%)". The other segment
-  values were not read.
-- For 2024 the printed 0,7% is therefore more than "geen overbelasting"
-  alone (0,5%). The remaining 0,2 points fit the class "bijna overbelast"
-  (at most 70 mol below the KDW), whose tooltip was not read. In 2030, 2035
-  and 2040 the part right of the line has two shades of green, which fits
-  the same two classes.
+  below. Tooltips read for 2024 in M26: "Sterke overbelasting (3,6%)",
+  "Matige overbelasting (95,4%)" and "Geen overbelasting (0,5%)". Tooltips
+  read in the bars with prognoses (the printed values are those of M25; the
+  edition is not visible in these two screenshots): "Sterke overbelasting
+  (13,5%)" for 2020, "Lichte overbelasting (3,4%)" for 2030 and "Bijna
+  overbelast (3,3%)" for 2035. The other segment values were not read.
+- The printed percentage includes "bijna overbelast". In 2035 that segment
+  (3,3%) lies right of the KDW line and inside the bar that carries 5,7%;
+  the rest of that part, about 2,4%, is then "geen overbelasting". For 2024
+  the printed 0,7% is likewise more than "geen overbelasting" alone (0,5%).
+  "Lichte overbelasting" is the palest segment left of the line.
 - The Veluwe in 2024 (M26), share of the surface per class:
 
   | Class | Share | How obtained |
@@ -975,6 +978,5 @@ Sources for this section:
   exists (reference year 2024).
 - From AERIUS Monitor's chart "Ontwikkeling stikstofbelasting" for the
   Veluwe in M26: the tooltips of "bijna overbelast" and "lichte
-  overbelasting" for 2024 (now derived by subtraction), and a statement by
-  AERIUS of what the printed percentage is. Also how the Monitor aggregates
-  hexagons on its map.
+  overbelasting" for 2024 (now derived by subtraction). Also how the
+  Monitor aggregates hexagons on its map.
