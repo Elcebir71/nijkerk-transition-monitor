@@ -271,9 +271,10 @@ Table 5a (p. 114) gives 2,143 ha of LGt4030 in the Veluwe.
 
 So `L4030` is the leefgebiedtype "weinig vergraste heide en stuifzandheide":
 heath that is habitat of these bird species without being mapped as habitat
-type H4030. Two differences with the present data, both expected: AERIUS
-labels it "Droge heiden", and its KDW is now 714 where the 2017 document
-says 1,071 (the KDW values were revised in 2023). The earlier text of this
+type H4030. Two differences with the present data: AERIUS labels it "Droge
+heiden", and its KDW is now 714 where the 2017 document says 1,071. The KDW
+values were revised in 2023; whether that revision is what changed this
+value was not checked. The earlier text of this
 point said the document gives no definition; that was based on a partial
 reading and is superseded by this paragraph.
 
@@ -705,9 +706,8 @@ How far this can be trusted:
   | 2030 | 33.2% | 32.7% | 1,153 | 1,154 |
   | 2035 | 35.9% | 35.4% | 1,076 | 1,077 |
 
-  Class shares differ by at most 1.5 percentage points. The small gap is
-  expected: RIVM works per habitat inside a hexagon, this file has one value
-  per hexagon.
+  Class shares differ by at most 1.5 percentage points. The reason for
+  this small gap has not been established.
 - It is the 2025 edition: reference year 2023, prognoses from that edition.
   The 2026 edition reports on 2024 and did not renew the prognoses; it notes
   that fewer farms take part in the buy-out schemes than assumed (p. 56), so
@@ -729,12 +729,15 @@ How far this can be trusted:
 - Against AERIUS Monitor M25 for the Veluwe (above), the share not above
   the KDW comes out lower here: 0.1% against 0,5% for 2023, 0.6% against
   2,3% for 2030, 3.5% against 5,7% for 2035. Both say that almost all of
-  the Veluwe is above the KDW. The gap is of the size seen in the national
-  check. Resolution is not the cause: the Monitor's own maps are on 16 ha
-  too (Handboek Data AERIUS 2026, p. 40). A possible cause is that the
-  Monitor works per habitat inside a hexagon and this file has one value
-  per hexagon; not tested. Where a share for the Veluwe is quoted, quote
-  the Monitor's.
+  the Veluwe is above the KDW. The reason for the difference has not been
+  established. What is known: both are on 16 ha hexagons. For AERIUS
+  Monitor 2025 the release notes say "De stikstofdepositie is in
+  tegenstelling tot voorheen beschikbaar op een resolutie van 16ha en niet
+  meer op 1ha"; the Handboek Data AERIUS 2026 says the same of the Monitor
+  maps (p. 40). How the Monitor adds up surface per class, and over which
+  surface, was not checked. An earlier version of this note gave a
+  difference in resolution as the likely cause; that was wrong. Where a
+  share for the Veluwe is quoted, quote the Monitor's.
 - Arkemheen and Veluwerandmeren do not occur in the file, in line with the
   AERIUS habitat layer.
 - Still to record: the title and licence of the catalogue record this file
@@ -762,9 +765,9 @@ edition next to the figure.
 **The KDW values themselves were revised in 2023.** RIVM report 2026-0018
 uses the values of Wamelink et al. (2023), see above. A share "below the
 KDW" that was calculated before that revision rests on other thresholds and
-cannot be set next to a current one. An example in this register: the KDW
-of `L4030` is 714 now and was 1,071 in the 2017 document. So older
-forecasts for 2025 or 2030 are not a yardstick for today's figures.
+cannot be set next to a current one. So older forecasts for 2025 or 2030
+are not a yardstick for today's figures. Which values changed, and by how
+much, was not looked up here.
 
 **Independent evaluation: PBL, WUR and RIVM (2026).** "Monitoring en
 evaluatie van het programma Stikstofreductie en Natuurverbetering.
@@ -897,6 +900,7 @@ Sources for this section:
 - [RIVM dashboard Stikstofdepositie in Natura 2000-gebieden](https://stikstofdepositiedata.rivm.nl/)
 - [PBL, WUR and RIVM (2026), Monitoring en evaluatie van het programma Stikstofreductie en Natuurverbetering, Syntheserapport 2026 (publication page)](https://www.pbl.nl/publicaties/monitoring-en-evaluatie-van-het-programma-stikstofreductie-en-natuurverbetering)
 - [AERIUS Monitor (product page; the Monitor itself was read on screen)](https://www.aeriusproducten.nl/producten/aerius-monitor)
+- [Release notes AERIUS Monitor 2025 (7 October 2025)](https://www.aeriusproducten.nl/documenten/2025/10/7/release-notes-aerius-monitor-2025)
 - [Provincie Zuid-Holland, factsheets Gebiedsplan stikstof 0.5 (2022)](https://www.zuid-holland.nl/publish/pages/30032/pzhfactsheetsgebiedsplanstikstof0-5.pdf)
 - [Natuurdoelanalyse Veluwe (Provincie Gelderland, 2023)](https://pas.ecologischeautoriteit.nl/files/ea/5123/013610-5123-natuurdoelanalyse-veluwe.pdf)
 
