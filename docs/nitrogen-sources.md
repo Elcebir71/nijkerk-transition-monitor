@@ -182,7 +182,7 @@ the map area. The statuses in the table are the outcome after all three.
 |---|---|---|---|
 | 1 | What does "relevant" mean in `relevant_habitats`? | Verified for hexagons; applied to the habitat layer by its metadata | See 1 below |
 | 2 | Is nitrogen-sensitive a KDW below 2,400 mol? | Verified | See 2 below |
-| 3 | What is code `L4030`? | A habitat-of-species type, per a provincial source; species list from secondary sources only | See 3 below |
+| 3 | What is code `L4030`? | Defined in a provincial source: a leefgebiedtype, with its species | See 3 below |
 | 4 | What does hexagon field `exceeding` mean? | Fits the data; no official field definition | Deposition above KDW minus 70 mol. See "Field test" below |
 | 5 | What does hexagon field `above_cl` mean? | Fits the data; no official field definition | Deposition above the KDW. See "Field test" below |
 | 6 | How do hexagon area and habitat coverage relate? | Hexagon and `surface` confirmed on the data; `coverage` narrowed down, not defined | See "Field test" below |
@@ -240,6 +240,25 @@ Natuurdoelanalyse Veluwe (2023) does not mention it in its first 16 pages.
 The species list therefore still rests on the two consultancy reports.
 Asked of the AERIUS helpdesk on 2026-10-06.
 
+Settled later on 2026-10-06 from the full text of that same PAS-gebiedsanalyse
+(252 pages, PDF supplied by the author). Section 5.18, p. 110, lists the
+seven leefgebiedtypen of the Veluwe that have a KDW of their own, among them
+"Lgt 4030 Weinig vergraste heide en stuifzandheide (kdw 1071)". It explains
+that the habitat (leefgebied) of a species can consist of nitrogen-sensitive
+habitat types, nitrogen-sensitive leefgebiedtypen and parts that are not
+nitrogen-sensitive. Table 2 (p. 110-111) gives Lgt 4030 as nitrogen-sensitive
+leefgebied of seven designated bird species: tapuit, nachtzwaluw,
+boomleeuwerik, draaihals, roodborsttapuit, wespendief and grauwe klauwier.
+Table 5a (p. 114) gives 2,143 ha of LGt4030 in the Veluwe.
+
+So `L4030` is the leefgebiedtype "weinig vergraste heide en stuifzandheide":
+heath that is habitat of these bird species without being mapped as habitat
+type H4030. Two differences with the present data, both expected: AERIUS
+labels it "Droge heiden", and its KDW is now 714 where the 2017 document
+says 1,071 (the KDW values were revised in 2023). The earlier text of this
+point said the document gives no definition; that was based on a partial
+reading and is superseded by this paragraph.
+
 **4 and 5. `exceeding` and `above_cl`.** No public document was found that
 defines these field names (Handboek Data 2025, Handboek Calculator 2025,
 Leeswijzer AERIUS Check, RIVM briefrapporten, RIVM metadata). What is
@@ -267,6 +286,9 @@ with the deposition year, `coverage` and `L4030`. Answer pending.
   minimum share is stated in the definition.
 - The link table (`hexagons_to_relevant_habitats`) records per hexagon which
   relevant habitat types are present. For its fields see "Field test".
+- RIVM's dashboard data defines the relevant surface as "ingetekend
+  oppervlakte maal dekkingspercentage" (see "Showing exceedance" below).
+  That supports reading `coverage` as this coverage percentage.
 - The `coverage` field of `relevant_habitats` is not defined in the AERIUS
   documents checked. Probable meaning, from the BIJ12 Methodiekdocument
   (2015, p. 21): one mapped polygon can hold several habitat types, "waarbij
@@ -419,6 +441,278 @@ makes by copying the processed files as they are. Run order:
 The map area is the bounding box of the municipality plus 15 km. Natura 2000
 areas are listed when they intersect that area.
 
+## Showing exceedance: official figures and classes
+
+Checked on 2026-10-06, to decide whether and how the page could show KDW
+exceedance. Nothing is decided here and nothing was added to the page.
+
+The RIVM report below was read in full text on 2026-10-06 (PDF supplied by
+the author); page numbers are the printed ones.
+
+**Official figure, national.** RIVM, Monitor stikstofdepositie in Natura
+2000-gebieden 2026 (report 2026-0018):
+
+- "In 2024 was de neerslag op 31 procent van de oppervlakte lager dan de
+  KDW. Een jaar eerder was dat 30 procent." (p. 3)
+- "Op basis van een berekening met gemiddelde weersomstandigheden bedroeg
+  het oppervlak onder de KDW in 2024 31 procent." Mean exceedance in 2024:
+  about 385 mol/ha/year (p. 63).
+- The figure counts mapped nitrogen-sensitive habitat area. The current
+  deposition is calculated at 16 ha resolution (p. 30). KDW values are from
+  Wamelink et al. (2023) and run from 429 to 2,400 mol/ha/year (p. 19).
+
+**No official figure for the Veluwe in this report.** The Veluwe is named
+twice, without a number:
+
+- "Op de Veluwe leidt bijvoorbeeld de ammoniakuitstoot van de landbouw in
+  de Gelderse Vallei tot een hoge depositie." (p. 51)
+- The expected fall in deposition "is het sterkst nabij landbouwgebieden
+  zoals de Veluwe of het noorden van Limburg" (p. 56).
+
+The first sentence matters for this project: it is RIVM, not this repo,
+linking agricultural ammonia from the Gelderse Vallei to deposition on the
+Veluwe. It can be quoted with its source. It is not a figure and says
+nothing about Nijkerk specifically.
+
+**Where a regional figure could come from.** The RIVM dashboard gives the
+results nationally and "per provincie" (p. 33), not per Natura 2000 area.
+The open data behind the report includes a "Dataset onderliggend aan
+Dashboard" and a breakdown of KDW exceedance by categories of nature
+(p. 33). Neither was read in this check. The XLSX with the figure data
+holds national series only (read for the 2025 edition; no row per area).
+
+**Official figures for Gelderland.** RIVM publishes the data behind its
+dashboard as six workbooks (`RIVM-MIL_*_20260401.xlsx`; Monitor 2025 data,
+database `monitor_2025_20250719`; supplied by the author, read on
+2026-10-06). They are per province, not per Natura 2000 area. For Gelderland,
+reference year 2023, at 16 ha:
+
+| Gelderland, 2023 | Value | Netherlands |
+|---|---|---|
+| Relevant mapped nitrogen-sensitive surface | 83,623 ha | 171,842 ha |
+| Share with deposition not above the KDW | 2.1% (1,754 ha) | 29.7% (51,040 ha) |
+| Mean deposition | 1,649 mol/ha/year | 1,368 |
+| Mean exceedance of the KDW | 456 mol/ha/year | 263 |
+| Natura 2000 areas with nitrogen-sensitive nature | 13 of 16 | 130 of 162 |
+
+Source: `Provinciekengetallen`. The national row in that file is at 1 ha.
+
+Share of the surface per exceedance class (mol above the KDW), from
+`exceedance_kdw_class`:
+
+| Gelderland | None | 0-250 | 250-500 | 500-750 | 750-1000 | >1000 |
+|---|---|---|---|---|---|---|
+| 2023 (reference) | 2.1% | 5.3% | 15.9% | 43.3% | 28.4% | 5.0% |
+| 2024 (historical series) | 1.9% | 5.0% | 20.6% | 55.6% | 15.1% | 1.8% |
+| 2030 (prognosis) | 4.0% | 17.8% | 55.1% | 20.8% | 2.1% | 0.1% |
+| 2035 (prognosis) | 7.4% | 23.3% | 60.6% | 8.2% | 0.5% | 0.0% |
+
+Where the deposition on Gelderland's nitrogen-sensitive nature comes from,
+2023, in mol/ha/year (`GemiddeldeDepositieOntwikkelingPrognoses`, scenario
+Diagnose): Dutch agriculture 960 of 1,649 (58%), mobility 218, Germany 204,
+Belgium 114. For the Netherlands as a whole agriculture is 686 of 1,358
+(50%).
+
+Inside or outside the province (`Depositieherkomst_binnenbuitenprovincie`,
+an older data version, DASH 2024; rows added up here): agriculture inside
+Gelderland 31% of the deposition load, agriculture elsewhere in the
+Netherlands 23%, agriculture abroad 14%. All sources inside Gelderland
+together: 38%.
+
+These are RIVM's own figures, so they can be shown with a plain source
+reference. They are about the province, not about the Veluwe or Nijkerk.
+The licence of these workbooks is not stated in them; still to record from
+the catalogue.
+
+The same workbooks define terms used elsewhere in this register:
+
+- Relevant surface: "Het gekarteerde oppervlak (ingetekend oppervlakte maal
+  dekkingspercentage) van alle stikstofrelevante kartering waaraan een
+  doelstelling van een habitattype of soort is gekoppeld". This is the
+  official wording behind `coverage`: a coverage percentage applied to the
+  drawn area.
+- "Zoomlevel 1 is 1 ha, zoomlevel 3 is 16 ha."
+
+**A figure for the Veluwe, aggregated here from RIVM's hexagon data.** RIVM
+publishes the data behind its exceedance map as a GeoPackage. The file
+`RIVM-MIL_M25-Deposities_Overbelastingsklasse_20260401.gpkg` (Monitor 2025
+data; supplied by the author, read on 2026-10-06) has one row per 16 ha
+hexagon and year, with the Natura 2000 area name, `cartographic_surface`,
+`deposition` and `distance_to_kdw`. Adding up the surface per class, with
+`scripts/nitrogen/inspect_rivm_monitor_classes.py`:
+
+| Veluwe | Below the KDW | 0-250 | 250-500 | 500-750 | 750-1000 | >1000 | Mean deposition | Mean exceedance |
+|---|---|---|---|---|---|---|---|---|
+| 2023 (reference) | 0.1% | 4.2% | 18.1% | 44.7% | 29.6% | 3.3% | 1,657 | 660 |
+| 2030 (prognosis) | 0.6% | 19.4% | 58.8% | 20.4% | 0.8% | 0.0% | 1,390 | 393 |
+| 2035 (prognosis) | 3.5% | 25.9% | 64.6% | 5.9% | 0.1% | 0.0% | 1,296 | 300 |
+
+Shares are of the mapped nitrogen-sensitive surface; classes and means are
+in mol N/ha/year above the KDW. In 2023, 77 of the 6,496 hexagons of the
+Veluwe have a deposition at or below the KDW.
+
+How far this can be trusted:
+
+- It is an aggregation made here from RIVM values, not a figure published by
+  RIVM. Say so wherever it is used.
+- Check on the national total, same method against the 2025 report's own
+  figure data:
+
+  | Netherlands | Below the KDW, here | In the report | Mean deposition, here | In the report |
+  |---|---|---|---|---|
+  | 2023 | 30.3% | 29.6% | 1,364 | 1,365 |
+  | 2030 | 33.2% | 32.7% | 1,153 | 1,154 |
+  | 2035 | 35.9% | 35.4% | 1,076 | 1,077 |
+
+  Class shares differ by at most 1.5 percentage points. The small gap is
+  expected: RIVM works per habitat inside a hexagon, this file has one value
+  per hexagon.
+- It is the 2025 edition: reference year 2023, prognoses from that edition.
+  The 2026 edition reports on 2024 and did not renew the prognoses; it notes
+  that fewer farms take part in the buy-out schemes than assumed (p. 56), so
+  the prognoses may be too favourable.
+- The file also stores a class per row (`kdw_class`). In 13,782 of 137,700
+  rows it differs from the class that follows from the row's own
+  `distance_to_kdw`. What the stored class is based on is not documented in
+  the file, so it is not used here. For the Veluwe the difference is small
+  (55 of 6,496 rows in 2023).
+- The surface in the GeoPackage adds up to about twice RIVM's stated
+  relevant surface (345,164 ha against 171,842 ha nationally; 163,623 ha
+  for the Veluwe against 83,623 ha for all of Gelderland). The reason is
+  not known. Shares and weighted means are not affected if the factor is
+  the same everywhere, and the national check above passes, but do not
+  quote hectares from this file.
+- The result fits the official provincial figures: Gelderland has 2.1%
+  below the KDW in 2023 and class shares close to those of the Veluwe,
+  which is most of the province's nitrogen-sensitive surface.
+- Arkemheen and Veluwerandmeren do not occur in the file, in line with the
+  AERIUS habitat layer.
+- Still to record: the title and licence of the catalogue record this file
+  comes from.
+
+**Resolution matters little at national level.** Annex figure B.1 (p. 88),
+for 2024 with average weather:
+
+| Map resolution | Mean deposition (mol/ha/year) | Area below the KDW |
+|---|---|---|
+| 1 ha | 1,303 | 30.7% |
+| 16 ha | 1,294 | 30.7% |
+| 1 km2 | 1,261 | 31.1% |
+
+The same page warns: "De depositiewaarde op een individueel punt op de kaart
+heeft een grote onzekerheid." An average over a habitat is less uncertain
+than a single calculation point. That is an argument against reading much
+into single hexagons.
+
+**Editions and series differ.** The dataset of the 2025 edition (report
+2025-0021) gives 29.3% below the KDW for 2024 in its historical series,
+which was provisional then. The 2026 edition gives 31%. Always name the
+edition next to the figure.
+
+**RIVM's own classes.** In this monitor RIVM classes exceedance in absolute
+mol above the KDW: geen overschrijding, 0-250, 250-500, 500-750, 750-1000,
+more than 1000 mol N/ha/year. These are not the AERIUS Monitor classes
+below.
+
+**The count in this repo is something else.** "43,664 of 43,770 relevant
+hexagons above their KDW" (see "Field test") counts 1 ha hexagons in a box
+of our own choosing, from the AERIUS open data. It is not a figure for the
+Veluwe and cannot be set next to the 31%: a different area (a box around
+Nijkerk against the whole country) and a different unit (number of
+hexagons against hectares of mapped habitat). Resolution is not the
+obstacle, as the table above shows. Keep the count as a technical check,
+not as a headline figure.
+
+**Why the open data carries 2024.** The Monitor 2026 reports on 2024, and
+states that the current deposition "wordt daarnaast ook berekend op 1
+hectare. Deze wordt gebruikt in AERIUS Calculator" (p. 88; also p. 30,
+footnote 4). That fits the year 2024 in the open data layer. A reading, not
+a statement by AERIUS.
+
+**An older download of the same hexagon deposition.** RIVM also offers the
+background deposition as a GeoPackage. The file
+`RIVM-MIL_AchtergrondStikstofdepositie_20241001.gpkg` (supplied by the
+author, read on 2026-10-06) has one layer, `ndep_2022`: total nitrogen
+deposition for 2022 on 252,203 hexagons of 1 ha, one row per `receptor_id`.
+
+- 252,203 is the national number of relevant hexagons given for AERIUS 2024
+  in RIVM 2024-0078 (p. 26). In the Nijkerk map area the file has 43,770
+  hexagons, the same number as the relevant hexagons in the open data
+  service.
+- It holds deposition only: no KDW, no area name, no class. It cannot give
+  exceedance or a Veluwe figure on its own.
+- It is an older product (2022, published 1 October 2024). Do not read the
+  difference with the 2024 values of the service as a trend: each release
+  recalculates.
+
+**Classes.** AERIUS Monitor 2026 itself shows five classes, as the legend of
+its map "Afstand tot de KDW" (tab "Stikstofdepositie en natuur", selection
+M26, Veluwe, 2024; read from the screen by the author on 2026-10-06):
+
+| Class | Legend text in AERIUS Monitor |
+|---|---|
+| Geen overbelasting | >70 mol onder KDW |
+| Bijna overbelast KDW | ≤70 mol onder KDW |
+| Lichte overbelasting KDW | ≤70 mol boven KDW |
+| Matige overbelasting KDW | >70 mol boven KDW maar <2x KDW |
+| Sterke overbelasting | ≥2x KDW |
+
+- This settles the class thresholds from the primary source. An older
+  legend (AERIUS Monitor of January 2022, in a Provincie Zuid-Holland
+  document) had four classes, without "licht"; RIVM reports say "(naderend)
+  overbelast" where the Monitor legend says "bijna overbelast".
+- The first two boundaries match the field test: `exceeding` turns true at
+  70 mol below the KDW, `above_cl` at the KDW.
+- AERIUS Monitor has a second map, "Afstand tot de KDW per habitat type",
+  which shows the class for one chosen habitat type.
+- On the Veluwe map for 2024 most hexagons are "matige overbelasting", with
+  scattered "sterke overbelasting" and a few green ones. So at class level
+  the map does show spatial differences. The Monitor draws coarse hexagons
+  at this zoom; how it aggregates the 1 ha values into them is not known,
+  and no counts or shares per class were read.
+- The two hexagon flags in the open data give three steps without any
+  calculation of our own: neither flag (geen), `exceeding` only (bijna),
+  `above_cl` (above the KDW: licht, matig and sterk together). In the map
+  area that is 47, 59 and 43,664 hexagons.
+- Splitting "above the KDW" into licht, matig and sterk needs a comparison
+  of deposition with the KDW per hexagon. With the official thresholds this
+  is applying a published rule to two published values, but it is still a
+  calculation made here. The alternatives are to link to AERIUS Monitor, or
+  to use a layer that already carries the class (the Gelderland geoportaal
+  is said to have one; not opened in this check).
+
+**Other things read from AERIUS Monitor 2026 on the same day.**
+
+- Its habitat type list for the Veluwe has "H4030 - Droge heiden", "L4030 -
+  Droge heiden" and "ZGH4030 - Droge heiden" as three separate entries. So
+  `L4030` is a type of its own in the official product. No definition is
+  shown.
+- Its habitat map legend: "Zeer stikstofgevoelig (KDW < 1400 mol N/ha/j)",
+  "Stikstofgevoelig (KDW 1400 - 2400 mol N/ha/j)", "Beperkt stikstofgevoelig
+  (KDW >= 2400 mol N/ha/j)". This agrees with the 2,400 mol threshold.
+- Its deposition map ("Totale depositie") is in kg N/ha/j, with classes from
+  ≤10 to >32. This repo uses mol N/ha/year; 1 kg N is about 71.4 mol.
+- The year offered for M26 is 2024, the same year as in the open data.
+
+**Three different deposition products.** Do not mix them in one figure:
+
+| Product | Resolution | Year | Where it is used here |
+|---|---|---|---|
+| RIVM GDN map | 1 x 1 km | 2025 | The map on the page |
+| AERIUS open data | 1 ha hexagons | 2024 | Field test only |
+| RIVM Monitor Natura 2000 | 16 ha | 2024 | Not used; source of the 31% |
+
+Sources for this section:
+
+- [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2026 (publication page)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
+- [RIVM report 2026-0018 (PDF)](https://www.rivm.nl/bibliotheek/rapporten/2026-0018.pdf)
+- [RIVM, dataset bij de Monitor 2026 (XLSX)](https://www.rivm.nl/documenten/dataset-bij-monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
+- [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2025 (report 2025-0021 and its dataset)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2025)
+- [RIVM dashboard Stikstofdepositie in Natura 2000-gebieden](https://stikstofdepositiedata.rivm.nl/)
+- [AERIUS Monitor (product page; the Monitor itself was read on screen)](https://www.aeriusproducten.nl/producten/aerius-monitor)
+- [Provincie Zuid-Holland, factsheets Gebiedsplan stikstof 0.5 (2022)](https://www.zuid-holland.nl/publish/pages/30032/pzhfactsheetsgebiedsplanstikstof0-5.pdf)
+- [Natuurdoelanalyse Veluwe (Provincie Gelderland, 2023)](https://pas.ecologischeautoriteit.nl/files/ea/5123/013610-5123-natuurdoelanalyse-veluwe.pdf)
+
 ## Provincial policy context (Gelderland)
 
 Checked on 2026-10-06. This is a reference list, not content for the page:
@@ -434,6 +728,7 @@ coverage only.
 |---|---|---|---|
 | Stikstofreductiegebieden (strokenbeleid), in the Omgevingsverordening Gelderland | Provinciale Staten, adopted 23 September 2026; in force 23 October 2026 | "Stikstofgevoelige natuur die overbelast is en stroken van maximaal 500 meter eromheen", in four areas: Veluwe, Landgoederen Brummen, Bekendelle, Willinks Weust | Definition, areas and dates: official. Rules: reported |
 | Versnellingsaanpak Stikstof | Province; follows the Gelderse Maatregelen Stikstof (from 2019) after the 2024 progress report | Four tracks: source measures (including the strips), extra nature measures, permits and enforcement, information and monitoring | Official |
+| "Weer ruimte voor boer, natuur en bouw" (national package) | Kabinet; Kamerbrief of the minister of LVVN, 26 June 2026 (2026D33108) | Emission targets for 2035 against 2019, farm emission norms, zones around nitrogen-sensitive Natura 2000 areas, and a separate target around the Veluwe. See "National package" below | Official (Kamerbrief). Mostly intentions still to be laid down in law |
 | Aanpak Veluwe | Rijk, province, 2 water boards, 21 municipalities; at least 10 years, to 2035; implementation started June 2026 | "Herstel van de natuur én ruimte voor wonen, werken en ondernemen" on and around the Veluwe | Programme: official. Start, budget and target: reported |
 | Beleidsregels salderen Gelderland 2026 | Gedeputeerde Staten, adopted 27 January 2026; in force 10 February 2026; amended version in force 18 July 2026 | Rules for internal and external netting (salderen) when a nature permit is granted. Province-wide | Official (CVDR756662). Percentages not recorded here: two readings gave different numbers |
 | Vitaal landelijk gebied Gelderland (VLGG) | Gedeputeerde Staten decided at the end of September 2024 not to adopt it for now | Concept programme for the rural area. Shelved after the cabinet withdrew the Transitiefonds and the NPLG. Named Veluwe and Gelderse Vallei among its priority areas | Official for 2024; later status not checked |
@@ -464,6 +759,29 @@ draft 2026 amendment of the Omgevingsverordening Gelderland:
   September 2026 with strips of at most 500 m, and this repo's own figure
   (nearest relevant habitat about 0.7 km outside the municipal boundary)
   agrees with it. The adopted map itself was not opened.
+- Geometric check, run by the author on 2026-10-06 with
+  `scripts/nitrogen/inspect_reduction_area.py`: **no overlap**. The shortest
+  distance from the municipal boundary to the zone is 172 m.
+  - Layer tested: 141 of the provincial map service "Omgevingsverordening",
+    "Voorbereidingsbesluit- Beperkingengebied stikstofemissie". Its own
+    description: the nitrogen-sensitive habitats and leefgebieden of the
+    Veluwe, Landgoederen Brummen, Willinks Weust and Bekendelle "met en
+    strook of zone van 500 meter vanaf de grens van de stikstofgevoelige
+    habitats en leefgebieden"; file created on 15 April 2025 for the
+    preparatory decision that Provinciale Staten took on 16 April 2025.
+  - The layer has four features; one (Veluwe) lies within 5 km of Nijkerk.
+    It is the only layer of that service with "stikstof" in its name.
+  - This agrees with the two other pieces of evidence: the municipality's
+    statement, and this repo's distance to the nearest relevant habitat
+    (about 0.7 km, so about 0.2 km to a 500 m strip).
+  - Limits: it is the zone of the preparatory decision, not a layer of the
+    regulation adopted on 23 September 2026, which was not found in the
+    service. The adopted strips are at most 500 m, so they should not reach
+    further. A geometric check on published boundaries is not a legal
+    statement about any parcel.
+- The margin is small. Nijkerk is outside the zone, but at its closest point
+  by less than 200 m. "Entirely outside" is correct; "far from it" would not
+  be.
 
 Keep two things apart:
 
@@ -475,6 +793,53 @@ Keep two things apart:
   relevant hexagons in the map area are above their KDW (see "Field test").
   Being outside the zone says nothing about that.
 
+### National package of June 2026
+
+"Weer ruimte voor boer, natuur en bouw", Kamerbrief of 26 June 2026. Read on
+2026-10-06 in the text of the letter (twice) and checked against a summary
+by an accountancy firm (Van de Graft Accountants, 15 July 2026; PDF supplied
+by the author) and the PBL reflection of September 2026.
+
+- **Emission targets for 2035 against 2019:** "42-46% (NH3) in de landbouw",
+  "50% (NOx) in de mobiliteit", "50% (NH3) in de industrie". Interim target
+  for agriculture, per the accountants' summary: 23-25% in 2030.
+- **Around the Veluwe:** "Rond de Veluwe wordt met de provincie Gelderland
+  naast de zonering 65-69% emissiereductie over een groter gebied
+  afgesproken, dus ook buiten de zones." The letter does not say how that
+  larger area is delimited.
+- **Zones:** about 85 nitrogen-sensitive Natura 2000 areas get a zone of 500
+  m, "vanaf de rand van het Natura 2000-gebied" (read once); 15 areas "met
+  een hoge stikstofoverbelasting uit de zone" get 1,000 m. The areas are
+  not named in the letter. Rules in the zones concern livestock density,
+  manure application room and plant protection products.
+- **Farm norm for dairy:** "0,164 kg NH3 en 92 kg CO2-eq uit stallen en
+  mestopslag per fosfaatrecht voor de melkveehouderij in 2035". Norms for
+  intensive livestock per animal place follow in early 2027.
+- **Money:** "Voor de Veluwe en de Peel is reeds €600 miljoen gereserveerd".
+- **PBL on the package** (publication 6203): "het emissiedoel komt binnen
+  bereik, maar vooralsnog alleen met 'generieke korting'" (p. 6).
+
+What this means for Nijkerk, and what it does not settle:
+
+- **The 65-69% area probably matters more for Nijkerk than the 500 m zone.**
+  It reaches beyond the zones by its own wording, and RIVM names the
+  agriculture of the Gelderse Vallei as a source of high deposition on the
+  Veluwe (see "Showing exceedance"). Whether Nijkerk lies in that area is
+  not stated anywhere read so far.
+- **The national zone is not the same as the provincial one.** The
+  provincial zone is 500 m from nitrogen-sensitive habitats (layer 141:
+  Nijkerk is 172 m outside). The national zone is measured from the edge of
+  the Natura 2000 area and may be 1,000 m for areas with a high overload.
+  The Veluwe boundary lies about 0.7 km from the municipal boundary, so a
+  500 m national zone would not reach Nijkerk and a 1,000 m zone would.
+  Which width the Veluwe gets is not known. Do not present "Nijkerk is
+  outside the zone" as settled for the national approach.
+- **Arkemheen and Veluwerandmeren** lie partly inside Nijkerk, but have no
+  relevant nitrogen-sensitive habitat in the AERIUS layer. The national
+  zones are for nitrogen-sensitive areas, so they are assumed not to get
+  one. An assumption, not checked against a list.
+- Most of the package is still intention: the letter announces legislation.
+
 ### What else this means for Nijkerk
 
 - **Province-wide rules apply.** The Beleidsregels salderen hold for every
@@ -482,9 +847,10 @@ Keep two things apart:
 - **Aanpak Veluwe.** Whether Nijkerk is one of the 21 municipalities was not
   confirmed from an official list. Two council groups in Nijkerk (CDA,
   CU-SGP) put questions to the college about it (StadNijkerk, 3 October
-  2026). Reported, without a named source document: a target of at least
-  65% less nitrogen emission in and around the Veluwe against 2019, and 300
-  million euro from the Rijk for the first phase.
+  2026). The target is 65-69% emission reduction "over een groter gebied"
+  around the Veluwe (Kamerbrief of 26 June 2026, see "National package"
+  below); earlier news coverage said "at least 65%". Reported in the news,
+  not checked: 300 million euro from the Rijk for the first phase.
 - **Regional setting.** Nijkerk is part of Regio Foodvalley, which spans
   Gelderland and Utrecht. This may be where the Utrecht references in the
   first sketch came from. The province made a similar slip: Nijkerk's
@@ -496,6 +862,11 @@ Sources for this section:
 
 - [Provincie Gelderland: Stikstof (overview)](https://www.gelderland.nl/themas/stikstof)
 - [Provincie Gelderland: Stikstofreductiegebieden](https://www.gelderland.nl/themas/stikstof/stikstofreductiegebieden)
+- [Kamerbrief "Weer ruimte voor boer, natuur en bouw", 26 June 2026 (Tweede Kamer, 2026D33108)](https://www.tweedekamer.nl/kamerstukken/brieven_regering/detail?id=2026Z14788&did=2026D33108)
+- [The same Kamerbrief on open.overheid.nl](https://open.overheid.nl/details/bc6acef2-0bb5-4ea6-976d-c7630b45ac89)
+- [Rijksoverheid: Kabinet haalt Nederland van het stikstofslot, 26 June 2026](https://www.onslevendlandschap.nl/actueel/nieuws/2026/06/26/kabinet-haalt-nederland-van-het-stikstofslot)
+- [PBL (2026), Reflectie op "Weer ruimte voor boer, natuur en bouw", publication 6203](https://www.pbl.nl/publicaties/reflectie-op-weer-ruimte-voor-boer-natuur-en-bouw-maatregelpakket-voor-landbouw-natuur-en-stikstof)
+- [Van de Graft Accountants, Nieuwe aanpak stikstofproblematiek, 15 July 2026 (secondary source)](https://www.vga.nl/nieuwe-aanpak-stikstofproblematiek/)
 - [Gemeente Nijkerk, zienswijze op ontwerp Omgevingsverordening Provincie Gelderland 2025-2026, 31 March 2026](https://nijkerk.bestuurlijkeinformatie.nl/Document/View/92fbd1f1-7848-4ef8-a22b-767cf84a7c77)
 - [Provincie Gelderland: Omgevingsverordening (adoption and entry into force)](https://www.gelderland.nl/themas/omgeving/omgevingsverordening)
 - [Omgevingsverordening Gelderland on Regels op de kaart](https://omgevingswet.overheid.nl/regels-op-de-kaart/documenten/_akn_nl_act_pv25_2023_omgevingsverordening_akn_nl_bill_pv25_2026_2026_000561/overzicht)
@@ -522,4 +893,12 @@ Sources for this section:
   the version of 14 November 2025; the new one takes effect on 23 October
   2026.
 - Confirm whether Nijkerk is a party to the Aanpak Veluwe.
+- From the annexes of the Kamerbrief of 26 June 2026 or later documents:
+  which zone width the Veluwe gets (500 or 1,000 m), and how the "groter
+  gebied" with the 65-69% target is delimited.
 - The answer of the AERIUS helpdesk (asked 2026-10-06).
+- For the Veluwe figure: the title and licence of the RIVMdata catalogue
+  record of the GeoPackage, and whether a Monitor 2026 version of the file
+  exists (reference year 2024).
+- Counts or shares per class for the Veluwe from AERIUS Monitor, if the
+  Monitor shows them, and how it aggregates hexagons on its map.
