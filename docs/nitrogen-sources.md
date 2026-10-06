@@ -1233,6 +1233,28 @@ Sources for this section:
     AERIUS 2025 release. So the page may show the previous version of
     this layer. Fetch it again and compare the habitat types, areas and
     KDW values before rebuilding the page data.
+  - Done by the author on 6 October 2026 at about 22:18 CEST: a fresh
+    download of `relevant_habitats` (41 features) differs from the layer
+    of 5 October that the page shows. Compared from the printed output of
+    `fetch_aerius_habitats.py`:
+
+    | | On the page (fetched 5 October) | Fresh download (6 October) |
+    |---|---|---|
+    | Habitat types in the map area | 33 | 31 |
+    | Mapped relevant habitat in the map area | 39,436 ha | 39,442 ha |
+    | Inside Nijkerk | 0 ha | 0 ha |
+    | Nearest to the municipal boundary | 0.7 km | 0.7 km |
+    | Lowest and highest KDW | 500 and 2,399 | 500 and 2,399 |
+
+    The two types that are gone are search areas with almost no surface
+    (ZGH2320 0.0 ha, ZGH5130 0.3 ha). The KDW of all 31 remaining types is
+    unchanged. The mapped area changed for 19 types; the largest changes
+    are H2330 (2,045 to 1,842 ha), Lg09 (449 to 621 ha) and `L4030` (2,097
+    to 2,130 ha). So the service now returns another version of this
+    layer, in line with its catalogue record. The page data has not been
+    rebuilt yet: the page still shows the layer of 5 October.
+  - Open: the hexagon layers were identical at 19:35 that evening. Whether
+    they have changed since has not been checked.
   - Check again some days later. The script now writes into its report
     whether each layer was downloaded in that run, and when; `--refresh`
     downloads again.
