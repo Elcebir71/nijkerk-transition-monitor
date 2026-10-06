@@ -166,14 +166,14 @@ def main() -> None:
             "Habitat types are the ones AERIUS marks as relevant (nitrogen-sensitive) for a location.",
             "kdw_mol_per_ha is the critical deposition value (kritische depositiewaarde) as given by AERIUS, in mol N per ha per year.",
             "No comparison is made here between the KDW and the RIVM deposition map.",
-            "mapped_ha is the area of the mapped polygons; coverage_weighted_ha multiplies each polygon by the coverage AERIUS gives for it.",
+            "mapped_ha is the area of the mapped polygons; coverage_weighted_ha multiplies the mapped area of a habitat type by the one coverage AERIUS gives for that type in the whole Natura 2000 area, so for a part of the area it is an approximation.",
             f"Map area: the bounding box of {config.MUNICIPALITY_NAME} plus {config.SURROUNDINGS_RADIUS_M / 1000:.0f} km. Areas are computed on the unsimplified data.",
             f"Drawn shapes: all relevant habitat types of an area merged, parts under {DRAW_MIN_PART_M2 / 10000:g} ha left out, "
             f"holes under {DRAW_MIN_HOLE_M2 / 10000:g} ha filled, simplified to {DRAW_SIMPLIFY_M} m. For display only.",
             "Codes: H = habitat type; ZGH = search area (indications, but no certainty, that the habitat type is present); "
             "Lg = nitrogen-sensitive habitat of Birds and Habitats Directive species (leefgebied).",
             "service_reply lists every Natura 2000 area the service returned for the bounding box; the query is by location, not by area name.",
-            "Still to verify from the AERIUS documentation: the exact criteria for 'relevant' and the code L4030.",
+            "What 'relevant' means, the KDW threshold and the code L4030: see docs/nitrogen-sources.md, 'AERIUS definitions: verification'.",
         ],
         "service_reply": [
             {"natura2000_area": name, **{k: (round(v, 1) if isinstance(v, float) else v) for k, v in counts.items()}}
