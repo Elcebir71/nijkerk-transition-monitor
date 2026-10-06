@@ -281,7 +281,8 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
         <li><strong>Wat “relevant” betekent.</strong> AERIUS spreekt van “relevante habitattypen”: stikstofgevoelige typen die volgens de beleidscriteria op die plek meetellen. De indeling is van AERIUS, niet van deze pagina.</li>
         <li><strong>Alleen Natura 2000.</strong> De kartering gaat over habitats binnen Natura 2000-gebieden. Over natuur daarbuiten zegt ze niets.</li>
         <li><strong>KDW.</strong> De kritische depositiewaarde is de grens waarboven het risico bestaat dat de kwaliteit van het habitat significant wordt aangetast door stikstofdepositie. De waarden hieronder zijn overgenomen uit AERIUS.</li>
-        <li><strong>Geen eigen vergelijking.</strong> Deze pagina legt de KDW niet naast de depositiekaart hierboven. Die kaart heeft vakken van 1×1 km; AERIUS Monitor maakt de vergelijking per hectare en is daarvoor de aangewezen bron.</li>
+        <li><strong>Geen eigen vergelijking.</strong> Deze pagina legt de KDW niet naast de depositiekaart hierboven. Die kaart heeft vakken van 1×1 km. AERIUS Monitor maakt de vergelijking zelf, met eigen kaarten op zeshoeken van 16 hectare, en is daarvoor de aangewezen bron.</li>
+        <li id="pub-exceedance" hidden></li>
         <li><strong>Codes.</strong> H is een habitattype. ZGH is een zoekgebied: er zijn aanwijzingen, maar geen zekerheid, dat het habitattype aanwezig is. Lg is een stikstofgevoelig leefgebied van soorten van de Vogel- en Habitatrichtlijn.</li>
       </ul>
       <details>
@@ -374,6 +375,14 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   var SVGNS = 'http://www.w3.org/2000/svg';
   var nf0 = new Intl.NumberFormat('nl-NL', { maximumFractionDigits: 0 });
   var nf1 = new Intl.NumberFormat('nl-NL', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  // Share of the nitrogen-sensitive surface where deposition is not above the KDW, as printed by
+  // AERIUS Monitor in its chart "Ontwikkeling stikstofbelasting". Copied by hand; see the note where it is used.
+  var PUBLISHED_EXCEEDANCE = {
+    area: 'Veluwe', year: 2024, edition: 'M26', share_not_above_kdw_pct: 0.7, read_on: '2026-10-06',
+    monitor_url: 'https://www.aeriusproducten.nl/producten/aerius-monitor',
+    dashboard_url: 'https://stikstofdepositiedata.rivm.nl/'
+  };
   var nf2 = new Intl.NumberFormat('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   // Small DOM helpers. All data-derived text goes in through textContent.
@@ -694,6 +703,22 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     if (without.length) txt += ' Voor ' + listNl(without) + ' bevat deze kartering binnen het kaartgebied geen relevante typen.';
     if (habStats.inMuni < 0.05) txt += ' Dit betekent niet dat stikstofdepositie geen effect kan hebben op natuur buiten de gemeentegrens.';
     $('#hab-summary').textContent = txt;
+
+    // One figure copied from AERIUS Monitor. It is not calculated here and not fetched by a script:
+    // it was read from the screen by hand, so it has to be updated by hand when a new edition appears.
+    // It is about the whole Natura 2000 area, not about the municipality.
+    // See docs/nitrogen-sources.md, "A published figure for the Veluwe: AERIUS Monitor".
+    var pe = PUBLISHED_EXCEEDANCE, peItem = $('#pub-exceedance');
+    peItem.appendChild(h('strong', null, 'Wat de officiële vergelijking laat zien.'));
+    peItem.appendChild(document.createTextNode(' Volgens AERIUS Monitor (versie ' + pe.edition + ') lag in ' + pe.year + ' op ' +
+      nf1.format(pe.share_not_above_kdw_pct) + '% van de oppervlakte stikstofgevoelige natuur in het Natura 2000-gebied ' + pe.area +
+      ' de depositie niet boven de KDW; op de rest wel. Dit cijfer gaat over de hele ' + pe.area + ', niet over de gemeente ' + muni.properties.name +
+      '. Het is op ' + nlDate(pe.read_on) + ' overgenomen uit AERIUS Monitor; elke nieuwe versie berekent het opnieuw. Meer: '));
+    peItem.appendChild(link(pe.monitor_url, 'AERIUS Monitor'));
+    peItem.appendChild(document.createTextNode(' en het '));
+    peItem.appendChild(link(pe.dashboard_url, 'RIVM-dashboard Stikstofdepositie in Natura 2000-gebieden'));
+    peItem.appendChild(document.createTextNode('.'));
+    peItem.hidden = false;
     var habTable = $('#hab-table');
     row(habTable, ['Gebied', 'Code', 'Habitattype of leefgebied', { text: 'KDW (mol N/ha/jaar)', n: 1 }, { text: 'Gekarteerd (ha)', n: 1 }], true);
     hRows.slice().sort(function (a, b) { return (a.kdw_mol_per_ha || 0) - (b.kdw_mol_per_ha || 0) || b.mapped_ha_in_map_area - a.mapped_ha_in_map_area; }).forEach(function (r) {
@@ -1091,6 +1116,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   row(src, ['Grenzen Natura 2000', 'RVO, via PDOK', link('https://www.pdok.nl/', 'Natura 2000 (WFS), licentie ' + D.natura2000.source.licence), 'Actueel', nlDate(D.natura2000.source.fetched_on), status('In gebruik', true)]);
   row(src, ['Gemeentegrens', 'Kadaster, via PDOK', link('https://www.pdok.nl/', 'Bestuurlijke Gebieden (WFS)'), 'Actueel', nlDate(D.boundary.source.fetched_on), status('In gebruik', true)]);
   if (HAB) row(src, ['Relevante stikstofgevoelige habitattypen en KDW', 'RIVM, AERIUS', link(HAB.source.info, 'Relevante habitatkartering (open data)'), 'Zoals gepubliceerd op de ophaaldatum', nlDate(HAB.source.fetched_on), status('In gebruik', true)]);
+  if (HAB) row(src, ['Depositie ten opzichte van de KDW, ' + PUBLISHED_EXCEEDANCE.area, 'RIVM, AERIUS', link(PUBLISHED_EXCEEDANCE.monitor_url, 'AERIUS Monitor, versie ' + PUBLISHED_EXCEEDANCE.edition + ', grafiek “Ontwikkeling stikstofbelasting”'), String(PUBLISHED_EXCEEDANCE.year), nlDate(PUBLISHED_EXCEEDANCE.read_on), status('Overgenomen cijfer', true)]);
   if (EM) row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM, CBS, PBL, WUR, Deltares)', link(EM.source.url, EM.source.dataset + ', per gemeente en sector'), EM.years[0] + '–' + EM.years[EM.years.length - 1], String(EM.source.exported_at || '').slice(0, 10), status('In gebruik', true)]);
   else row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM e.a.)', link('https://www.emissieregistratie.nl/', 'Emissiereeks 1990–2024'), '–', '–', status('Nog niet toegevoegd', false)]);
 

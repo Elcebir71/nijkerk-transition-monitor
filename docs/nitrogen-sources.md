@@ -517,6 +517,15 @@ makes by copying the processed files as they are. Run order:
 The map area is the bounding box of the municipality plus 15 km. Natura 2000
 areas are listed when they intersect that area.
 
+One figure on the page does not come from that file: the share of the
+nitrogen-sensitive surface of the Veluwe where deposition is not above the
+KDW (0,7% in 2024, AERIUS Monitor M26). It was read from the screen, so it
+is a constant in the page script (`PUBLISHED_EXCEEDANCE`) with its edition,
+year and reading date, and it is shown as context for the whole Veluwe, not
+as a figure for Nijkerk. Update it by hand when a new Monitor edition
+appears. Source and reading: "A published figure for the Veluwe: AERIUS
+Monitor" below.
+
 ## Showing exceedance: official figures and classes
 
 Checked on 2026-10-06, to decide whether and how the page could show KDW
@@ -1187,6 +1196,8 @@ Sources for this section:
 - From the annexes of the Kamerbrief of 26 June 2026 or later documents:
   which zone width the Veluwe gets (500 or 1,000 m), and how the "groter
   gebied" with the 65-69% target is delimited.
+- When AERIUS Monitor M27 appears: read the Veluwe share again and update
+  `PUBLISHED_EXCEEDANCE` in `nitrogen.html`.
 - The answer of the AERIUS helpdesk (asked 2026-10-06). No longer needed
   for `exceeding`, `above_cl`, `surface` and `coverage`, which the Handboek
   Data AERIUS 2026 describes. Still of use for the year of the deposition
