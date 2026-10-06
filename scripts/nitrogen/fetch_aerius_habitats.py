@@ -158,7 +158,7 @@ def main() -> None:
             "layer": config.AERIUS_HABITAT_LAYER,
             "url": config.AERIUS_WFS,
             "info": config.AERIUS_PRODUCT_PAGE,
-            "version": "As served on the fetch date. The register record describes the AERIUS 2025 release (published 2025-10-07).",
+            "version": "As served on the fetch date. The service does not state a version; the catalogue record (see 'record') says which AERIUS release the layer belongs to.",
             "licence": "Public domain (Creative Commons Public Domain Mark 1.0), no restrictions, per the Nationaal Georegister record",
             "fetched_on": fetched_on,
         },
