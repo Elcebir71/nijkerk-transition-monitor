@@ -29,8 +29,9 @@ does not compare deposition with the KDW itself and gives no costs.
 | Relevant nitrogen-sensitive habitat types and their KDW | RIVM, AERIUS open data, layer `relevant_habitats` | As served on the fetch date | `fetch_aerius_habitats.py` |
 | Share of the Veluwe not above the KDW | RIVM, AERIUS Monitor, edition M26 | 2024 | Read from the screen by hand; a constant in the page |
 
-All fetches behind the page are of 5 October 2026; the Monitor figure was
-read on 6 October 2026. The page shows these dates in its sources table.
+The fetches behind the page are of 5 October 2026, except the habitat
+layer, which is of 6 October 2026; the Monitor figure was read on 6 October
+2026. The page shows these dates in its sources table.
 
 ## What is calculated here
 
@@ -114,10 +115,10 @@ territory of Nijkerk, not on the habitats of the Veluwe.
   Nijkerk: inside the municipality AERIUS maps no relevant
   nitrogen-sensitive habitat. The figure is copied by hand and has to be
   updated by hand.
-- **The habitat layer was fetched one day before AERIUS 2026 appeared.**
-  The service does not state a version; the layer is shown as served on 5
-  October 2026. Its catalogue record now describes AERIUS 2026, so the
-  layer has to be fetched again and compared [Still needed].
+- **The habitat layer carries no version of its own.** The service does
+  not state one; the layer is shown as served on 6 October 2026, the day
+  its catalogue record started to describe AERIUS 2026. It differs a
+  little from the layer of the day before [Still needed].
 
 ## Checked, but not on the page
 
