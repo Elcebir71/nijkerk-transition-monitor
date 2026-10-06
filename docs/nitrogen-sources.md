@@ -434,8 +434,20 @@ average weather (p. 29-33).
 area are available in the RIVM dashboard and as open data (p. 33). Neither
 could be read in this check, so no figure for the Veluwe is recorded yet.
 The report itself does not discuss the Veluwe. The XLSX published with the
-report on 2 October 2026 is described as the data behind the figures; what
-it holds per area is not known.
+report on 2 October 2026 is described as the data behind the figures. The
+same file of the 2025 edition was read on 2026-10-06: it holds national
+series only, with no row per Natura 2000 area, so the 2026 file is not
+expected to give a Veluwe figure either.
+
+Two things from that 2025 file to keep in mind:
+
+- Editions differ. The 2025 edition gives 29.3% of the area below the KDW
+  for 2024; the 2026 edition gives 31% for the same year. Each edition
+  recalculates. Always name the edition next to the figure.
+- RIVM uses its own exceedance classes in this monitor, in absolute mol
+  above the KDW: geen overschrijding, 0-250, 250-500, 500-750, 750-1000,
+  more than 1000 mol N/ha/year. These are not the AERIUS Monitor classes
+  below.
 
 **The count in this repo is something else.** "43,664 of 43,770 relevant
 hexagons above their KDW" (see "Field test") counts 1 ha hexagons in a box
@@ -511,6 +523,7 @@ Sources for this section:
 - [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2026 (publication page)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
 - [RIVM report 2026-0018 (PDF)](https://www.rivm.nl/bibliotheek/rapporten/2026-0018.pdf)
 - [RIVM, dataset bij de Monitor 2026 (XLSX)](https://www.rivm.nl/documenten/dataset-bij-monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
+- [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2025 (report 2025-0021 and its dataset)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2025)
 - [RIVM dashboard Stikstofdepositie in Natura 2000-gebieden](https://stikstofdepositiedata.rivm.nl/)
 - [AERIUS Monitor (product page; the Monitor itself was read on screen)](https://www.aeriusproducten.nl/producten/aerius-monitor)
 - [Provincie Zuid-Holland, factsheets Gebiedsplan stikstof 0.5 (2022)](https://www.zuid-holland.nl/publish/pages/30032/pzhfactsheetsgebiedsplanstikstof0-5.pdf)
