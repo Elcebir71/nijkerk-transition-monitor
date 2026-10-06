@@ -424,42 +424,79 @@ areas are listed when they intersect that area.
 Checked on 2026-10-06, to decide whether and how the page could show KDW
 exceedance. Nothing is decided here and nothing was added to the page.
 
+The RIVM report below was read in full text on 2026-10-06 (PDF supplied by
+the author); page numbers are the printed ones.
+
 **Official figure, national.** RIVM, Monitor stikstofdepositie in Natura
-2000-gebieden 2026 (report 2026-0018, p. 9): "In 2024 was de neerslag op 31
-procent van de oppervlakte lager dan de KDW." This counts mapped habitat
-area, on results calculated at 16 ha resolution with 2024 emissions and
-average weather (p. 29-33).
+2000-gebieden 2026 (report 2026-0018):
 
-**Official figure, per area.** The same report says results per Natura 2000
-area are available in the RIVM dashboard and as open data (p. 33). Neither
-could be read in this check, so no figure for the Veluwe is recorded yet.
-The report itself does not discuss the Veluwe. The XLSX published with the
-report on 2 October 2026 is described as the data behind the figures. The
-same file of the 2025 edition was read on 2026-10-06: it holds national
-series only, with no row per Natura 2000 area, so the 2026 file is not
-expected to give a Veluwe figure either.
+- "In 2024 was de neerslag op 31 procent van de oppervlakte lager dan de
+  KDW. Een jaar eerder was dat 30 procent." (p. 3)
+- "Op basis van een berekening met gemiddelde weersomstandigheden bedroeg
+  het oppervlak onder de KDW in 2024 31 procent." Mean exceedance in 2024:
+  about 385 mol/ha/year (p. 63).
+- The figure counts mapped nitrogen-sensitive habitat area. The current
+  deposition is calculated at 16 ha resolution (p. 30). KDW values are from
+  Wamelink et al. (2023) and run from 429 to 2,400 mol/ha/year (p. 19).
 
-Two things from that 2025 file to keep in mind:
+**No official figure for the Veluwe in this report.** The Veluwe is named
+twice, without a number:
 
-- Editions differ. The 2025 edition gives 29.3% of the area below the KDW
-  for 2024; the 2026 edition gives 31% for the same year. Each edition
-  recalculates. Always name the edition next to the figure.
-- RIVM uses its own exceedance classes in this monitor, in absolute mol
-  above the KDW: geen overschrijding, 0-250, 250-500, 500-750, 750-1000,
-  more than 1000 mol N/ha/year. These are not the AERIUS Monitor classes
-  below.
+- "Op de Veluwe leidt bijvoorbeeld de ammoniakuitstoot van de landbouw in
+  de Gelderse Vallei tot een hoge depositie." (p. 51)
+- The expected fall in deposition "is het sterkst nabij landbouwgebieden
+  zoals de Veluwe of het noorden van Limburg" (p. 56).
+
+The first sentence matters for this project: it is RIVM, not this repo,
+linking agricultural ammonia from the Gelderse Vallei to deposition on the
+Veluwe. It can be quoted with its source. It is not a figure and says
+nothing about Nijkerk specifically.
+
+**Where a regional figure could come from.** The RIVM dashboard gives the
+results nationally and "per provincie" (p. 33), not per Natura 2000 area.
+The open data behind the report includes a "Dataset onderliggend aan
+Dashboard" and a breakdown of KDW exceedance by categories of nature
+(p. 33). Neither was read in this check. The XLSX with the figure data
+holds national series only (read for the 2025 edition; no row per area).
+
+**Resolution matters little at national level.** Annex figure B.1 (p. 88),
+for 2024 with average weather:
+
+| Map resolution | Mean deposition (mol/ha/year) | Area below the KDW |
+|---|---|---|
+| 1 ha | 1,303 | 30.7% |
+| 16 ha | 1,294 | 30.7% |
+| 1 km2 | 1,261 | 31.1% |
+
+The same page warns: "De depositiewaarde op een individueel punt op de kaart
+heeft een grote onzekerheid." An average over a habitat is less uncertain
+than a single calculation point. That is an argument against reading much
+into single hexagons.
+
+**Editions and series differ.** The dataset of the 2025 edition (report
+2025-0021) gives 29.3% below the KDW for 2024 in its historical series,
+which was provisional then. The 2026 edition gives 31%. Always name the
+edition next to the figure.
+
+**RIVM's own classes.** In this monitor RIVM classes exceedance in absolute
+mol above the KDW: geen overschrijding, 0-250, 250-500, 500-750, 750-1000,
+more than 1000 mol N/ha/year. These are not the AERIUS Monitor classes
+below.
 
 **The count in this repo is something else.** "43,664 of 43,770 relevant
 hexagons above their KDW" (see "Field test") counts 1 ha hexagons in a box
 of our own choosing, from the AERIUS open data. It is not a figure for the
-Veluwe and cannot be set next to the 31%: different area, different unit
-(hexagons against hectares of mapped habitat) and a different resolution.
-Keep it as a technical check, not as a headline figure.
+Veluwe and cannot be set next to the 31%: a different area (a box around
+Nijkerk against the whole country) and a different unit (number of
+hexagons against hectares of mapped habitat). Resolution is not the
+obstacle, as the table above shows. Keep the count as a technical check,
+not as a headline figure.
 
-**Why the open data carries 2024.** The Monitor 2026 uses 2024 emissions,
-and notes (p. 30, footnote 4) that the current deposition is also calculated
-at 1 ha for AERIUS Calculator. That fits the year 2024 in the open data
-layer. A reading, not a statement by AERIUS.
+**Why the open data carries 2024.** The Monitor 2026 reports on 2024, and
+states that the current deposition "wordt daarnaast ook berekend op 1
+hectare. Deze wordt gebruikt in AERIUS Calculator" (p. 88; also p. 30,
+footnote 4). That fits the year 2024 in the open data layer. A reading, not
+a statement by AERIUS.
 
 **Classes.** AERIUS Monitor 2026 itself shows five classes, as the legend of
 its map "Afstand tot de KDW" (tab "Stikstofdepositie en natuur", selection
@@ -633,7 +670,9 @@ Sources for this section:
   2026.
 - Confirm whether Nijkerk is a party to the Aanpak Veluwe.
 - The answer of the AERIUS helpdesk (asked 2026-10-06).
-- The official figure for the Veluwe from the RIVM dashboard or its open
-  data (share of nitrogen-sensitive area above the KDW, 2024).
+- A regional figure, if one is wanted: the RIVM dashboard gives results per
+  province (Gelderland), not per Natura 2000 area. A Veluwe figure would
+  have to come from the open data behind the dashboard or from AERIUS
+  Monitor.
 - Counts or shares per class for the Veluwe from AERIUS Monitor, if the
   Monitor shows them, and how it aggregates hexagons on its map.
