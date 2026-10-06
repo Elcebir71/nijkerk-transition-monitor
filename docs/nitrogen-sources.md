@@ -868,6 +868,106 @@ Keep two things apart:
   relevant hexagons in the map area are above their KDW (see "Field test").
   Being outside the zone says nothing about that.
 
+### The province's consultation note on the strips (July 2025)
+
+Provincie Gelderland, "Denkrichting invulling beleid stikstofstroken",
+"Versie 8 juli 2025", 22 pages; annex 1 to a document for Provinciale
+Staten. Supplied by the author as a PDF and read in full on 2026-10-06 (the
+Staten site refuses automated reading). Page numbers are those printed in
+the note.
+
+Status: a text for consultation, "ter bespreking tijdens de participatie
+tot en met oktober 2025". The note says of itself: "het gaat dus nog niet
+om een besluit" (p. 3). It shows the province's reasoning and the rules it
+was considering then. It is not the regulation adopted on 23 September
+2026.
+
+**How the strips are drawn.** This part was not open for discussion: "De
+komst en de omvang van de strook (maximaal 500 meter) staan vast" (p. 6).
+
+- Measured from the habitat itself, not from the Natura 2000 boundary: the
+  strips rest on "de feitelijke ligging van de stikstofgevoelige
+  habitattypen en leefgebiedtypen met een 'nee, tenzij'-oordeel in de
+  natuurdoelanalyse" (p. 8).
+- Not from hexagons. The national idea of April 2025 was a strip around
+  overloaded hexagons; the province rejects that because hexagons "zijn een
+  hulpmiddel in het AERIUS-model en volgen veel minder precies de contouren
+  van de natuur" (p. 9).
+- The same boundary as the preparatory decision of 16 April 2025: "Wat de
+  provincie betreft verandert de strook van 500 meter niet en blijft deze
+  hetzelfde als in het voorbereidingsbesluit" (p. 8), and no later changes
+  are intended (p. 10). This supports the use of layer 141 for the
+  geometric check above. Whether the adopted regulation kept exactly that
+  boundary still has to be read in the regulation.
+- On the boundary (p. 9-10) the province prefers "scenario 2": a project
+  lies in the strip if 50% or more of its nitrogen emission comes from
+  emission points inside the boundary, or if it emits more than 1,000 kg
+  NH3-equivalent per year inside it. Farmland is judged per cadastral
+  parcel: a parcel that lies for at least 50% inside the strip falls under
+  the rules as a whole, other parcels of the same farm do not.
+- A consequence, drawn here and not stated in the note: for land the rules
+  follow the parcel, not the farm address. A farm based outside the strip
+  can have parcels inside it.
+- The strips at Winterswijk (Bekendelle, Willinks Weust) were conditional
+  on the outcome of a local area process (p. 10).
+
+**Figures the province gives.**
+
+- The Veluwe: "de depositie op de Veluwe gemiddeld 1.650 mol per hectare
+  per jaar" and "Bijna overal op de Veluwe (99%) wordt de KDW overschreden"
+  (p. 4). This agrees with AERIUS Monitor (0,5% to 0,7% not above the KDW)
+  and with the mean deposition of the aggregation made here (1,657).
+- The aim and its size: a reduction of 70% of all nitrogen emissions in the
+  500 m strip against 2018 would lower deposition by "circa 75 mol per
+  hectare per jaar voor de Veluwe en circa 145 mol per hectare per jaar
+  voor de Landgoederen Brummen" (p. 4). The province adds that "zeker méér
+  nodig zal zijn dan strokenbeleid alleen" and that measures outside the
+  strip "onontkoombaar" are.
+- Why near the nature: of ammonia and nitrogen oxides about 5% and 2.5% of
+  the emission lands within 500 m of the source; from a study of the
+  Universiteit van Amsterdam, "9% van de ammoniakemissies van een boerderij
+  komen binnen 500 meter terecht" (p. 3; the study is not named).
+- Where the emission in the strips comes from: agriculture about 65%
+  (p. 14), mobility about 25% (p. 18), businesses and public functions
+  about 5% (p. 11), housing and building less than 5% (p. 20).
+- Farms: about 8,500 in Gelderland, of which about 400 (5%) in the strips
+  around the Veluwe and Landgoederen Brummen: nearly 80 arable, nearly 90
+  with housed animals, about 50 dairy, about 150 other grazing livestock,
+  about 15 other (p. 14). Totals for all strips; nothing per municipality.
+- National policy at that time: the Kamerbrief of 25 April 2025
+  (35334-362) spoke of "een strook van 250 meter rond overbelaste
+  hexagonen"; the province kept 500 m because 250 m gives half the effect
+  (p. 4, 8). The later national package is under "National package of June
+  2026" below.
+
+**Rules under consideration for agriculture** (p. 15; not the adopted
+text): emission norms in kg ammonia per animal place for 2030 and 2035;
+best available technique in half of a farm's barns by 2030 and in all by
+2035; emission norms per hectare for arable and land-based livestock
+farming; artificial fertilizer halved by 2030 and banned in 2035; a lower
+norm and a maximum temperature for spreading slurry; external netting only
+with a farm inside the strip, with 85% taken off; a minimum share of
+permanent grassland. The province intended to let norms apply from 2030,
+not only from 2035 (p. 15). The news report on the adopted rules, quoted
+above, says no nitrogen fertilizer from 2030. Note and report differ; which
+is right for the adopted text is not known until the regulation is read.
+
+**For the technology note** (`docs/nitrogen-technology-research.md`):
+
+- The province separates "innovatie" (techniques "die nog niet
+  wetenschappelijk bewezen zijn en nog niet juridisch geborgd") from
+  "modernisering" (proven and legally secured). Inside the strips only the
+  second counts: "een bewezen technologie in de strook minstens 45%
+  emissiereductie moet opleveren". Innovation policy "krijgt buiten de
+  stroken vorm" (p. 16).
+- For industrial manure processing in the strips it considers requiring
+  that this is done indoors and with a chemical air scrubber (p. 13).
+
+Not recorded from this note: its chapter on money (p. 22) and the subsidy
+percentages. One date in the note is evidently a slip: a ruling of the Raad
+van State "op 18 december 2025" that led to a proposal of 28 January 2025
+(p. 6).
+
 ### National package of June 2026
 
 "Weer ruimte voor boer, natuur en bouw", Kamerbrief of 26 June 2026. Read on
@@ -938,6 +1038,7 @@ Sources for this section:
 
 - [Provincie Gelderland: Stikstof (overview)](https://www.gelderland.nl/themas/stikstof)
 - [Provincie Gelderland: Stikstofreductiegebieden](https://www.gelderland.nl/themas/stikstof/stikstofreductiegebieden)
+- [Provincie Gelderland: Denkrichting invulling beleid stikstofstroken, versie 8 juli 2025 (Staten document; read from a PDF supplied by the author)](https://gelderland.stateninformatie.nl/document/15783213/3/Bijlage+1+Notitie+%E2%80%98Denkrichting+invulling+beleid+stikstofstroken)
 - [Kamerbrief "Weer ruimte voor boer, natuur en bouw", 26 June 2026 (Tweede Kamer, 2026D33108)](https://www.tweedekamer.nl/kamerstukken/brieven_regering/detail?id=2026Z14788&did=2026D33108)
 - [The same Kamerbrief on open.overheid.nl](https://open.overheid.nl/details/bc6acef2-0bb5-4ea6-976d-c7630b45ac89)
 - [Rijksoverheid: Kabinet haalt Nederland van het stikstofslot, 26 June 2026](https://www.onslevendlandschap.nl/actueel/nieuws/2026/06/26/kabinet-haalt-nederland-van-het-stikstofslot)
