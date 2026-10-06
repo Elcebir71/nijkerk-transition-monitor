@@ -34,7 +34,7 @@ be Gelderland sources. The main nitrogen-sensitive Natura 2000 context is the
 | Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National 1x1 km grid, clipped to Nijkerk + 15 km | 2025; prognosis 2030–2040 | Zip with ESRI ASCII grid, EPSG:28992 | Weergave | Verified |
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
 | Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on fetch date (AERIUS 2025) | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
-| Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | Deposition year 2023 | WFS | Not used yet | Fields seen; `exceeding` and `above_cl` still not verified (2026-10-06) |
+| Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | Year 2024 in the samples seen; full list of years not checked | WFS | Not used yet | Fields seen; `exceeding` and `above_cl` still not verified (2026-10-06) |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
 
 The land-use row is not needed for v1.
@@ -134,8 +134,10 @@ The land-use row is not needed for v1.
   <https://www.aeriusproducten.nl/producten/aerius-monitor>
 - **What it means:** per Natura 2000 area and habitat type, the mapped
   polygons that AERIUS treats as relevant (nitrogen-sensitive), with the
-  critical deposition value (KDW, mol N per ha per year) and a coverage
-  fraction per polygon. Covers Natura 2000 areas only.
+  critical deposition value (KDW, mol N per ha per year) and one coverage
+  value per record. A record is one habitat type in one Natura 2000 area
+  (all its polygons together), so the coverage is not per polygon. Covers
+  Natura 2000 areas only.
 - **Result for the map area (2026-10-05):** 33 habitat types and species
   habitats, all in the Veluwe, 39,436 ha mapped; KDW from 500 to 2,399.
   Inside the municipality of Nijkerk: 0 ha. Arkemheen, Veluwerandmeren and
@@ -160,10 +162,12 @@ The land-use row is not needed for v1.
   verification" below. In short: "relevant" and the 2,400 mol threshold are
   verified; `L4030` only from secondary sources; the hexagon fields
   `exceeding` and `above_cl` are still not verified.
-- **Note on years:** AERIUS deposition per hexagon is for 2023, the RIVM GDN
-  map on the page is for 2025. Do not combine them in one figure. The AERIUS
+- **Note on years:** the two deposition samples read from the service on
+  2026-10-06 carry year 2024, not 2023 as noted here earlier. The AERIUS
   Handboek Data 2025 lists 2020 and 2023 as the reference years of Monitor
-  2025.
+  2025, so which years the open data layer holds still has to be listed.
+  The RIVM GDN map on the page is for 2025. Do not combine the two in one
+  figure.
 - **Script:** `scripts/nitrogen/fetch_aerius_habitats.py`. The download is
   kept in `data/nitrogen/raw/` (not committed) and reused on later runs.
 
@@ -268,6 +272,34 @@ this is settled. Two ways to settle it:
   aangewezen habitattype of leefgebied van een aangewezen soort binnen het
   Natura 2000-gebied" (RIVM 2025-0020, p. 29). H9999 does not occur in the
   map area.
+
+### Observed in the service (2026-10-06)
+
+From the output of `inspect_aerius.py`, run on 2026-10-06. Field names and
+types are as served; the meanings in the last column are readings, not
+definitions.
+
+| Layer | Features in map area | Fields (besides ids and geometry) | Reading |
+|---|---|---|---|
+| `base_geometries:hexagons` | 71,442 | `zoom_level`, `relevant`, `exceeding`, `above_cl`, `extra_assessment` (all boolean), `critical_deposition` | Both samples were zoom level 4 and 5 with every field empty. The flags are probably filled at zoom level 1 only; not seen yet |
+| `depositions:depositions` | 46,826 | `year`, `zoom_level`, `total_deposition` | Samples: year 2024, zoom level 1, values 1,895 and 2,058. Unit not stated by the service |
+| `base_geometries:hexagons_to_relevant_habitats` | 81,522 | `zoom_level`, habitat type, `critical_deposition`, `surface`, `coverage` | `surface` samples 9,334.45 and 10,000.00: fits m2 of habitat inside a 1 ha hexagon |
+| `base_geometries:relevant_habitats` | 41 | habitat type, `critical_deposition`, `coverage` | Sample coverage 0.47026383437375235 for a whole area and type: looks like a calculated average, not a recorded percentage |
+| `base_geometries:extra_assessment_hexagons_to_habitats` | 0 | habitat type, `critical_deposition` | Nothing in the map area |
+
+What this changes:
+
+- `exceeding` and `above_cl` are yes/no flags, so the two-candidate reading
+  under 4 and 5 can be tested: join hexagons and depositions on
+  `receptor_id` and `zoom_level`, and compare `total_deposition` with
+  `critical_deposition`. Not done yet: no zoom level 1 hexagon has been
+  seen.
+- `coverage` in `relevant_habitats` is one value per Natura 2000 area and
+  habitat type. This may explain the search-area types with a coverage below
+  1 (an average over polygons), but that is not shown yet.
+- `coverage_weighted_ha_in_map_area` in the processed habitat file multiplies
+  the area inside the map area by that area-wide value. It is therefore an
+  approximation for the map area. The page does not show this figure.
 
 Sources for this section:
 
