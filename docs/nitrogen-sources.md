@@ -1193,7 +1193,12 @@ Sources for this section:
   page and the field test were made around that date and are labelled
   AERIUS 2025. Fetch again, compare, and state the AERIUS version: habitat
   types, KDW values, hexagon flags and the deposition year can all have
-  changed.
+  changed. Two reruns of the field test on the evening of 6 October 2026
+  gave the same report in every number (year 2024, 43,770 relevant
+  hexagons, 43,664 / 59 / 47), but those reports do not say whether the
+  layers were downloaded again or read from the saved files, so they prove
+  nothing yet. The script now writes that into the report; run it with
+  `--refresh` to download again.
 - For the Veluwe figure: the title and licence of the RIVMdata catalogue
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
