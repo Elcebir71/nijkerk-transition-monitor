@@ -561,11 +561,19 @@ which did not renew them.
   it is the share of the surface not above the KDW. This is read from the
   drawing; the Monitor does not label the number.
 - The segments carry the class names of the legend recorded under "Classes"
-  below. Two tooltips were read: "Sterke overbelasting (13,5%)" for 2020 in
-  M25 and "Sterke overbelasting (3,6%)" for 2024 in M26. The other segment
-  values were not read. In 2030, 2035 and 2040 the part right of the line
-  has two shades of green, which fits the two classes below the KDW ("bijna
-  overbelast" and "geen overbelasting").
+  below. Three tooltips were read: "Sterke overbelasting (13,5%)" for 2020
+  in M25, and for 2024 in M26 "Sterke overbelasting (3,6%)" and "Geen
+  overbelasting (0,5%)". The other segment values were not read.
+- For 2024 the printed 0,7% is therefore more than "geen overbelasting"
+  alone (0,5%). The remaining 0,2 points fit the class "bijna overbelast"
+  (at most 70 mol below the KDW), whose tooltip was not read. In 2030, 2035
+  and 2040 the part right of the line has two shades of green, which fits
+  the same two classes.
+- What follows for the Veluwe in 2024 (M26): 0,5% of the surface is more
+  than 70 mol below the KDW, 0,7% is not above the KDW, 3,6% is at twice
+  the KDW or more. The rest, about 95,7%, is above the KDW but below twice
+  the KDW ("lichte" and "matige overbelasting" together; a subtraction made
+  here, the two values were not read).
 - Name the edition next to any figure. Do not read the step from M25 to M26
   as a trend: each edition recalculates, as RIVM's own series show (see
   "Editions and series differ" below).
@@ -956,6 +964,6 @@ Sources for this section:
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
 - From AERIUS Monitor's chart "Ontwikkeling stikstofbelasting" for the
-  Veluwe: the value of every class segment (tooltips; M26 first), and a
-  statement by AERIUS of what the printed percentage is. Also how the
-  Monitor aggregates hexagons on its map.
+  Veluwe in M26: the tooltips of "bijna overbelast", "lichte" and "matige
+  overbelasting" for 2024, and a statement by AERIUS of what the printed
+  percentage is. Also how the Monitor aggregates hexagons on its map.
