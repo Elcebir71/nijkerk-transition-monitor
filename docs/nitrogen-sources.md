@@ -538,18 +538,22 @@ chart "Ontwikkeling stikstofbelasting" (under "Stikstofdepositie en natuur")
 that gives, per Natura 2000 area, "De oppervlakte in het gebied met een
 bepaalde onder- of overbelasting stikstof, in relatie tot de kritische
 depositiewaarde, met prognoses over de ontwikkeling." Read from the screen
-by the author on 2026-10-06, selection M25, Veluwe, 2025, "Alle
-habitattypen en l..." (the last entry is cut off on screen); the percentage
+by the author on 2026-10-06, for the Veluwe and "Alle habitattypen en l..."
+(the last entry is cut off on screen), in two editions; the percentage
 printed next to each bar:
 
-| Veluwe, AERIUS Monitor M25 | Printed next to the bar |
-|---|---|
-| 2020 (historisch) | 0,3% |
-| 2023 (historisch) | 0,5% |
-| 2025 (prognose) | 0,5% |
-| 2030 (prognose) | 2,3% |
-| 2035 (prognose) | 5,7% |
-| 2040 (doorkijkjaar) | 11,6% |
+| Veluwe | Edition | Printed next to the bar |
+|---|---|---|
+| 2024 (historisch) | M26 | 0,7% |
+| 2020 (historisch) | M25 | 0,3% |
+| 2023 (historisch) | M25 | 0,5% |
+| 2025 (prognose) | M25 | 0,5% |
+| 2030 (prognose) | M25 | 2,3% |
+| 2035 (prognose) | M25 | 5,7% |
+| 2040 (doorkijkjaar) | M25 | 11,6% |
+
+M26 shows one bar only, 2024, and no prognoses. That fits the 2026 report,
+which did not renew them.
 
 - What the percentage is: the bar is drawn on both sides of a line marked
   "KDW", on an axis "Oppervlakte (%) met onder-/overbelasting". The printed
@@ -557,14 +561,18 @@ printed next to each bar:
   it is the share of the surface not above the KDW. This is read from the
   drawing; the Monitor does not label the number.
 - The segments carry the class names of the legend recorded under "Classes"
-  below. One tooltip was read: "Sterke overbelasting (13,5%)" for 2020. The
-  other segment values were not read. In 2030, 2035 and 2040 the part right
-  of the line has two shades of green, which fits the two classes below the
-  KDW ("bijna overbelast" and "geen overbelasting").
-- This is the 2025 edition (M25). The same chart in M26 has not been read;
-  name the edition next to any figure.
-- The prognoses are model results of that edition. The 2026 report says the
-  prognoses may be too favourable (see the note on editions below).
+  below. Two tooltips were read: "Sterke overbelasting (13,5%)" for 2020 in
+  M25 and "Sterke overbelasting (3,6%)" for 2024 in M26. The other segment
+  values were not read. In 2030, 2035 and 2040 the part right of the line
+  has two shades of green, which fits the two classes below the KDW ("bijna
+  overbelast" and "geen overbelasting").
+- Name the edition next to any figure. Do not read the step from M25 to M26
+  as a trend: each edition recalculates, as RIVM's own series show (see
+  "Editions and series differ" below).
+- The prognoses are model results of the 2025 edition. The 2026 report says
+  they may be too favourable (see the notes on the aggregation below).
+- The figure that goes with the 31% of RIVM report 2026-0018 (Netherlands,
+  2024) is the M26 one: 0,7% for the Veluwe in 2024.
 
 So for the Veluwe a published share exists and no calculation of our own is
 needed to state it. The aggregation below stays as a cross-check.
@@ -948,6 +956,6 @@ Sources for this section:
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
 - From AERIUS Monitor's chart "Ontwikkeling stikstofbelasting" for the
-  Veluwe: the value of every class segment (tooltips), the same chart in
-  M26, and a statement by AERIUS of what the printed percentage is. Also
-  how the Monitor aggregates hexagons on its map.
+  Veluwe: the value of every class segment (tooltips; M26 first), and a
+  statement by AERIUS of what the printed percentage is. Also how the
+  Monitor aggregates hexagons on its map.
