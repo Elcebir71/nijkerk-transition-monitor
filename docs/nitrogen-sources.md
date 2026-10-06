@@ -498,6 +498,22 @@ hectare. Deze wordt gebruikt in AERIUS Calculator" (p. 88; also p. 30,
 footnote 4). That fits the year 2024 in the open data layer. A reading, not
 a statement by AERIUS.
 
+**An older download of the same hexagon deposition.** RIVM also offers the
+background deposition as a GeoPackage. The file
+`RIVM-MIL_AchtergrondStikstofdepositie_20241001.gpkg` (supplied by the
+author, read on 2026-10-06) has one layer, `ndep_2022`: total nitrogen
+deposition for 2022 on 252,203 hexagons of 1 ha, one row per `receptor_id`.
+
+- 252,203 is the national number of relevant hexagons given for AERIUS 2024
+  in RIVM 2024-0078 (p. 26). In the Nijkerk map area the file has 43,770
+  hexagons, the same number as the relevant hexagons in the open data
+  service.
+- It holds deposition only: no KDW, no area name, no class. It cannot give
+  exceedance or a Veluwe figure on its own.
+- It is an older product (2022, published 1 October 2024). Do not read the
+  difference with the 2024 values of the service as a trend: each release
+  recalculates.
+
 **Classes.** AERIUS Monitor 2026 itself shows five classes, as the legend of
 its map "Afstand tot de KDW" (tab "Stikstofdepositie en natuur", selection
 M26, Veluwe, 2024; read from the screen by the author on 2026-10-06):
