@@ -533,6 +533,42 @@ The same workbooks define terms used elsewhere in this register:
   drawn area.
 - "Zoomlevel 1 is 1 ha, zoomlevel 3 is 16 ha."
 
+**A published figure for the Veluwe: AERIUS Monitor.** AERIUS Monitor has a
+chart "Ontwikkeling stikstofbelasting" (under "Stikstofdepositie en natuur")
+that gives, per Natura 2000 area, "De oppervlakte in het gebied met een
+bepaalde onder- of overbelasting stikstof, in relatie tot de kritische
+depositiewaarde, met prognoses over de ontwikkeling." Read from the screen
+by the author on 2026-10-06, selection M25, Veluwe, 2025, "Alle
+habitattypen en l..." (the last entry is cut off on screen); the percentage
+printed next to each bar:
+
+| Veluwe, AERIUS Monitor M25 | Printed next to the bar |
+|---|---|
+| 2020 (historisch) | 0,3% |
+| 2023 (historisch) | 0,5% |
+| 2025 (prognose) | 0,5% |
+| 2030 (prognose) | 2,3% |
+| 2035 (prognose) | 5,7% |
+| 2040 (doorkijkjaar) | 11,6% |
+
+- What the percentage is: the bar is drawn on both sides of a line marked
+  "KDW", on an axis "Oppervlakte (%) met onder-/overbelasting". The printed
+  percentage matches the length of the part to the right of that line, so
+  it is the share of the surface not above the KDW. This is read from the
+  drawing; the Monitor does not label the number.
+- The segments carry the class names of the legend recorded under "Classes"
+  below. One tooltip was read: "Sterke overbelasting (13,5%)" for 2020. The
+  other segment values were not read. In 2030, 2035 and 2040 the part right
+  of the line has two shades of green, which fits the two classes below the
+  KDW ("bijna overbelast" and "geen overbelasting").
+- This is the 2025 edition (M25). The same chart in M26 has not been read;
+  name the edition next to any figure.
+- The prognoses are model results of that edition. The 2026 report says the
+  prognoses may be too favourable (see the note on editions below).
+
+So for the Veluwe a published share exists and no calculation of our own is
+needed to state it. The aggregation below stays as a cross-check.
+
 **A figure for the Veluwe, aggregated here from RIVM's hexagon data.** RIVM
 publishes the data behind its exceedance map as a GeoPackage. The file
 `RIVM-MIL_M25-Deposities_Overbelastingsklasse_20260401.gpkg` (Monitor 2025
@@ -585,6 +621,13 @@ How far this can be trusted:
 - The result fits the official provincial figures: Gelderland has 2.1%
   below the KDW in 2023 and class shares close to those of the Veluwe,
   which is most of the province's nitrogen-sensitive surface.
+- Against AERIUS Monitor M25 for the Veluwe (above), the share not above
+  the KDW comes out lower here: 0.1% against 0,5% for 2023, 0.6% against
+  2,3% for 2030, 3.5% against 5,7% for 2035. Both say that almost all of
+  the Veluwe is above the KDW. The gap is of the size seen in the national
+  check; a likely cause is one value per 16 ha hexagon here against 1 ha
+  hexagons with a coverage per habitat in the Monitor, but this was not
+  tested. Where a share for the Veluwe is quoted, quote the Monitor's.
 - Arkemheen and Veluwerandmeren do not occur in the file, in line with the
   AERIUS habitat layer.
 - Still to record: the title and licence of the catalogue record this file
@@ -668,8 +711,9 @@ M26, Veluwe, 2024; read from the screen by the author on 2026-10-06):
 - On the Veluwe map for 2024 most hexagons are "matige overbelasting", with
   scattered "sterke overbelasting" and a few green ones. So at class level
   the map does show spatial differences. The Monitor draws coarse hexagons
-  at this zoom; how it aggregates the 1 ha values into them is not known,
-  and no counts or shares per class were read.
+  at this zoom; how it aggregates the 1 ha values into them is not known.
+  Shares of the surface are in the Monitor's chart "Ontwikkeling
+  stikstofbelasting" (see "A published figure for the Veluwe" above).
 - The two hexagon flags in the open data give three steps without any
   calculation of our own: neither flag (geen), `exceeding` only (bijna),
   `above_cl` (above the KDW: licht, matig and sterk together). In the map
@@ -903,5 +947,7 @@ Sources for this section:
 - For the Veluwe figure: the title and licence of the RIVMdata catalogue
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
-- Counts or shares per class for the Veluwe from AERIUS Monitor, if the
-  Monitor shows them, and how it aggregates hexagons on its map.
+- From AERIUS Monitor's chart "Ontwikkeling stikstofbelasting" for the
+  Veluwe: the value of every class segment (tooltips), the same chart in
+  M26, and a statement by AERIUS of what the printed percentage is. Also
+  how the Monitor aggregates hexagons on its map.
