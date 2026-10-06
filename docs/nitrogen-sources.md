@@ -267,6 +267,9 @@ with the deposition year, `coverage` and `L4030`. Answer pending.
   minimum share is stated in the definition.
 - The link table (`hexagons_to_relevant_habitats`) records per hexagon which
   relevant habitat types are present. For its fields see "Field test".
+- RIVM's dashboard data defines the relevant surface as "ingetekend
+  oppervlakte maal dekkingspercentage" (see "Showing exceedance" below).
+  That supports reading `coverage` as this coverage percentage.
 - The `coverage` field of `relevant_habitats` is not defined in the AERIUS
   documents checked. Probable meaning, from the BIJ12 Methodiekdocument
   (2015, p. 21): one mapped polygon can hold several habitat types, "waarbij
@@ -459,6 +462,58 @@ Dashboard" and a breakdown of KDW exceedance by categories of nature
 (p. 33). Neither was read in this check. The XLSX with the figure data
 holds national series only (read for the 2025 edition; no row per area).
 
+**Official figures for Gelderland.** RIVM publishes the data behind its
+dashboard as six workbooks (`RIVM-MIL_*_20260401.xlsx`; Monitor 2025 data,
+database `monitor_2025_20250719`; supplied by the author, read on
+2026-10-06). They are per province, not per Natura 2000 area. For Gelderland,
+reference year 2023, at 16 ha:
+
+| Gelderland, 2023 | Value | Netherlands |
+|---|---|---|
+| Relevant mapped nitrogen-sensitive surface | 83,623 ha | 171,842 ha |
+| Share with deposition not above the KDW | 2.1% (1,754 ha) | 29.7% (51,040 ha) |
+| Mean deposition | 1,649 mol/ha/year | 1,368 |
+| Mean exceedance of the KDW | 456 mol/ha/year | 263 |
+| Natura 2000 areas with nitrogen-sensitive nature | 13 of 16 | 130 of 162 |
+
+Source: `Provinciekengetallen`. The national row in that file is at 1 ha.
+
+Share of the surface per exceedance class (mol above the KDW), from
+`exceedance_kdw_class`:
+
+| Gelderland | None | 0-250 | 250-500 | 500-750 | 750-1000 | >1000 |
+|---|---|---|---|---|---|---|
+| 2023 (reference) | 2.1% | 5.3% | 15.9% | 43.3% | 28.4% | 5.0% |
+| 2024 (historical series) | 1.9% | 5.0% | 20.6% | 55.6% | 15.1% | 1.8% |
+| 2030 (prognosis) | 4.0% | 17.8% | 55.1% | 20.8% | 2.1% | 0.1% |
+| 2035 (prognosis) | 7.4% | 23.3% | 60.6% | 8.2% | 0.5% | 0.0% |
+
+Where the deposition on Gelderland's nitrogen-sensitive nature comes from,
+2023, in mol/ha/year (`GemiddeldeDepositieOntwikkelingPrognoses`, scenario
+Diagnose): Dutch agriculture 960 of 1,649 (58%), mobility 218, Germany 204,
+Belgium 114. For the Netherlands as a whole agriculture is 686 of 1,358
+(50%).
+
+Inside or outside the province (`Depositieherkomst_binnenbuitenprovincie`,
+an older data version, DASH 2024; rows added up here): agriculture inside
+Gelderland 31% of the deposition load, agriculture elsewhere in the
+Netherlands 23%, agriculture abroad 14%. All sources inside Gelderland
+together: 38%.
+
+These are RIVM's own figures, so they can be shown with a plain source
+reference. They are about the province, not about the Veluwe or Nijkerk.
+The licence of these workbooks is not stated in them; still to record from
+the catalogue.
+
+The same workbooks define terms used elsewhere in this register:
+
+- Relevant surface: "Het gekarteerde oppervlak (ingetekend oppervlakte maal
+  dekkingspercentage) van alle stikstofrelevante kartering waaraan een
+  doelstelling van een habitattype of soort is gekoppeld". This is the
+  official wording behind `coverage`: a coverage percentage applied to the
+  drawn area.
+- "Zoomlevel 1 is 1 ha, zoomlevel 3 is 16 ha."
+
 **A figure for the Veluwe, aggregated here from RIVM's hexagon data.** RIVM
 publishes the data behind its exceedance map as a GeoPackage. The file
 `RIVM-MIL_M25-Deposities_Overbelastingsklasse_20260401.gpkg` (Monitor 2025
@@ -502,9 +557,15 @@ How far this can be trusted:
   `distance_to_kdw`. What the stored class is based on is not documented in
   the file, so it is not used here. For the Veluwe the difference is small
   (55 of 6,496 rows in 2023).
-- The Veluwe surface adds up to more than the area of its hexagons, because
-  habitat types that overlap are each counted. RIVM's mean deposition is
-  reproduced with this weight, so it appears to be the weight RIVM uses.
+- The surface in the GeoPackage adds up to about twice RIVM's stated
+  relevant surface (345,164 ha against 171,842 ha nationally; 163,623 ha
+  for the Veluwe against 83,623 ha for all of Gelderland). The reason is
+  not known. Shares and weighted means are not affected if the factor is
+  the same everywhere, and the national check above passes, but do not
+  quote hectares from this file.
+- The result fits the official provincial figures: Gelderland has 2.1%
+  below the KDW in 2023 and class shares close to those of the Veluwe,
+  which is most of the province's nitrogen-sensitive surface.
 - Arkemheen and Veluwerandmeren do not occur in the file, in line with the
   AERIUS habitat layer.
 - Still to record: the title and licence of the catalogue record this file
