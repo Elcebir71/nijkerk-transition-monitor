@@ -225,7 +225,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     <a class="backlink" href="index.html">Naar de Transitie Monitor (synthetische demodata)</a>
   </header>
 
-  <div class="principle"><strong>Alleen echte, openbare data.</strong> Deze pagina toont cijfers zoals CBS, RIVM, de Emissieregistratie en PDOK ze publiceren, met bron, peildatum en beperkingen erbij. Ik reken niet zelf aan depositie en leg geen verband tussen dieraantallen en depositie.</div>
+  <div class="principle"><strong>Alleen echte, openbare data.</strong> Deze pagina toont cijfers zoals CBS, RIVM, de Emissieregistratie en PDOK ze publiceren, met bron, peildatum en beperkingen erbij. Ik bereken zelf geen depositie en leg geen verband tussen dieraantallen en depositie.</div>
 
   <div class="missing" id="missing" hidden>
     <strong>Het databestand ontbreekt.</strong> Voer in de map van het project <code>python scripts/nitrogen/build_page_data.py</code> uit en laad deze pagina opnieuw.
@@ -281,9 +281,9 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
         <li><strong>Wat “relevant” betekent.</strong> AERIUS spreekt van “relevante habitattypen”: stikstofgevoelige typen die volgens de beleidscriteria op die plek meetellen. De indeling is van AERIUS, niet van deze pagina.</li>
         <li><strong>Alleen Natura 2000.</strong> De kartering gaat over habitats binnen Natura 2000-gebieden. Over natuur daarbuiten zegt ze niets.</li>
         <li><strong>KDW.</strong> De kritische depositiewaarde is de grens waarboven het risico bestaat dat de kwaliteit van het habitat significant wordt aangetast door stikstofdepositie. De waarden hieronder zijn overgenomen uit AERIUS.</li>
-        <li><strong>Geen eigen vergelijking.</strong> Deze pagina legt de KDW niet naast de depositiekaart hierboven. Die kaart heeft vakken van 1×1 km. AERIUS Monitor maakt de vergelijking zelf, met eigen kaarten op zeshoeken van 16 hectare, en is daarvoor de aangewezen bron.</li>
+        <li><strong>Geen eigen vergelijking.</strong> Deze pagina legt de KDW niet naast de depositiekaart hierboven. Die kaart heeft vakken van 1×1 km. AERIUS Monitor maakt de vergelijking zelf, met eigen kaarten op zeshoeken van 16 hectare, en is daarvoor de aangewezen bron. Het gemeentegemiddelde bovenaan deze pagina is de depositie op het grondgebied van Nijkerk, niet op de habitats in de tabel hieronder; leg het daarom niet naast een KDW.</li>
         <li id="pub-exceedance" hidden></li>
-        <li><strong>Codes.</strong> H is een habitattype. ZGH is een zoekgebied: er zijn aanwijzingen, maar geen zekerheid, dat het habitattype aanwezig is. Lg is een stikstofgevoelig leefgebied van soorten van de Vogel- en Habitatrichtlijn.</li>
+        <li><strong>Codes.</strong> H is een habitattype. ZGH is een zoekgebied: er zijn aanwijzingen, maar geen zekerheid, dat het habitattype aanwezig is. Lg is een stikstofgevoelig leefgebied van soorten van de Vogel- en Habitatrichtlijn.<span id="l-code-note" hidden> L4030 is ook een leefgebied. De provincie Gelderland beschrijft het in haar PAS-gebiedsanalyse Veluwe (2017) als “Lgt 4030, weinig vergraste heide en stuifzandheide”, stikstofgevoelig leefgebied van aangewezen vogelsoorten. AERIUS noemt het “Droge heiden”, net als habitattype H4030.</span></li>
       </ul>
       <details>
         <summary id="hab-table-summary">Tabel met alle typen</summary>
@@ -703,6 +703,8 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     if (without.length) txt += ' Voor ' + listNl(without) + ' bevat deze kartering binnen het kaartgebied geen relevante typen.';
     if (habStats.inMuni < 0.05) txt += ' Dit betekent niet dat stikstofdepositie geen effect kan hebben op natuur buiten de gemeentegrens.';
     $('#hab-summary').textContent = txt;
+    // The note on L4030 only makes sense while the table has that code.
+    if (hRows.some(function (r) { return r.habitat_code === 'L4030'; })) $('#l-code-note').hidden = false;
 
     // One figure copied from AERIUS Monitor. It is not calculated here and not fetched by a script:
     // it was read from the screen by hand, so it has to be updated by hand when a new edition appears.
@@ -712,7 +714,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     peItem.appendChild(h('strong', null, 'Wat de officiële vergelijking laat zien.'));
     peItem.appendChild(document.createTextNode(' Volgens AERIUS Monitor (versie ' + pe.edition + ') lag in ' + pe.year + ' op ' +
       nf1.format(pe.share_not_above_kdw_pct) + '% van de oppervlakte stikstofgevoelige natuur in het Natura 2000-gebied ' + pe.area +
-      ' de depositie niet boven de KDW; op de rest wel. Dit cijfer gaat over de hele ' + pe.area + ', niet over de gemeente ' + muni.properties.name +
+      ' de berekende depositie niet boven de KDW; op de rest wel. Dit cijfer gaat over de hele ' + pe.area + ', niet over de gemeente ' + muni.properties.name +
       '. Het is op ' + nlDate(pe.read_on) + ' overgenomen uit AERIUS Monitor; elke nieuwe versie berekent het opnieuw. Meer: '));
     peItem.appendChild(link(pe.monitor_url, 'AERIUS Monitor'));
     peItem.appendChild(document.createTextNode(' en het '));
@@ -743,7 +745,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     $('#kpis').appendChild(el);
   }
   kpi('Gemiddelde stikstofdepositie, ' + dep.source.year, nf0.format(sum.ntot.mean_mol_per_ha), 'mol N/ha/jaar',
-    'Ongeveer ' + nf1.format(sum.ntot.mean_kg_n_per_ha) + ' kg N/ha/jaar. RIVM GDN; onzekerheid per vak 30–35%.');
+    'Ongeveer ' + nf1.format(sum.ntot.mean_kg_n_per_ha) + ' kg N/ha/jaar. Eigen gebiedsgemiddelde, berekend uit de GDN-kaart van het RIVM; onzekerheid per vak 30–35%.');
   if (nhxShare !== null) kpi('Aandeel gereduceerd stikstof (NHx)', nf0.format(nhxShare) + '%', '',
     'Van wat in Nijkerk neerkomt; de rest is NOy. Zegt niets over waar de uitstoot plaatsvond.');
   var insideParts = n2kAreas.filter(function (a) { return a.overlap >= 0.5; }).sort(function (x, y) { return y.overlap - x.overlap; })
