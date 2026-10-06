@@ -24,6 +24,24 @@ Nijkerk is in the province of **Gelderland**. Provincial policy sources must
 be Gelderland sources. The main nitrogen-sensitive Natura 2000 context is the
 **Veluwe**.
 
+## Kinds of sources
+
+Not every source in this register carries the same weight. When a figure is
+quoted, say which kind it comes from.
+
+| Kind | Examples in this register | What it may be used for |
+|---|---|---|
+| Official data | CBS, Emissieregistratie, RIVM GDN, PDOK, AERIUS open data, AERIUS Monitor, RIVM Monitor Natura 2000 | The page. Always with source, edition and reference date |
+| Official evaluation | PBL, WUR and RIVM on the nitrogen programme; Ecologische Autoriteit | Context in these notes. Not a data source for the page |
+| Policy, adopted | Omgevingsverordening Gelderland, Beleidsregels salderen | Reference only. "Official" only once read in the regulation itself |
+| Policy, in preparation | Consultation notes, Kamerbrieven with intentions, a municipality's zienswijze | Reasoning and history. Never as the rule in force |
+| Derived here | Field test on the AERIUS layers, the Veluwe aggregation, distance and overlap checks | Cross-check. If ever quoted, as "calculated here from ..." |
+| Reported | News coverage, a firm's summary of a letter | A pointer, until the primary source has been read. Marked "reported" |
+
+Position papers and opinion pieces on the nitrogen debate are not recorded
+here. The Stikstofmonitor shows published figures and takes no side on
+whether the KDW is the right yardstick.
+
 ## Register
 
 | Onderwerp | Bron | Dataset | Gebied | Periode | Formaat | Gebruik | Status |
@@ -34,7 +52,7 @@ be Gelderland sources. The main nitrogen-sensitive Natura 2000 context is the
 | Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National 1x1 km grid, clipped to Nijkerk + 15 km | 2025; prognosis 2030–2040 | Zip with ESRI ASCII grid, EPSG:28992 | Weergave | Verified |
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
 | Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on fetch date (AERIUS 2025) | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
-| Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | 2024 (the only year in the layer for the map area) | WFS | Not used yet | Field meanings fit the data in a test (2026-10-06); no official field definition found |
+| Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | 2024 (the only year in the layer for the map area) | WFS | Not used yet | Fields officially described (Handboek Data AERIUS 2026, p. 47) and confirmed in a test on the data (2026-10-06) |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
 
 The land-use row is not needed for v1.
@@ -160,9 +178,9 @@ The land-use row is not needed for v1.
   see point 3 of the verification section below.
 - **Definitions checked on 2026-10-06:** see "AERIUS definitions:
   verification" below. In short: "relevant" and the 2,400 mol threshold are
-  verified; `L4030` only from secondary sources; for the hexagon fields
-  `exceeding` and `above_cl` a rule was found that fits every hexagon in the
-  map area, but no official field definition.
+  verified; `L4030` is defined in a provincial source; the hexagon fields
+  `exceeding` and `above_cl` have an official description (Handboek Data
+  AERIUS 2026, p. 47) and a rule that fits every hexagon in the map area.
 - **Note on years:** the open data deposition layer holds one year for the
   map area, 2024 (read on 2026-10-06), not 2023 as noted here earlier. The
   AERIUS Handboek Data 2025 lists 2020 and 2023 as the reference years of
@@ -183,9 +201,9 @@ the map area. The statuses in the table are the outcome after all three.
 | 1 | What does "relevant" mean in `relevant_habitats`? | Verified for hexagons; applied to the habitat layer by its metadata | See 1 below |
 | 2 | Is nitrogen-sensitive a KDW below 2,400 mol? | Verified | See 2 below |
 | 3 | What is code `L4030`? | Defined in a provincial source: a leefgebiedtype, with its species | See 3 below |
-| 4 | What does hexagon field `exceeding` mean? | Fits the data; no official field definition | Deposition above KDW minus 70 mol. See "Field test" below |
-| 5 | What does hexagon field `above_cl` mean? | Fits the data; no official field definition | Deposition above the KDW. See "Field test" below |
-| 6 | How do hexagon area and habitat coverage relate? | Hexagon and `surface` confirmed on the data; `coverage` narrowed down, not defined | See "Field test" below |
+| 4 | What does hexagon field `exceeding` mean? | Verified: official field description, and it fits the data | "naderend overbelast": deposition above KDW minus 70 mol. See 4 and 5 below |
+| 5 | What does hexagon field `above_cl` mean? | Verified: official field description, and it fits the data | "overbelast": deposition above the KDW. See 4 and 5 below |
+| 6 | How do hexagon area and habitat coverage relate? | Verified: `surface` and `coverage` have an official field description | Drawn surface, and percentage of it covered by the habitat. See 6 below |
 
 **1. "Relevant".** The RIVM metadata for the AERIUS link table between
 hexagons and relevant habitats says: "De voorwaarden onder welke een
@@ -259,6 +277,13 @@ says 1,071 (the KDW values were revised in 2023). The earlier text of this
 point said the document gives no definition; that was based on a partial
 reading and is superseded by this paragraph.
 
+The Handboek Data AERIUS 2026 (p. 36) confirms the category, without a
+list: besides the habitat types of the Habitats Directive, "zijn een
+veertiental stikstofgevoelige aanvullende leefgebieden opgenomen". The KDW
+values come from Wageningen Environmental Research, "Overzicht van kritische
+depositiewaarden voor stikstof, toegepast op habitattypen en leefgebieden
+van Natura 2000: Herziening 2023" (31 August 2023).
+
 **4 and 5. `exceeding` and `above_cl`.** No public document was found that
 defines these field names (Handboek Data 2025, Handboek Calculator 2025,
 Leeswijzer AERIUS Check, RIVM briefrapporten, RIVM metadata). What is
@@ -275,7 +300,47 @@ deposition above KDW minus 70 mol. The test on the data (see "Field test"
 below) shows which field carries which. Still open: confirmation of the
 field definitions by AERIUS itself. Asked on 2026-10-06 through the AERIUS
 contact form (Landelijk Informatiepunt Stikstof en Natura 2000), together
-with the deposition year, `coverage` and `L4030`. Answer pending.
+with the deposition year, `coverage` and `L4030`. Answer pending; for the
+field definitions it is no longer needed, see below.
+
+Settled later on 2026-10-06 from the Handboek Data AERIUS 2026, v1.0 (RIVM,
+6 October 2026, 54 pages; PDF supplied by the author; chapter 5 and section
+4.3-4.4 read). Section 5.1, "Velden webservice hexagons" (p. 47):
+
+| Veld | Type | Omschrijving |
+|---|---|---|
+| `relevant` | boolean | "Geeft aan of het hexagoon relevant is." |
+| `exceeding` | boolean | "Waarde of het hexagoon naderend overbelast is." |
+| `above_cl` | boolean | "Waarde of het hexagoon overbelast is." |
+| `extra_assessment` | boolean | "Betreft hexagoon met een hersteldoel" |
+| `critical_deposition` | integer | "Minimale kritische depositie in mol N/ha/jaar" |
+
+- This is the official field description that was missing. Together with
+  the definition of the terms it closes points 4 and 5: `above_cl` is
+  "overbelast" (deposition above the KDW), `exceeding` is "naderend
+  overbelast" (from 70 mol below the KDW). The field test found exactly
+  this split.
+- The 70 mol is in the term, not in the field table. Besides RIVM 2025-0020
+  above, the online documentation of AERIUS Calculator 2025 (Resultaten,
+  Weergave) says: "Er is sprake van bijna overbelasting wanneer de
+  achtergronddepositie minder dan 70 mol onder de KDW ligt", and speaks of
+  "de meest kritische depositiewaarde".
+- `critical_deposition` of a hexagon is the lowest KDW in it ("Minimale"),
+  as the field test showed.
+- Which map decides: the "actuele depositiekaart", calculated on 1 ha
+  hexagons, "is gebruikt voor het bepalen van de hexagonen met een
+  naderende overbelasting" (p. 39).
+- Correction of the earlier text of this point: "no public document was
+  found that defines these field names" was wrong for the Handboek Data.
+  The reading tool gets the text of the 2025 editions (v2, and v3 of 14
+  April 2026) only up to p. 48, just before the field tables, and that
+  limit was not noticed. The 2025 editions were not read beyond that page;
+  the table above is from the 2026 edition.
+- The Handboek Data AERIUS 2026 is dated 6 October 2026, the day of the
+  field test. A fresh download that evening gave the same numbers as the
+  first one, so the data did not change during that day. Whether it is
+  AERIUS 2025 or AERIUS 2026 data, the service does not say. See "Still
+  needed".
 
 **6. Hexagon area and coverage.**
 
@@ -289,8 +354,13 @@ with the deposition year, `coverage` and `L4030`. Answer pending.
 - RIVM's dashboard data defines the relevant surface as "ingetekend
   oppervlakte maal dekkingspercentage" (see "Showing exceedance" below).
   That supports reading `coverage` as this coverage percentage.
-- The `coverage` field of `relevant_habitats` is not defined in the AERIUS
-  documents checked. Probable meaning, from the BIJ12 Methodiekdocument
+- Official field descriptions, Handboek Data AERIUS 2026: in the link
+  table `surface` is "Ingetekende oppervlakte" and `coverage` is
+  "Percentage dekking van het habitat" (p. 48-49); in `relevant_habitats`
+  `coverage` is again "Percentage dekking van het habitat" (p. 50). So the
+  relevant surface is drawn surface times coverage, as in RIVM's dashboard
+  data. The handbook gives no more than these few words.
+- Background to that description, from the BIJ12 Methodiekdocument
   (2015, p. 21): one mapped polygon can hold several habitat types, "waarbij
   per type het percentage in het vlak wordt vermeld". For search areas no
   percentage is recorded: "het percentage is 100% zoekgebied" (p. 8).
@@ -338,7 +408,9 @@ values, 81,522 hexagon-habitat rows. Run by the author on 2026-10-06 with
 service and writes a report to `data/nitrogen/raw/` (not committed).
 
 A rule that fits the data is not an official definition. It shows which
-reading is consistent with what the service publishes.
+reading is consistent with what the service publishes. The official field
+descriptions were found afterwards, in the Handboek Data AERIUS 2026 (see
+points 4 to 6 above), and agree with the outcome below.
 
 **1. Where the flags are filled.** Only at zoom level 1 (52,932 hexagons).
 At zoom levels 2 to 5 every field is empty. `receptor_id` is not unique on
@@ -400,8 +472,9 @@ types overlap each other inside a hexagon.
   matches where the type lies almost wholly in the map area (ZGH2330 0.9997
   in both). This fits an average over the whole Natura 2000 area.
 - Reading that fits all of this: the share of the mapped area that the
-  habitat type really occupies, as in the BIJ12 percentages. Not confirmed
-  by an AERIUS document. The BIJ12 rule of 2015 that search areas are
+  habitat type really occupies, as in the BIJ12 percentages. The Handboek
+  Data AERIUS 2026 describes the field as "Percentage dekking van het
+  habitat", which agrees. The BIJ12 rule of 2015 that search areas are
   always 100% does not hold in this data.
 - `L4030` behaves like the Lg types (always 1) and unlike H4030, which
   supports reading it as habitat of species (leefgebied), see point 3 above.
@@ -420,6 +493,9 @@ Sources for this section:
 - [RIVM-rapport 2020-0174, Impactanalyse Actualisatie AERIUS Calculator 2020](https://www.rivm.nl/bibliotheek/rapporten/2020-0174.pdf)
 - [RIVM metadata: AERIUS koppeltabel hexagonengrid en relevante-habitats](https://data.rivm.nl/meta/srv/metadata/bf6fb96b-16ea-4f30-9ac9-d66a18f674ad)
 - [AERIUS Handboek Data 2025, v2](https://www.aeriusproducten.nl/site/binaries/site-content/collections/documents/2025/12/8/handboek-data-aerius-2025-v2/handboek-data-aerius-2025-v2.pdf)
+- [AERIUS Handboek Data 2025, v3 (14 April 2026)](https://www.aeriusproducten.nl/documenten/2026/04/14/handboek-data-aerius-2025-v3)
+- RIVM, Handboek Data AERIUS 2026, v1.0, 6 October 2026 (read from a PDF supplied by the author; link not recorded)
+- [AERIUS Calculator 2025, online documentation](https://docs.aerius.nl/downloads/nl/calculator-2025.html)
 - [AERIUS Handboek Werken met Calculator 2025](https://www.aeriusproducten.nl/site/binaries/site-content/collections/documents/2025/12/9/handboek-werken-met-aerius-calculator-2025/handboek-werken-met-calculator-2025.pdf)
 - [BIJ12, Methodiekdocument kartering habitattypen Natura 2000 (2015)](https://www.bij12.nl/wp-content/uploads/2023/11/WW-BIJLAGE-09-%E2%80%93-Methodiekdocument-kartering-habitattypen.pdf)
 - [HaskoningDHV (2020), Compensatieplan stikstofgevoelig habitat Natura 2000-gebied Veluwe](https://zoek.officielebekendmakingen.nl/blg-959322.pdf)
@@ -533,6 +609,71 @@ The same workbooks define terms used elsewhere in this register:
   drawn area.
 - "Zoomlevel 1 is 1 ha, zoomlevel 3 is 16 ha."
 
+**A published figure for the Veluwe: AERIUS Monitor.** AERIUS Monitor has a
+chart "Ontwikkeling stikstofbelasting" (under "Stikstofdepositie en natuur")
+that gives, per Natura 2000 area, "De oppervlakte in het gebied met een
+bepaalde onder- of overbelasting stikstof, in relatie tot de kritische
+depositiewaarde, met prognoses over de ontwikkeling." Read from the screen
+by the author on 2026-10-06, for the Veluwe and "Alle habitattypen en l..."
+(the last entry is cut off on screen), in two editions; the percentage
+printed next to each bar:
+
+| Veluwe | Edition | Printed next to the bar |
+|---|---|---|
+| 2024 (historisch) | M26 | 0,7% |
+| 2020 (historisch) | M25 | 0,3% |
+| 2023 (historisch) | M25 | 0,5% |
+| 2025 (prognose) | M25 | 0,5% |
+| 2030 (prognose) | M25 | 2,3% |
+| 2035 (prognose) | M25 | 5,7% |
+| 2040 (doorkijkjaar) | M25 | 11,6% |
+
+M26 shows one bar only, 2024, and no prognoses. That fits the 2026 report,
+which did not renew them.
+
+- What the percentage is: the bar is drawn on both sides of a line marked
+  "KDW", on an axis "Oppervlakte (%) met onder-/overbelasting". The printed
+  percentage matches the length of the part to the right of that line, so
+  it is the share of the surface not above the KDW. The Monitor does not
+  label the number; the reading rests on the drawing and on the segment
+  tooltips below, which add up to it.
+- The segments carry the class names of the legend recorded under "Classes"
+  below. Tooltips read for 2024 in M26: "Sterke overbelasting (3,6%)",
+  "Matige overbelasting (95,4%)" and "Geen overbelasting (0,5%)". Tooltips
+  read in the bars with prognoses (the printed values are those of M25; the
+  edition is not visible in these two screenshots): "Sterke overbelasting
+  (13,5%)" for 2020, "Lichte overbelasting (3,4%)" for 2030 and "Bijna
+  overbelast (3,3%)" for 2035. The other segment values were not read.
+- The printed percentage includes "bijna overbelast". In 2035 that segment
+  (3,3%) lies right of the KDW line and inside the bar that carries 5,7%;
+  the rest of that part, about 2,4%, is then "geen overbelasting". For 2024
+  the printed 0,7% is likewise more than "geen overbelasting" alone (0,5%).
+  "Lichte overbelasting" is the palest segment left of the line.
+- The Veluwe in 2024 (M26), share of the surface per class:
+
+  | Class | Share | How obtained |
+  |---|---|---|
+  | Sterke overbelasting (≥2x KDW) | 3,6% | tooltip |
+  | Matige overbelasting (>70 mol boven KDW, <2x KDW) | 95,4% | tooltip |
+  | Lichte overbelasting (≤70 mol boven KDW) | about 0,3% | 100 minus the rest |
+  | Bijna overbelast (≤70 mol onder KDW) | about 0,2% | 0,7 minus 0,5 |
+  | Geen overbelasting (>70 mol onder KDW) | 0,5% | tooltip |
+  | Not above the KDW (the last two together) | 0,7% | printed next to the bar |
+
+  The two "about" values are subtractions made here from rounded
+  percentages, so each can be off by 0,1 point. Their tooltips were not
+  read.
+- Name the edition next to any figure. Do not read the step from M25 to M26
+  as a trend: each edition recalculates, as RIVM's own series show (see
+  "Editions and series differ" below).
+- The prognoses are model results of the 2025 edition. The 2026 report says
+  they may be too favourable (see the notes on the aggregation below).
+- The figure that goes with the 31% of RIVM report 2026-0018 (Netherlands,
+  2024) is the M26 one: 0,7% for the Veluwe in 2024.
+
+So for the Veluwe a published share exists and no calculation of our own is
+needed to state it. The aggregation below stays as a cross-check.
+
 **A figure for the Veluwe, aggregated here from RIVM's hexagon data.** RIVM
 publishes the data behind its exceedance map as a GeoPackage. The file
 `RIVM-MIL_M25-Deposities_Overbelastingsklasse_20260401.gpkg` (Monitor 2025
@@ -585,6 +726,15 @@ How far this can be trusted:
 - The result fits the official provincial figures: Gelderland has 2.1%
   below the KDW in 2023 and class shares close to those of the Veluwe,
   which is most of the province's nitrogen-sensitive surface.
+- Against AERIUS Monitor M25 for the Veluwe (above), the share not above
+  the KDW comes out lower here: 0.1% against 0,5% for 2023, 0.6% against
+  2,3% for 2030, 3.5% against 5,7% for 2035. Both say that almost all of
+  the Veluwe is above the KDW. The gap is of the size seen in the national
+  check. Resolution is not the cause: the Monitor's own maps are on 16 ha
+  too (Handboek Data AERIUS 2026, p. 40). A possible cause is that the
+  Monitor works per habitat inside a hexagon and this file has one value
+  per hexagon; not tested. Where a share for the Veluwe is quoted, quote
+  the Monitor's.
 - Arkemheen and Veluwerandmeren do not occur in the file, in line with the
   AERIUS habitat layer.
 - Still to record: the title and licence of the catalogue record this file
@@ -608,6 +758,32 @@ into single hexagons.
 2025-0021) gives 29.3% below the KDW for 2024 in its historical series,
 which was provisional then. The 2026 edition gives 31%. Always name the
 edition next to the figure.
+
+**The KDW values themselves were revised in 2023.** RIVM report 2026-0018
+uses the values of Wamelink et al. (2023), see above. A share "below the
+KDW" that was calculated before that revision rests on other thresholds and
+cannot be set next to a current one. An example in this register: the KDW
+of `L4030` is 714 now and was 1,071 in the 2017 document. So older
+forecasts for 2025 or 2030 are not a yardstick for today's figures.
+
+**Independent evaluation: PBL, WUR and RIVM (2026).** "Monitoring en
+evaluatie van het programma Stikstofreductie en Natuurverbetering.
+Syntheserapport 2026", PBL publication 5782, 12 March 2026, made "op
+verzoek van het Ministerie van LVVN". Only the publication page was read on
+2026-10-06, not the report. From that page:
+
+- "De wettelijke doelen voor de verlaging van de stikstofdepositie op
+  Natura 2000-gebieden worden niet gehaald".
+- The share of nitrogen-sensitive nature below the KDW "is gestegen van
+  ongeveer 21 procent in 2005 naar 30 procent in 2023". The 30% agrees with
+  the 2025 monitor (29.6% for 2023, see the national check above).
+- "Voor 2030 wordt 33 procent ingeschat met de meegenomen maatregelen,
+  terwijl het doel voor dat jaar 50 procent is."
+- "Het herstel van de natuur blijft achter bij wat er binnen de Europese
+  Unie is afgesproken."
+
+These are national figures. The page gives nothing for the Veluwe or for
+Gelderland. Still to do if this is ever quoted: read the report itself.
 
 **RIVM's own classes.** In this monitor RIVM classes exceedance in absolute
 mol above the KDW: geen overschrijding, 0-250, 250-500, 500-750, 750-1000,
@@ -668,8 +844,9 @@ M26, Veluwe, 2024; read from the screen by the author on 2026-10-06):
 - On the Veluwe map for 2024 most hexagons are "matige overbelasting", with
   scattered "sterke overbelasting" and a few green ones. So at class level
   the map does show spatial differences. The Monitor draws coarse hexagons
-  at this zoom; how it aggregates the 1 ha values into them is not known,
-  and no counts or shares per class were read.
+  at this zoom; how it aggregates the 1 ha values into them is not known.
+  Shares of the surface are in the Monitor's chart "Ontwikkeling
+  stikstofbelasting" (see "A published figure for the Veluwe" above).
 - The two hexagon flags in the open data give three steps without any
   calculation of our own: neither flag (geen), `exceeding` only (bijna),
   `above_cl` (above the KDW: licht, matig and sterk together). In the map
@@ -702,6 +879,15 @@ M26, Veluwe, 2024; read from the screen by the author on 2026-10-06):
 | AERIUS open data | 1 ha hexagons | 2024 | Field test only |
 | RIVM Monitor Natura 2000 | 16 ha | 2024 | Not used; source of the 31% |
 
+The Handboek Data AERIUS 2026 says the same of two of them (p. 40): the
+maps in AERIUS Monitor "zijn niet direct te vergelijken met de
+achtergronddepositie voor AERIUS Calculator vanwege verschillen in
+methodiek", and their resolution "grover (16 ha) dan de
+achtergronddepositie in AERIUS Calculator (1 hectare)". Its Table 4 gives
+the years per Monitor edition: M2025 has reference years 2020 and 2023,
+prognoses for 2025, 2030 and 2035, and an indicative prognosis for 2040.
+That is what was read from the M25 chart.
+
 Sources for this section:
 
 - [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2026 (publication page)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
@@ -709,6 +895,7 @@ Sources for this section:
 - [RIVM, dataset bij de Monitor 2026 (XLSX)](https://www.rivm.nl/documenten/dataset-bij-monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
 - [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2025 (report 2025-0021 and its dataset)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2025)
 - [RIVM dashboard Stikstofdepositie in Natura 2000-gebieden](https://stikstofdepositiedata.rivm.nl/)
+- [PBL, WUR and RIVM (2026), Monitoring en evaluatie van het programma Stikstofreductie en Natuurverbetering, Syntheserapport 2026 (publication page)](https://www.pbl.nl/publicaties/monitoring-en-evaluatie-van-het-programma-stikstofreductie-en-natuurverbetering)
 - [AERIUS Monitor (product page; the Monitor itself was read on screen)](https://www.aeriusproducten.nl/producten/aerius-monitor)
 - [Provincie Zuid-Holland, factsheets Gebiedsplan stikstof 0.5 (2022)](https://www.zuid-holland.nl/publish/pages/30032/pzhfactsheetsgebiedsplanstikstof0-5.pdf)
 - [Natuurdoelanalyse Veluwe (Provincie Gelderland, 2023)](https://pas.ecologischeautoriteit.nl/files/ea/5123/013610-5123-natuurdoelanalyse-veluwe.pdf)
@@ -795,6 +982,106 @@ Keep two things apart:
   relevant hexagons in the map area are above their KDW (see "Field test").
   Being outside the zone says nothing about that.
 
+### The province's consultation note on the strips (July 2025)
+
+Provincie Gelderland, "Denkrichting invulling beleid stikstofstroken",
+"Versie 8 juli 2025", 22 pages; annex 1 to a document for Provinciale
+Staten. Supplied by the author as a PDF and read in full on 2026-10-06 (the
+Staten site refuses automated reading). Page numbers are those printed in
+the note.
+
+Status: a text for consultation, "ter bespreking tijdens de participatie
+tot en met oktober 2025". The note says of itself: "het gaat dus nog niet
+om een besluit" (p. 3). It shows the province's reasoning and the rules it
+was considering then. It is not the regulation adopted on 23 September
+2026.
+
+**How the strips are drawn.** This part was not open for discussion: "De
+komst en de omvang van de strook (maximaal 500 meter) staan vast" (p. 6).
+
+- Measured from the habitat itself, not from the Natura 2000 boundary: the
+  strips rest on "de feitelijke ligging van de stikstofgevoelige
+  habitattypen en leefgebiedtypen met een 'nee, tenzij'-oordeel in de
+  natuurdoelanalyse" (p. 8).
+- Not from hexagons. The national idea of April 2025 was a strip around
+  overloaded hexagons; the province rejects that because hexagons "zijn een
+  hulpmiddel in het AERIUS-model en volgen veel minder precies de contouren
+  van de natuur" (p. 9).
+- The same boundary as the preparatory decision of 16 April 2025: "Wat de
+  provincie betreft verandert de strook van 500 meter niet en blijft deze
+  hetzelfde als in het voorbereidingsbesluit" (p. 8), and no later changes
+  are intended (p. 10). This supports the use of layer 141 for the
+  geometric check above. Whether the adopted regulation kept exactly that
+  boundary still has to be read in the regulation.
+- On the boundary (p. 9-10) the province prefers "scenario 2": a project
+  lies in the strip if 50% or more of its nitrogen emission comes from
+  emission points inside the boundary, or if it emits more than 1,000 kg
+  NH3-equivalent per year inside it. Farmland is judged per cadastral
+  parcel: a parcel that lies for at least 50% inside the strip falls under
+  the rules as a whole, other parcels of the same farm do not.
+- A consequence, drawn here and not stated in the note: for land the rules
+  follow the parcel, not the farm address. A farm based outside the strip
+  can have parcels inside it.
+- The strips at Winterswijk (Bekendelle, Willinks Weust) were conditional
+  on the outcome of a local area process (p. 10).
+
+**Figures the province gives.**
+
+- The Veluwe: "de depositie op de Veluwe gemiddeld 1.650 mol per hectare
+  per jaar" and "Bijna overal op de Veluwe (99%) wordt de KDW overschreden"
+  (p. 4). This agrees with AERIUS Monitor (0,5% to 0,7% not above the KDW)
+  and with the mean deposition of the aggregation made here (1,657).
+- The aim and its size: a reduction of 70% of all nitrogen emissions in the
+  500 m strip against 2018 would lower deposition by "circa 75 mol per
+  hectare per jaar voor de Veluwe en circa 145 mol per hectare per jaar
+  voor de Landgoederen Brummen" (p. 4). The province adds that "zeker méér
+  nodig zal zijn dan strokenbeleid alleen" and that measures outside the
+  strip "onontkoombaar" are.
+- Why near the nature: of ammonia and nitrogen oxides about 5% and 2.5% of
+  the emission lands within 500 m of the source; from a study of the
+  Universiteit van Amsterdam, "9% van de ammoniakemissies van een boerderij
+  komen binnen 500 meter terecht" (p. 3; the study is not named).
+- Where the emission in the strips comes from: agriculture about 65%
+  (p. 14), mobility about 25% (p. 18), businesses and public functions
+  about 5% (p. 11), housing and building less than 5% (p. 20).
+- Farms: about 8,500 in Gelderland, of which about 400 (5%) in the strips
+  around the Veluwe and Landgoederen Brummen: nearly 80 arable, nearly 90
+  with housed animals, about 50 dairy, about 150 other grazing livestock,
+  about 15 other (p. 14). Totals for all strips; nothing per municipality.
+- National policy at that time: the Kamerbrief of 25 April 2025
+  (35334-362) spoke of "een strook van 250 meter rond overbelaste
+  hexagonen"; the province kept 500 m because 250 m gives half the effect
+  (p. 4, 8). The later national package is under "National package of June
+  2026" below.
+
+**Rules under consideration for agriculture** (p. 15; not the adopted
+text): emission norms in kg ammonia per animal place for 2030 and 2035;
+best available technique in half of a farm's barns by 2030 and in all by
+2035; emission norms per hectare for arable and land-based livestock
+farming; artificial fertilizer halved by 2030 and banned in 2035; a lower
+norm and a maximum temperature for spreading slurry; external netting only
+with a farm inside the strip, with 85% taken off; a minimum share of
+permanent grassland. The province intended to let norms apply from 2030,
+not only from 2035 (p. 15). The news report on the adopted rules, quoted
+above, says no nitrogen fertilizer from 2030. Note and report differ; which
+is right for the adopted text is not known until the regulation is read.
+
+**For the technology note** (`docs/nitrogen-technology-research.md`):
+
+- The province separates "innovatie" (techniques "die nog niet
+  wetenschappelijk bewezen zijn en nog niet juridisch geborgd") from
+  "modernisering" (proven and legally secured). Inside the strips only the
+  second counts: "een bewezen technologie in de strook minstens 45%
+  emissiereductie moet opleveren". Innovation policy "krijgt buiten de
+  stroken vorm" (p. 16).
+- For industrial manure processing in the strips it considers requiring
+  that this is done indoors and with a chemical air scrubber (p. 13).
+
+Not recorded from this note: its chapter on money (p. 22) and the subsidy
+percentages. One date in the note is evidently a slip: a ruling of the Raad
+van State "op 18 december 2025" that led to a proposal of 28 January 2025
+(p. 6).
+
 ### National package of June 2026
 
 "Weer ruimte voor boer, natuur en bouw", Kamerbrief of 26 June 2026. Read on
@@ -865,6 +1152,7 @@ Sources for this section:
 
 - [Provincie Gelderland: Stikstof (overview)](https://www.gelderland.nl/themas/stikstof)
 - [Provincie Gelderland: Stikstofreductiegebieden](https://www.gelderland.nl/themas/stikstof/stikstofreductiegebieden)
+- [Provincie Gelderland: Denkrichting invulling beleid stikstofstroken, versie 8 juli 2025 (Staten document; read from a PDF supplied by the author)](https://gelderland.stateninformatie.nl/document/15783213/3/Bijlage+1+Notitie+%E2%80%98Denkrichting+invulling+beleid+stikstofstroken)
 - [Kamerbrief "Weer ruimte voor boer, natuur en bouw", 26 June 2026 (Tweede Kamer, 2026D33108)](https://www.tweedekamer.nl/kamerstukken/brieven_regering/detail?id=2026Z14788&did=2026D33108)
 - [The same Kamerbrief on open.overheid.nl](https://open.overheid.nl/details/bc6acef2-0bb5-4ea6-976d-c7630b45ac89)
 - [Rijksoverheid: Kabinet haalt Nederland van het stikstofslot, 26 June 2026](https://www.onslevendlandschap.nl/actueel/nieuws/2026/06/26/kabinet-haalt-nederland-van-het-stikstofslot)
@@ -899,9 +1187,33 @@ Sources for this section:
 - From the annexes of the Kamerbrief of 26 June 2026 or later documents:
   which zone width the Veluwe gets (500 or 1,000 m), and how the "groter
   gebied" with the 65-69% target is delimited.
-- The answer of the AERIUS helpdesk (asked 2026-10-06).
+- The answer of the AERIUS helpdesk (asked 2026-10-06). No longer needed
+  for `exceeding`, `above_cl`, `surface` and `coverage`, which the Handboek
+  Data AERIUS 2026 describes. Still of use for the year of the deposition
+  in the open data, which the handbook does not name.
+- AERIUS 2026 was published on 6 October 2026. The habitat layer on the
+  page and the field test were made around that date and are labelled
+  AERIUS 2025. Fetch again, compare, and state the AERIUS version: habitat
+  types, KDW values, hexagon flags and the deposition year can all have
+  changed.
+  - First check, by the author on 6 October 2026 around 19:35 CEST: the
+    three hexagon layers were downloaded again (the saved files moved
+    aside; the screen showed the downloads: 71,442, 46,826 and 81,522
+    features) and the field test gave the same report in every number:
+    deposition year 2024, 43,770 relevant hexagons, 43,664 / 59 / 47,
+    81,522 link rows. So that evening the open data service returned the
+    same hexagon data as before. Either AERIUS 2026 was not yet in the
+    service, or it changed nothing in this map area; which of the two is
+    not known.
+  - Not rechecked: the habitat layer shown on the page
+    (`relevant_habitats`), which that script does not download.
+  - Check again some days later. The script now writes into its report
+    whether each layer was downloaded in that run, and when; `--refresh`
+    downloads again.
 - For the Veluwe figure: the title and licence of the RIVMdata catalogue
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
-- Counts or shares per class for the Veluwe from AERIUS Monitor, if the
-  Monitor shows them, and how it aggregates hexagons on its map.
+- From AERIUS Monitor's chart "Ontwikkeling stikstofbelasting" for the
+  Veluwe in M26: the tooltips of "bijna overbelast" and "lichte
+  overbelasting" for 2024 (now derived by subtraction). Also how the
+  Monitor aggregates hexagons on its map.

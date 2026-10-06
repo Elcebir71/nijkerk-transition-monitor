@@ -1,7 +1,11 @@
 """One-off helper: test what the AERIUS hexagon fields mean, using the data itself.
 
 Usage (from the repo root):
-    python scripts/nitrogen/inspect_aerius_fields.py
+    python scripts/nitrogen/inspect_aerius_fields.py [--refresh]
+
+Without --refresh the script reads the downloads it saved earlier, if any.
+With --refresh it downloads the three layers again and replaces the saved
+files. The report states for each layer which of the two happened, and when.
 
 Questions this helps with (see docs/nitrogen-sources.md, "AERIUS definitions"):
   1. Which rule reproduces the hexagon field `exceeding`?
@@ -20,6 +24,7 @@ from __future__ import annotations
 import json
 import sys
 from collections import Counter, defaultdict
+from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -51,7 +56,11 @@ RULES = {
     f"deposition >= KDW - {NEAR_MARGIN_MOL}": lambda dep, kdw: dep >= kdw - NEAR_MARGIN_MOL,
 }
 
+REFRESH = "--refresh" in sys.argv[1:]
+TIME_FORMAT = "%Y-%m-%d %H:%M %Z"
+
 report_lines: list[str] = []
+provenance_lines: list[str] = []   # per layer: downloaded now, or read from a saved file
 
 
 def out(text: str = "") -> None:
@@ -72,11 +81,16 @@ def request_features(layer: str, extra: dict) -> dict:
 
 
 def fetch(layer: str) -> list[dict]:
-    """Return all features of a layer in the map area. Uses the saved download if there is one."""
+    """Return all features of a layer in the map area.
+
+    Uses the saved download if there is one, unless --refresh was given.
+    """
     file_name, sort_key = LAYERS[layer]
     path = RAW_DIR / file_name
-    if path.exists():
-        print(f"Using the download saved earlier ({file_name}). Delete that file to download again.")
+    if path.exists() and not REFRESH:
+        saved_at = datetime.fromtimestamp(path.stat().st_mtime).astimezone()
+        print(f"Using the download saved earlier ({file_name}). Run with --refresh to download again.")
+        provenance_lines.append(f"  {layer}: NOT downloaded in this run; read from the file saved on {saved_at.strftime(TIME_FORMAT)}")
         return json.loads(path.read_text(encoding="utf-8"))["features"]
 
     print(f"Downloading {layer} (this can take several minutes)...")
@@ -97,6 +111,7 @@ def fetch(layer: str) -> list[dict]:
     print(f"  {len(features)} features")
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"layer": layer, "features": features}), encoding="utf-8")
+    provenance_lines.append(f"  {layer}: downloaded in this run, {datetime.now().astimezone().strftime(TIME_FORMAT)}")
     return features
 
 
@@ -335,7 +350,16 @@ def main() -> None:
     link_features = fetch("base_geometries:hexagons_to_relevant_habitats")
 
     out("AERIUS field test, map area " + MAP_BBOX.split(",urn")[0])
-    out("A rule that fits the data is not an official definition.\n")
+    out("A rule that fits the data is not an official definition.")
+    out("\nWhere the data of this run came from:")
+    for line in provenance_lines:
+        out(line)
+    habitat_path = RAW_DIR / HABITAT_RAW_FILE
+    if habitat_path.exists():
+        saved_at = datetime.fromtimestamp(habitat_path.stat().st_mtime).astimezone()
+        out(f"  base_geometries:relevant_habitats (used in D3b only): file saved on {saved_at.strftime(TIME_FORMAT)} "
+            "by fetch_aerius_habitats.py; never downloaded by this script")
+    out()
     hexagons = report_hexagons(hexagon_features)
     depositions_by_year = report_depositions(deposition_features)
     report_rules(hexagons, depositions_by_year)
