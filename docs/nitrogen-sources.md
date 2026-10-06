@@ -52,7 +52,7 @@ whether the KDW is the right yardstick.
 | Depositie | RIVM | GDN `depo_NTOT`, `depo_NHx`, `depo_NOy` | National 1x1 km grid, clipped to Nijkerk + 15 km | 2025; prognosis 2030–2040 | Zip with ESRI ASCII grid, EPSG:28992 | Weergave | Verified |
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
 | Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on fetch date (AERIUS 2025) | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
-| Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | 2024 (the only year in the layer for the map area) | WFS | Not used yet | Field meanings fit the data in a test (2026-10-06); no official field definition found |
+| Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | 2024 (the only year in the layer for the map area) | WFS | Not used yet | Fields officially described (Handboek Data AERIUS 2026, p. 47) and confirmed in a test on the data (2026-10-06) |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
 
 The land-use row is not needed for v1.
@@ -178,9 +178,9 @@ The land-use row is not needed for v1.
   see point 3 of the verification section below.
 - **Definitions checked on 2026-10-06:** see "AERIUS definitions:
   verification" below. In short: "relevant" and the 2,400 mol threshold are
-  verified; `L4030` only from secondary sources; for the hexagon fields
-  `exceeding` and `above_cl` a rule was found that fits every hexagon in the
-  map area, but no official field definition.
+  verified; `L4030` is defined in a provincial source; the hexagon fields
+  `exceeding` and `above_cl` have an official description (Handboek Data
+  AERIUS 2026, p. 47) and a rule that fits every hexagon in the map area.
 - **Note on years:** the open data deposition layer holds one year for the
   map area, 2024 (read on 2026-10-06), not 2023 as noted here earlier. The
   AERIUS Handboek Data 2025 lists 2020 and 2023 as the reference years of
@@ -201,9 +201,9 @@ the map area. The statuses in the table are the outcome after all three.
 | 1 | What does "relevant" mean in `relevant_habitats`? | Verified for hexagons; applied to the habitat layer by its metadata | See 1 below |
 | 2 | Is nitrogen-sensitive a KDW below 2,400 mol? | Verified | See 2 below |
 | 3 | What is code `L4030`? | Defined in a provincial source: a leefgebiedtype, with its species | See 3 below |
-| 4 | What does hexagon field `exceeding` mean? | Fits the data; no official field definition | Deposition above KDW minus 70 mol. See "Field test" below |
-| 5 | What does hexagon field `above_cl` mean? | Fits the data; no official field definition | Deposition above the KDW. See "Field test" below |
-| 6 | How do hexagon area and habitat coverage relate? | Hexagon and `surface` confirmed on the data; `coverage` narrowed down, not defined | See "Field test" below |
+| 4 | What does hexagon field `exceeding` mean? | Verified: official field description, and it fits the data | "naderend overbelast": deposition above KDW minus 70 mol. See 4 and 5 below |
+| 5 | What does hexagon field `above_cl` mean? | Verified: official field description, and it fits the data | "overbelast": deposition above the KDW. See 4 and 5 below |
+| 6 | How do hexagon area and habitat coverage relate? | Verified: `surface` and `coverage` have an official field description | Drawn surface, and percentage of it covered by the habitat. See 6 below |
 
 **1. "Relevant".** The RIVM metadata for the AERIUS link table between
 hexagons and relevant habitats says: "De voorwaarden onder welke een
@@ -277,6 +277,13 @@ says 1,071 (the KDW values were revised in 2023). The earlier text of this
 point said the document gives no definition; that was based on a partial
 reading and is superseded by this paragraph.
 
+The Handboek Data AERIUS 2026 (p. 36) confirms the category, without a
+list: besides the habitat types of the Habitats Directive, "zijn een
+veertiental stikstofgevoelige aanvullende leefgebieden opgenomen". The KDW
+values come from Wageningen Environmental Research, "Overzicht van kritische
+depositiewaarden voor stikstof, toegepast op habitattypen en leefgebieden
+van Natura 2000: Herziening 2023" (31 August 2023).
+
 **4 and 5. `exceeding` and `above_cl`.** No public document was found that
 defines these field names (Handboek Data 2025, Handboek Calculator 2025,
 Leeswijzer AERIUS Check, RIVM briefrapporten, RIVM metadata). What is
@@ -293,31 +300,45 @@ deposition above KDW minus 70 mol. The test on the data (see "Field test"
 below) shows which field carries which. Still open: confirmation of the
 field definitions by AERIUS itself. Asked on 2026-10-06 through the AERIUS
 contact form (Landelijk Informatiepunt Stikstof en Natura 2000), together
-with the deposition year, `coverage` and `L4030`. Answer pending.
+with the deposition year, `coverage` and `L4030`. Answer pending; for the
+field definitions it is no longer needed, see below.
 
-Rechecked later on 2026-10-06, after a claim that the Handboek Data 2025
-defines `exceeding` as "naderend overbelast" and `above_cl` as
-"overbelast". Not confirmed, and not refuted either:
+Settled later on 2026-10-06 from the Handboek Data AERIUS 2026, v1.0 (RIVM,
+6 October 2026, 54 pages; PDF supplied by the author; chapter 5 and section
+4.3-4.4 read). Section 5.1, "Velden webservice hexagons" (p. 47):
 
-- The Handboek Data AERIUS 2025 now has a version 3 (14 April 2026, 55
-  pages). Its chapter 5 describes the open data services. Of the hexagon
-  grid it says: "Deze webservice bevat ook alle kenmerken zoals of deze
-  relevant is voor vergunningverlening en of er een overbelasting is van
-  een stikstofgevoelig habitat" (p. 48). That names the subject of the
-  flags, not the field names.
-- The reading tool gets the text of this PDF only up to that sentence on
-  p. 48. Pages 49 to 55, with the rest of the service descriptions, were
-  not read. The same limit applies to version 2. So "no public document
-  was found" above does not cover those pages of the Handboek Data. To
-  settle it, read p. 48-55 in the PDF itself.
-- The online documentation of AERIUS Calculator 2025 (Resultaten, Weergave)
-  defines the terms, not the fields: "Er is sprake van bijna overbelasting
-  wanneer de achtergronddepositie minder dan 70 mol onder de KDW ligt",
-  and the selection is "relevante hexagonen waar sprake is van een
-  overbelasting van de meest kritische depositiewaarde, of bijna
-  overbelasting van de meest kritische depositiewaarde". This agrees with
-  the field test: the lowest KDW in the hexagon decides, and the two steps
-  are the KDW and 70 mol below it.
+| Veld | Type | Omschrijving |
+|---|---|---|
+| `relevant` | boolean | "Geeft aan of het hexagoon relevant is." |
+| `exceeding` | boolean | "Waarde of het hexagoon naderend overbelast is." |
+| `above_cl` | boolean | "Waarde of het hexagoon overbelast is." |
+| `extra_assessment` | boolean | "Betreft hexagoon met een hersteldoel" |
+| `critical_deposition` | integer | "Minimale kritische depositie in mol N/ha/jaar" |
+
+- This is the official field description that was missing. Together with
+  the definition of the terms it closes points 4 and 5: `above_cl` is
+  "overbelast" (deposition above the KDW), `exceeding` is "naderend
+  overbelast" (from 70 mol below the KDW). The field test found exactly
+  this split.
+- The 70 mol is in the term, not in the field table. Besides RIVM 2025-0020
+  above, the online documentation of AERIUS Calculator 2025 (Resultaten,
+  Weergave) says: "Er is sprake van bijna overbelasting wanneer de
+  achtergronddepositie minder dan 70 mol onder de KDW ligt", and speaks of
+  "de meest kritische depositiewaarde".
+- `critical_deposition` of a hexagon is the lowest KDW in it ("Minimale"),
+  as the field test showed.
+- Which map decides: the "actuele depositiekaart", calculated on 1 ha
+  hexagons, "is gebruikt voor het bepalen van de hexagonen met een
+  naderende overbelasting" (p. 39).
+- Correction of the earlier text of this point: "no public document was
+  found that defines these field names" was wrong for the Handboek Data.
+  The reading tool gets the text of the 2025 editions (v2, and v3 of 14
+  April 2026) only up to p. 48, just before the field tables, and that
+  limit was not noticed. The 2025 editions were not read beyond that page;
+  the table above is from the 2026 edition.
+- The Handboek Data AERIUS 2026 is dated 6 October 2026, the day of the
+  field test. Whether the service already returned AERIUS 2026 data when
+  the test ran is not known. See "Still needed".
 
 **6. Hexagon area and coverage.**
 
@@ -331,8 +352,13 @@ defines `exceeding` as "naderend overbelast" and `above_cl` as
 - RIVM's dashboard data defines the relevant surface as "ingetekend
   oppervlakte maal dekkingspercentage" (see "Showing exceedance" below).
   That supports reading `coverage` as this coverage percentage.
-- The `coverage` field of `relevant_habitats` is not defined in the AERIUS
-  documents checked. Probable meaning, from the BIJ12 Methodiekdocument
+- Official field descriptions, Handboek Data AERIUS 2026: in the link
+  table `surface` is "Ingetekende oppervlakte" and `coverage` is
+  "Percentage dekking van het habitat" (p. 48-49); in `relevant_habitats`
+  `coverage` is again "Percentage dekking van het habitat" (p. 50). So the
+  relevant surface is drawn surface times coverage, as in RIVM's dashboard
+  data. The handbook gives no more than these few words.
+- Background to that description, from the BIJ12 Methodiekdocument
   (2015, p. 21): one mapped polygon can hold several habitat types, "waarbij
   per type het percentage in het vlak wordt vermeld". For search areas no
   percentage is recorded: "het percentage is 100% zoekgebied" (p. 8).
@@ -380,7 +406,9 @@ values, 81,522 hexagon-habitat rows. Run by the author on 2026-10-06 with
 service and writes a report to `data/nitrogen/raw/` (not committed).
 
 A rule that fits the data is not an official definition. It shows which
-reading is consistent with what the service publishes.
+reading is consistent with what the service publishes. The official field
+descriptions were found afterwards, in the Handboek Data AERIUS 2026 (see
+points 4 to 6 above), and agree with the outcome below.
 
 **1. Where the flags are filled.** Only at zoom level 1 (52,932 hexagons).
 At zoom levels 2 to 5 every field is empty. `receptor_id` is not unique on
@@ -442,8 +470,9 @@ types overlap each other inside a hexagon.
   matches where the type lies almost wholly in the map area (ZGH2330 0.9997
   in both). This fits an average over the whole Natura 2000 area.
 - Reading that fits all of this: the share of the mapped area that the
-  habitat type really occupies, as in the BIJ12 percentages. Not confirmed
-  by an AERIUS document. The BIJ12 rule of 2015 that search areas are
+  habitat type really occupies, as in the BIJ12 percentages. The Handboek
+  Data AERIUS 2026 describes the field as "Percentage dekking van het
+  habitat", which agrees. The BIJ12 rule of 2015 that search areas are
   always 100% does not hold in this data.
 - `L4030` behaves like the Lg types (always 1) and unlike H4030, which
   supports reading it as habitat of species (leefgebied), see point 3 above.
@@ -463,6 +492,7 @@ Sources for this section:
 - [RIVM metadata: AERIUS koppeltabel hexagonengrid en relevante-habitats](https://data.rivm.nl/meta/srv/metadata/bf6fb96b-16ea-4f30-9ac9-d66a18f674ad)
 - [AERIUS Handboek Data 2025, v2](https://www.aeriusproducten.nl/site/binaries/site-content/collections/documents/2025/12/8/handboek-data-aerius-2025-v2/handboek-data-aerius-2025-v2.pdf)
 - [AERIUS Handboek Data 2025, v3 (14 April 2026)](https://www.aeriusproducten.nl/documenten/2026/04/14/handboek-data-aerius-2025-v3)
+- RIVM, Handboek Data AERIUS 2026, v1.0, 6 October 2026 (read from a PDF supplied by the author; link not recorded)
 - [AERIUS Calculator 2025, online documentation](https://docs.aerius.nl/downloads/nl/calculator-2025.html)
 - [AERIUS Handboek Werken met Calculator 2025](https://www.aeriusproducten.nl/site/binaries/site-content/collections/documents/2025/12/9/handboek-werken-met-aerius-calculator-2025/handboek-werken-met-calculator-2025.pdf)
 - [BIJ12, Methodiekdocument kartering habitattypen Natura 2000 (2015)](https://www.bij12.nl/wp-content/uploads/2023/11/WW-BIJLAGE-09-%E2%80%93-Methodiekdocument-kartering-habitattypen.pdf)
@@ -698,9 +728,11 @@ How far this can be trusted:
   the KDW comes out lower here: 0.1% against 0,5% for 2023, 0.6% against
   2,3% for 2030, 3.5% against 5,7% for 2035. Both say that almost all of
   the Veluwe is above the KDW. The gap is of the size seen in the national
-  check; a likely cause is one value per 16 ha hexagon here against 1 ha
-  hexagons with a coverage per habitat in the Monitor, but this was not
-  tested. Where a share for the Veluwe is quoted, quote the Monitor's.
+  check. Resolution is not the cause: the Monitor's own maps are on 16 ha
+  too (Handboek Data AERIUS 2026, p. 40). A possible cause is that the
+  Monitor works per habitat inside a hexagon and this file has one value
+  per hexagon; not tested. Where a share for the Veluwe is quoted, quote
+  the Monitor's.
 - Arkemheen and Veluwerandmeren do not occur in the file, in line with the
   AERIUS habitat layer.
 - Still to record: the title and licence of the catalogue record this file
@@ -844,6 +876,15 @@ M26, Veluwe, 2024; read from the screen by the author on 2026-10-06):
 | RIVM GDN map | 1 x 1 km | 2025 | The map on the page |
 | AERIUS open data | 1 ha hexagons | 2024 | Field test only |
 | RIVM Monitor Natura 2000 | 16 ha | 2024 | Not used; source of the 31% |
+
+The Handboek Data AERIUS 2026 says the same of two of them (p. 40): the
+maps in AERIUS Monitor "zijn niet direct te vergelijken met de
+achtergronddepositie voor AERIUS Calculator vanwege verschillen in
+methodiek", and their resolution "grover (16 ha) dan de
+achtergronddepositie in AERIUS Calculator (1 hectare)". Its Table 4 gives
+the years per Monitor edition: M2025 has reference years 2020 and 2023,
+prognoses for 2025, 2030 and 2035, and an indicative prognosis for 2040.
+That is what was read from the M25 chart.
 
 Sources for this section:
 
@@ -1144,7 +1185,15 @@ Sources for this section:
 - From the annexes of the Kamerbrief of 26 June 2026 or later documents:
   which zone width the Veluwe gets (500 or 1,000 m), and how the "groter
   gebied" with the 65-69% target is delimited.
-- The answer of the AERIUS helpdesk (asked 2026-10-06).
+- The answer of the AERIUS helpdesk (asked 2026-10-06). No longer needed
+  for `exceeding`, `above_cl`, `surface` and `coverage`, which the Handboek
+  Data AERIUS 2026 describes. Still of use for the year of the deposition
+  in the open data, which the handbook does not name.
+- AERIUS 2026 was published on 6 October 2026. The habitat layer on the
+  page and the field test were made around that date and are labelled
+  AERIUS 2025. Fetch again, compare, and state the AERIUS version: habitat
+  types, KDW values, hexagon flags and the deposition year can all have
+  changed.
 - For the Veluwe figure: the title and licence of the RIVMdata catalogue
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
