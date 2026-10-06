@@ -728,6 +728,7 @@ coverage only.
 |---|---|---|---|
 | Stikstofreductiegebieden (strokenbeleid), in the Omgevingsverordening Gelderland | Provinciale Staten, adopted 23 September 2026; in force 23 October 2026 | "Stikstofgevoelige natuur die overbelast is en stroken van maximaal 500 meter eromheen", in four areas: Veluwe, Landgoederen Brummen, Bekendelle, Willinks Weust | Definition, areas and dates: official. Rules: reported |
 | Versnellingsaanpak Stikstof | Province; follows the Gelderse Maatregelen Stikstof (from 2019) after the 2024 progress report | Four tracks: source measures (including the strips), extra nature measures, permits and enforcement, information and monitoring | Official |
+| "Weer ruimte voor boer, natuur en bouw" (national package) | Kabinet; Kamerbrief of the minister of LVVN, 26 June 2026 (2026D33108) | Emission targets for 2035 against 2019, farm emission norms, zones around nitrogen-sensitive Natura 2000 areas, and a separate target around the Veluwe. See "National package" below | Official (Kamerbrief). Mostly intentions still to be laid down in law |
 | Aanpak Veluwe | Rijk, province, 2 water boards, 21 municipalities; at least 10 years, to 2035; implementation started June 2026 | "Herstel van de natuur én ruimte voor wonen, werken en ondernemen" on and around the Veluwe | Programme: official. Start, budget and target: reported |
 | Beleidsregels salderen Gelderland 2026 | Gedeputeerde Staten, adopted 27 January 2026; in force 10 February 2026; amended version in force 18 July 2026 | Rules for internal and external netting (salderen) when a nature permit is granted. Province-wide | Official (CVDR756662). Percentages not recorded here: two readings gave different numbers |
 | Vitaal landelijk gebied Gelderland (VLGG) | Gedeputeerde Staten decided at the end of September 2024 not to adopt it for now | Concept programme for the rural area. Shelved after the cabinet withdrew the Transitiefonds and the NPLG. Named Veluwe and Gelderse Vallei among its priority areas | Official for 2024; later status not checked |
@@ -792,6 +793,53 @@ Keep two things apart:
   relevant hexagons in the map area are above their KDW (see "Field test").
   Being outside the zone says nothing about that.
 
+### National package of June 2026
+
+"Weer ruimte voor boer, natuur en bouw", Kamerbrief of 26 June 2026. Read on
+2026-10-06 in the text of the letter (twice) and checked against a summary
+by an accountancy firm (Van de Graft Accountants, 15 July 2026; PDF supplied
+by the author) and the PBL reflection of September 2026.
+
+- **Emission targets for 2035 against 2019:** "42-46% (NH3) in de landbouw",
+  "50% (NOx) in de mobiliteit", "50% (NH3) in de industrie". Interim target
+  for agriculture, per the accountants' summary: 23-25% in 2030.
+- **Around the Veluwe:** "Rond de Veluwe wordt met de provincie Gelderland
+  naast de zonering 65-69% emissiereductie over een groter gebied
+  afgesproken, dus ook buiten de zones." The letter does not say how that
+  larger area is delimited.
+- **Zones:** about 85 nitrogen-sensitive Natura 2000 areas get a zone of 500
+  m, "vanaf de rand van het Natura 2000-gebied" (read once); 15 areas "met
+  een hoge stikstofoverbelasting uit de zone" get 1,000 m. The areas are
+  not named in the letter. Rules in the zones concern livestock density,
+  manure application room and plant protection products.
+- **Farm norm for dairy:** "0,164 kg NH3 en 92 kg CO2-eq uit stallen en
+  mestopslag per fosfaatrecht voor de melkveehouderij in 2035". Norms for
+  intensive livestock per animal place follow in early 2027.
+- **Money:** "Voor de Veluwe en de Peel is reeds €600 miljoen gereserveerd".
+- **PBL on the package** (publication 6203): "het emissiedoel komt binnen
+  bereik, maar vooralsnog alleen met 'generieke korting'" (p. 6).
+
+What this means for Nijkerk, and what it does not settle:
+
+- **The 65-69% area probably matters more for Nijkerk than the 500 m zone.**
+  It reaches beyond the zones by its own wording, and RIVM names the
+  agriculture of the Gelderse Vallei as a source of high deposition on the
+  Veluwe (see "Showing exceedance"). Whether Nijkerk lies in that area is
+  not stated anywhere read so far.
+- **The national zone is not the same as the provincial one.** The
+  provincial zone is 500 m from nitrogen-sensitive habitats (layer 141:
+  Nijkerk is 172 m outside). The national zone is measured from the edge of
+  the Natura 2000 area and may be 1,000 m for areas with a high overload.
+  The Veluwe boundary lies about 0.7 km from the municipal boundary, so a
+  500 m national zone would not reach Nijkerk and a 1,000 m zone would.
+  Which width the Veluwe gets is not known. Do not present "Nijkerk is
+  outside the zone" as settled for the national approach.
+- **Arkemheen and Veluwerandmeren** lie partly inside Nijkerk, but have no
+  relevant nitrogen-sensitive habitat in the AERIUS layer. The national
+  zones are for nitrogen-sensitive areas, so they are assumed not to get
+  one. An assumption, not checked against a list.
+- Most of the package is still intention: the letter announces legislation.
+
 ### What else this means for Nijkerk
 
 - **Province-wide rules apply.** The Beleidsregels salderen hold for every
@@ -799,9 +847,10 @@ Keep two things apart:
 - **Aanpak Veluwe.** Whether Nijkerk is one of the 21 municipalities was not
   confirmed from an official list. Two council groups in Nijkerk (CDA,
   CU-SGP) put questions to the college about it (StadNijkerk, 3 October
-  2026). Reported, without a named source document: a target of at least
-  65% less nitrogen emission in and around the Veluwe against 2019, and 300
-  million euro from the Rijk for the first phase.
+  2026). The target is 65-69% emission reduction "over een groter gebied"
+  around the Veluwe (Kamerbrief of 26 June 2026, see "National package"
+  below); earlier news coverage said "at least 65%". Reported in the news,
+  not checked: 300 million euro from the Rijk for the first phase.
 - **Regional setting.** Nijkerk is part of Regio Foodvalley, which spans
   Gelderland and Utrecht. This may be where the Utrecht references in the
   first sketch came from. The province made a similar slip: Nijkerk's
@@ -813,6 +862,11 @@ Sources for this section:
 
 - [Provincie Gelderland: Stikstof (overview)](https://www.gelderland.nl/themas/stikstof)
 - [Provincie Gelderland: Stikstofreductiegebieden](https://www.gelderland.nl/themas/stikstof/stikstofreductiegebieden)
+- [Kamerbrief "Weer ruimte voor boer, natuur en bouw", 26 June 2026 (Tweede Kamer, 2026D33108)](https://www.tweedekamer.nl/kamerstukken/brieven_regering/detail?id=2026Z14788&did=2026D33108)
+- [The same Kamerbrief on open.overheid.nl](https://open.overheid.nl/details/bc6acef2-0bb5-4ea6-976d-c7630b45ac89)
+- [Rijksoverheid: Kabinet haalt Nederland van het stikstofslot, 26 June 2026](https://www.onslevendlandschap.nl/actueel/nieuws/2026/06/26/kabinet-haalt-nederland-van-het-stikstofslot)
+- [PBL (2026), Reflectie op "Weer ruimte voor boer, natuur en bouw", publication 6203](https://www.pbl.nl/publicaties/reflectie-op-weer-ruimte-voor-boer-natuur-en-bouw-maatregelpakket-voor-landbouw-natuur-en-stikstof)
+- [Van de Graft Accountants, Nieuwe aanpak stikstofproblematiek, 15 July 2026 (secondary source)](https://www.vga.nl/nieuwe-aanpak-stikstofproblematiek/)
 - [Gemeente Nijkerk, zienswijze op ontwerp Omgevingsverordening Provincie Gelderland 2025-2026, 31 March 2026](https://nijkerk.bestuurlijkeinformatie.nl/Document/View/92fbd1f1-7848-4ef8-a22b-767cf84a7c77)
 - [Provincie Gelderland: Omgevingsverordening (adoption and entry into force)](https://www.gelderland.nl/themas/omgeving/omgevingsverordening)
 - [Omgevingsverordening Gelderland on Regels op de kaart](https://omgevingswet.overheid.nl/regels-op-de-kaart/documenten/_akn_nl_act_pv25_2023_omgevingsverordening_akn_nl_bill_pv25_2026_2026_000561/overzicht)
@@ -839,6 +893,9 @@ Sources for this section:
   the version of 14 November 2025; the new one takes effect on 23 October
   2026.
 - Confirm whether Nijkerk is a party to the Aanpak Veluwe.
+- From the annexes of the Kamerbrief of 26 June 2026 or later documents:
+  which zone width the Veluwe gets (500 or 1,000 m), and how the "groter
+  gebied" with the 65-69% target is delimited.
 - The answer of the AERIUS helpdesk (asked 2026-10-06).
 - For the Veluwe figure: the title and licence of the RIVMdata catalogue
   record of the GeoPackage, and whether a Monitor 2026 version of the file

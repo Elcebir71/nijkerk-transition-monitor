@@ -189,6 +189,16 @@ of digestion on emissions.
   checked.
 - Open question: emissions are counted where manure is applied. How much of
   Nijkerk's manure is applied inside the municipality is not known here.
+- National policy follows the same split by pathway. The cabinet package of
+  26 June 2026 sets a farm norm for dairy of "0,164 kg NH3 ... uit stallen
+  en mestopslag per fosfaatrecht" in 2035: a norm on housing and storage
+  emission only. PBL (2026, publication 6203) puts housing and storage at 60
+  kt NH3 and field emission at 42 kt in 2019 (p. 24) and notes that field
+  emissions "vallen nu niet onder de voorgestelde bedrijfsspecifieke
+  emissienormen" (p. 7). So a technology that recovers N from digestate does
+  not help a farm meet that norm; the barn-side rows of the matrix do. Keep
+  three quantities apart in any scenario: N recovered, NH3 emission avoided,
+  and deposition avoided.
 
 ## Rough order-of-magnitude for Nijkerk (illustrative only)
 
@@ -256,6 +266,11 @@ Emission pathways (checked 2026-10-06):
 - [WUR (2020), report WPR-840: Mestvergisting als onderdeel van duurzame kringlopen](https://edepot.wur.nl/524221)
 - [NCM (2026), Hoe zit het met monomestvergisting en stikstof?](https://www.mestverwaarding.nl/kenniscentrum/5627/hoe-zit-het-met-monomestvergisting-en-stikstof)
 - [NCM (2023), Ammoniakemissie bij emissiearme stallen wordt onderschat (on the CBS 2019 study and the WLR verification)](https://www.mestverwaarding.nl/kenniscentrum/3588/ammoniakemissie-bij-emissiearme-stallen-wordt-onderschat)
+
+National policy (checked 2026-10-06):
+
+- [Kamerbrief "Weer ruimte voor boer, natuur en bouw", 26 June 2026 (Tweede Kamer, 2026D33108)](https://www.tweedekamer.nl/kamerstukken/brieven_regering/detail?id=2026Z14788&did=2026D33108)
+- [PBL (2026), Reflectie op "Weer ruimte voor boer, natuur en bouw", publication 6203](https://www.pbl.nl/publicaties/reflectie-op-weer-ruimte-voor-boer-natuur-en-bouw-maatregelpakket-voor-landbouw-natuur-en-stikstof)
 
 Technology matrix (checked 2026-10-06):
 
