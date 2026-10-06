@@ -337,8 +337,10 @@ Settled later on 2026-10-06 from the Handboek Data AERIUS 2026, v1.0 (RIVM,
   limit was not noticed. The 2025 editions were not read beyond that page;
   the table above is from the 2026 edition.
 - The Handboek Data AERIUS 2026 is dated 6 October 2026, the day of the
-  field test. Whether the service already returned AERIUS 2026 data when
-  the test ran is not known. See "Still needed".
+  field test. A fresh download that evening gave the same numbers as the
+  first one, so the data did not change during that day. Whether it is
+  AERIUS 2025 or AERIUS 2026 data, the service does not say. See "Still
+  needed".
 
 **6. Hexagon area and coverage.**
 
@@ -1193,12 +1195,21 @@ Sources for this section:
   page and the field test were made around that date and are labelled
   AERIUS 2025. Fetch again, compare, and state the AERIUS version: habitat
   types, KDW values, hexagon flags and the deposition year can all have
-  changed. Two reruns of the field test on the evening of 6 October 2026
-  gave the same report in every number (year 2024, 43,770 relevant
-  hexagons, 43,664 / 59 / 47), but those reports do not say whether the
-  layers were downloaded again or read from the saved files, so they prove
-  nothing yet. The script now writes that into the report; run it with
-  `--refresh` to download again.
+  changed.
+  - First check, by the author on 6 October 2026 around 19:35 CEST: the
+    three hexagon layers were downloaded again (the saved files moved
+    aside; the screen showed the downloads: 71,442, 46,826 and 81,522
+    features) and the field test gave the same report in every number:
+    deposition year 2024, 43,770 relevant hexagons, 43,664 / 59 / 47,
+    81,522 link rows. So that evening the open data service returned the
+    same hexagon data as before. Either AERIUS 2026 was not yet in the
+    service, or it changed nothing in this map area; which of the two is
+    not known.
+  - Not rechecked: the habitat layer shown on the page
+    (`relevant_habitats`), which that script does not download.
+  - Check again some days later. The script now writes into its report
+    whether each layer was downloaded in that run, and when; `--refresh`
+    downloads again.
 - For the Veluwe figure: the title and licence of the RIVMdata catalogue
   record of the GeoPackage, and whether a Monitor 2026 version of the file
   exists (reference year 2024).
