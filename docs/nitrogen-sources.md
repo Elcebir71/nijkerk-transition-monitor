@@ -419,6 +419,76 @@ makes by copying the processed files as they are. Run order:
 The map area is the bounding box of the municipality plus 15 km. Natura 2000
 areas are listed when they intersect that area.
 
+## Showing exceedance: official figures and classes
+
+Checked on 2026-10-06, to decide whether and how the page could show KDW
+exceedance. Nothing is decided here and nothing was added to the page.
+
+**Official figure, national.** RIVM, Monitor stikstofdepositie in Natura
+2000-gebieden 2026 (report 2026-0018, p. 9): "In 2024 was de neerslag op 31
+procent van de oppervlakte lager dan de KDW." This counts mapped habitat
+area, on results calculated at 16 ha resolution with 2024 emissions and
+average weather (p. 29-33).
+
+**Official figure, per area.** The same report says results per Natura 2000
+area are available in the RIVM dashboard and as open data (p. 33). Neither
+could be read in this check, so no figure for the Veluwe is recorded yet.
+The report itself does not discuss the Veluwe. The XLSX published with the
+report on 2 October 2026 is described as the data behind the figures; what
+it holds per area is not known.
+
+**The count in this repo is something else.** "43,664 of 43,770 relevant
+hexagons above their KDW" (see "Field test") counts 1 ha hexagons in a box
+of our own choosing, from the AERIUS open data. It is not a figure for the
+Veluwe and cannot be set next to the 31%: different area, different unit
+(hexagons against hectares of mapped habitat) and a different resolution.
+Keep it as a technical check, not as a headline figure.
+
+**Why the open data carries 2024.** The Monitor 2026 uses 2024 emissions,
+and notes (p. 30, footnote 4) that the current deposition is also calculated
+at 1 ha for AERIUS Calculator. That fits the year 2024 in the open data
+layer. A reading, not a statement by AERIUS.
+
+**Classes.** Four classes appear as the legend of AERIUS Monitor maps in a
+provincial document (Provincie Zuid-Holland, Gebiedsplan stikstof 0.5,
+2022, source AERIUS Monitor of 13 January 2022):
+
+| Class | Legend text |
+|---|---|
+| Geen overbelasting | more than 70 mol below the KDW |
+| Naderende overbelasting | less than 70 mol below the KDW |
+| Matige overbelasting | above the KDW |
+| Sterke overbelasting | above 2 x KDW |
+
+- The Natuurdoelanalyse Veluwe (2023) also uses "licht" ("57% licht tot
+  matig" for H4030), so Gelderland works with a fifth class. Its thresholds
+  were not read in a source that could be opened here.
+- The two hexagon flags give three of these classes without any calculation
+  of our own: neither flag (geen), `exceeding` only (naderend), `above_cl`
+  (above the KDW). In the map area that is 47, 59 and 43,664 hexagons.
+- Splitting "above the KDW" into matig and sterk needs a comparison of
+  deposition with 2 x KDW per hexagon. That is a calculation of our own on
+  two published values, unless a layer is used that already carries the
+  class. The Gelderland geoportaal is said to have one ("KDW overschrijding
+  (Categorieën AERIUS)"); it could not be opened in this check.
+
+**Three different deposition products.** Do not mix them in one figure:
+
+| Product | Resolution | Year | Where it is used here |
+|---|---|---|---|
+| RIVM GDN map | 1 x 1 km | 2025 | The map on the page |
+| AERIUS open data | 1 ha hexagons | 2024 | Field test only |
+| RIVM Monitor Natura 2000 | 16 ha | 2024 | Not used; source of the 31% |
+
+Sources for this section:
+
+- [RIVM, Monitor stikstofdepositie in Natura 2000-gebieden 2026 (publication page)](https://www.rivm.nl/publicaties/monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
+- [RIVM report 2026-0018 (PDF)](https://www.rivm.nl/bibliotheek/rapporten/2026-0018.pdf)
+- [RIVM, dataset bij de Monitor 2026 (XLSX)](https://www.rivm.nl/documenten/dataset-bij-monitor-stikstofdepositie-in-natura-2000-gebieden-2026)
+- [RIVM dashboard Stikstofdepositie in Natura 2000-gebieden](https://stikstofdepositiedata.rivm.nl/)
+- [Provincie Zuid-Holland, factsheets Gebiedsplan stikstof 0.5 (2022)](https://www.zuid-holland.nl/publish/pages/30032/pzhfactsheetsgebiedsplanstikstof0-5.pdf)
+- [Natuurdoelanalyse Veluwe (Provincie Gelderland, 2023)](https://pas.ecologischeautoriteit.nl/files/ea/5123/013610-5123-natuurdoelanalyse-veluwe.pdf)
+
 ## Provincial policy context (Gelderland)
 
 Checked on 2026-10-06. This is a reference list, not content for the page:
@@ -523,3 +593,7 @@ Sources for this section:
   2026.
 - Confirm whether Nijkerk is a party to the Aanpak Veluwe.
 - The answer of the AERIUS helpdesk (asked 2026-10-06).
+- The official figure for the Veluwe from the RIVM dashboard or its open
+  data (share of nitrogen-sensitive area above the KDW, 2024).
+- The class thresholds as Gelderland uses them (five classes), and whether
+  the provincial map layer with AERIUS classes can serve as the source.
