@@ -1,0 +1,9 @@
+# Keep the build context to the two files the source-check image needs.
+# Everything is left out first, then those two files are let back in.
+*
+!scripts
+scripts/*
+!scripts/nitrogen
+scripts/nitrogen/*
+!scripts/nitrogen/config.py
+!scripts/nitrogen/check_sources.py

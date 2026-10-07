@@ -233,7 +233,8 @@ class IssueTests(unittest.TestCase):
     def test_without_a_token_no_request_is_made(self):
         with mock.patch.dict(cs.os.environ, {}, clear=True), mock.patch.object(cs.requests, "get") as get, \
                 mock.patch.object(cs.requests, "post") as post:
-            message = cs.open_issue(["line"])
+            delivered, message = cs.open_issue(["line"])
+        self.assertFalse(delivered)
         self.assertIn("No issue opened", message)
         get.assert_not_called()
         post.assert_not_called()
@@ -242,7 +243,8 @@ class IssueTests(unittest.TestCase):
         with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
                 mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload=[])), \
                 mock.patch.object(cs.requests, "post", return_value=FakeResponse(payload={"number": 12})) as post:
-            message = cs.open_issue(["CHANGED         CBS"])
+            delivered, message = cs.open_issue(["CHANGED         CBS"])
+        self.assertTrue(delivered)
         self.assertEqual(message, "Opened issue #12.")
         url, kwargs = post.call_args.args[0], post.call_args.kwargs
         self.assertEqual(url, "https://api.github.com/repos/owner/repo/issues")
@@ -250,19 +252,77 @@ class IssueTests(unittest.TestCase):
         self.assertIn("CHANGED         CBS", kwargs["json"]["body"])
 
     def test_an_open_issue_gets_a_comment_instead_of_a_second_issue(self):
+        open_issues = [{"number": 3, "title": "Something else"},
+                       {"number": 5, "title": cs.ISSUE_TITLE, "pull_request": {}},
+                       {"number": 7, "title": cs.ISSUE_TITLE}]
         with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
-                mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload=[{"number": 7}])), \
+                mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload=open_issues)), \
                 mock.patch.object(cs.requests, "post", return_value=FakeResponse(payload={})) as post:
-            message = cs.open_issue(["line"])
+            delivered, message = cs.open_issue(["line"])
+        self.assertTrue(delivered)
         self.assertEqual(message, "Added the report to open issue #7.")
         self.assertTrue(post.call_args.args[0].endswith("/issues/7/comments"))
 
-    def test_the_token_is_never_printed(self):
+    def test_other_open_issues_do_not_count_as_an_earlier_report(self):
+        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
+                mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload=[{"number": 3, "title": "Other"}])), \
+                mock.patch.object(cs.requests, "post", return_value=FakeResponse(payload={"number": 4})) as post:
+            delivered, message = cs.open_issue(["line"])
+        self.assertEqual(message, "Opened issue #4.")
+        self.assertTrue(post.call_args.args[0].endswith("/issues"))
+
+    def test_a_failed_request_is_reported_without_the_token(self):
         with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
                 mock.patch.object(cs.requests, "get", side_effect=cs.requests.ConnectionError("down")):
-            message = cs.open_issue(["line"])
+            delivered, message = cs.open_issue(["line"])
+        self.assertFalse(delivered)
         self.assertIn("Could not open an issue", message)
         self.assertNotIn("not-a-real-token", message)
+
+    def test_a_refused_token_is_a_failed_delivery(self):
+        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
+                mock.patch.object(cs.requests, "get", return_value=FakeResponse(status=401, payload={"message": "Bad credentials"})):
+            delivered, message = cs.open_issue(["line"])
+        self.assertFalse(delivered)
+        self.assertNotIn("not-a-real-token", message)
+
+
+class ExitCodeTests(unittest.TestCase):
+    """What a scheduled job sees: 0 means nothing left to do."""
+
+    STATE = {"written_on": "2026-10-07", "sources": {"only": {"value": 1}},
+             "manual": {key: {"checked_on": date.today().isoformat()} for key in cs.MANUAL_SOURCES}}
+
+    def run_main(self, arguments, fingerprint, issue_result=None):
+        checks = {"only": ("Only source", lambda: fingerprint)}
+        with mock.patch.object(cs, "CHECKS", checks), mock.patch.object(cs, "read_state", return_value=self.STATE), \
+                mock.patch.object(cs.sys, "argv", ["check_sources.py"] + arguments), \
+                mock.patch.object(cs, "open_issue", return_value=issue_result) as issue:
+            return cs.main(), issue
+
+    def test_nothing_changed_is_zero_and_opens_no_issue(self):
+        code, issue = self.run_main(["--issue"], {"value": 1})
+        self.assertEqual(code, 0)
+        issue.assert_not_called()
+
+    def test_change_without_issue_option_is_one(self):
+        code, issue = self.run_main([], {"value": 2})
+        self.assertEqual(code, 1)
+        issue.assert_not_called()
+
+    def test_change_put_in_an_issue_is_zero(self):
+        code, issue = self.run_main(["--issue"], {"value": 2}, (True, "Opened issue #1."))
+        self.assertEqual(code, 0)
+        issue.assert_called_once()
+
+    def test_change_that_could_not_be_reported_is_three(self):
+        code, _ = self.run_main(["--issue"], {"value": 2}, (False, "Could not open an issue: down"))
+        self.assertEqual(code, 3)
+
+    def test_unreadable_state_is_two(self):
+        with mock.patch.object(cs, "read_state", side_effect=cs.CheckError("HTTP 404")), \
+                mock.patch.object(cs.sys, "argv", ["check_sources.py", "--state", "https://example.invalid/state.json"]):
+            self.assertEqual(cs.main(), 2)
 
 
 if __name__ == "__main__":
