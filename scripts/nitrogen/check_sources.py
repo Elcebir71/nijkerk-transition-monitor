@@ -308,6 +308,26 @@ def write_state(results: dict, old_state: dict, today: date) -> None:
 # GitHub issue
 # ---------------------------------------------------------------------------
 
+def github_call(method: str, url: str, headers: dict, **kwargs) -> requests.Response:
+    """One call to the GitHub API. A refusal is raised with GitHub's own explanation, never with the token."""
+    try:
+        response = requests.request(method, url, headers=headers, timeout=TIMEOUT_S, **kwargs)
+    except requests.RequestException as error:
+        raise CheckError(f"no answer from GitHub: {type(error).__name__}") from error
+    if response.status_code >= 400:
+        try:
+            reason = response.json().get("message", "")
+        except ValueError:
+            reason = response.text[:200]
+        details = [f"HTTP {response.status_code}", reason]
+        # GitHub says in these headers which permission a call needs and whether a rate limit was hit.
+        for header in ("X-Accepted-GitHub-Permissions", "Retry-After", "X-RateLimit-Remaining"):
+            if response.headers.get(header) is not None:
+                details.append(f"{header}: {response.headers[header]}")
+        raise CheckError("; ".join(part for part in details if part) + f" ({method} {url.split('/repos/')[-1]})")
+    return response
+
+
 def open_issue(report_lines: list[str]) -> tuple[bool, str]:
     """Put the report in a GitHub issue. Returns whether that worked, and a line for the log.
 
@@ -317,26 +337,23 @@ def open_issue(report_lines: list[str]) -> tuple[bool, str]:
     token, repository = os.environ.get("GITHUB_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
     if not token or not repository:
         return False, "No issue opened: GITHUB_TOKEN and GITHUB_REPOSITORY are not both set."
-    headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
+    headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
+               "X-GitHub-Api-Version": "2022-11-28"}
     base = f"{GITHUB_API}/repos/{repository}/issues"
     body = "```\n" + "\n".join(report_lines) + "\n```\n\nOpened by `scripts/nitrogen/check_sources.py`. " \
            "Nothing on the page was changed. After looking, refresh the data by hand if needed and save the " \
            "new state with `--write-state`."
     try:
-        listing = requests.get(base, headers=headers, params={"state": "open", "per_page": 100}, timeout=TIMEOUT_S)
-        listing.raise_for_status()
+        listing = github_call("GET", base, headers, params={"state": "open", "per_page": 100})
         # Found by title, not by label: a token without the right to set labels drops them silently.
-        earlier = [issue for issue in listing.json() if issue.get("title") == ISSUE_TITLE and "pull_request" not in issue]
+        earlier = [issue for issue in as_json(listing) if issue.get("title") == ISSUE_TITLE and "pull_request" not in issue]
         if earlier:
             number = earlier[0]["number"]
-            comment = requests.post(f"{base}/{number}/comments", headers=headers, json={"body": body}, timeout=TIMEOUT_S)
-            comment.raise_for_status()
+            github_call("POST", f"{base}/{number}/comments", headers, json={"body": body})
             return True, f"Added the report to open issue #{number}."
-        created = requests.post(base, headers=headers, timeout=TIMEOUT_S,
-                                json={"title": ISSUE_TITLE, "body": body, "labels": [ISSUE_LABEL]})
-        created.raise_for_status()
-        return True, f"Opened issue #{created.json()['number']}."
-    except (requests.RequestException, ValueError, KeyError) as error:
+        created = github_call("POST", base, headers, json={"title": ISSUE_TITLE, "body": body, "labels": [ISSUE_LABEL]})
+        return True, f"Opened issue #{as_json(created)['number']}."
+    except (CheckError, KeyError, TypeError) as error:
         return False, f"Could not open an issue: {error}"
 
 

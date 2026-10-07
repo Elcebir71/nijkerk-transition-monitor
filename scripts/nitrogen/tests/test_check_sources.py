@@ -230,24 +230,31 @@ class StateTests(unittest.TestCase):
 class IssueTests(unittest.TestCase):
     ENV = {"GITHUB_TOKEN": "not-a-real-token", "GITHUB_REPOSITORY": "owner/repo"}
 
+    def call(self, answers):
+        """Run open_issue with a list of answers, one per GitHub call. Returns (result, calls made)."""
+        calls = []
+        def request(method, url, **kwargs):
+            calls.append((method, url, kwargs))
+            answer = answers[len(calls) - 1]
+            if isinstance(answer, Exception):
+                raise answer
+            return answer
+        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), mock.patch.object(cs.requests, "request", side_effect=request):
+            return cs.open_issue(["CHANGED         CBS"]), calls
+
     def test_without_a_token_no_request_is_made(self):
-        with mock.patch.dict(cs.os.environ, {}, clear=True), mock.patch.object(cs.requests, "get") as get, \
-                mock.patch.object(cs.requests, "post") as post:
+        with mock.patch.dict(cs.os.environ, {}, clear=True), mock.patch.object(cs.requests, "request") as request:
             delivered, message = cs.open_issue(["line"])
         self.assertFalse(delivered)
         self.assertIn("No issue opened", message)
-        get.assert_not_called()
-        post.assert_not_called()
+        request.assert_not_called()
 
     def test_opens_one_issue_with_the_label(self):
-        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
-                mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload=[])), \
-                mock.patch.object(cs.requests, "post", return_value=FakeResponse(payload={"number": 12})) as post:
-            delivered, message = cs.open_issue(["CHANGED         CBS"])
+        (delivered, message), calls = self.call([FakeResponse(payload=[]), FakeResponse(status=201, payload={"number": 12})])
         self.assertTrue(delivered)
         self.assertEqual(message, "Opened issue #12.")
-        url, kwargs = post.call_args.args[0], post.call_args.kwargs
-        self.assertEqual(url, "https://api.github.com/repos/owner/repo/issues")
+        method, url, kwargs = calls[1]
+        self.assertEqual((method, url), ("POST", "https://api.github.com/repos/owner/repo/issues"))
         self.assertEqual(kwargs["json"]["labels"], [cs.ISSUE_LABEL])
         self.assertIn("CHANGED         CBS", kwargs["json"]["body"])
 
@@ -255,36 +262,50 @@ class IssueTests(unittest.TestCase):
         open_issues = [{"number": 3, "title": "Something else"},
                        {"number": 5, "title": cs.ISSUE_TITLE, "pull_request": {}},
                        {"number": 7, "title": cs.ISSUE_TITLE}]
-        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
-                mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload=open_issues)), \
-                mock.patch.object(cs.requests, "post", return_value=FakeResponse(payload={})) as post:
-            delivered, message = cs.open_issue(["line"])
+        (delivered, message), calls = self.call([FakeResponse(payload=open_issues), FakeResponse(status=201, payload={})])
         self.assertTrue(delivered)
         self.assertEqual(message, "Added the report to open issue #7.")
-        self.assertTrue(post.call_args.args[0].endswith("/issues/7/comments"))
+        self.assertEqual(calls[1][0], "POST")
+        self.assertTrue(calls[1][1].endswith("/issues/7/comments"))
 
     def test_other_open_issues_do_not_count_as_an_earlier_report(self):
-        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
-                mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload=[{"number": 3, "title": "Other"}])), \
-                mock.patch.object(cs.requests, "post", return_value=FakeResponse(payload={"number": 4})) as post:
-            delivered, message = cs.open_issue(["line"])
+        (delivered, message), calls = self.call([FakeResponse(payload=[{"number": 3, "title": "Other"}]),
+                                                 FakeResponse(status=201, payload={"number": 4})])
         self.assertEqual(message, "Opened issue #4.")
-        self.assertTrue(post.call_args.args[0].endswith("/issues"))
+        self.assertTrue(calls[1][1].endswith("/issues"))
 
-    def test_a_failed_request_is_reported_without_the_token(self):
-        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
-                mock.patch.object(cs.requests, "get", side_effect=cs.requests.ConnectionError("down")):
-            delivered, message = cs.open_issue(["line"])
+    def test_no_answer_is_reported_without_the_token(self):
+        (delivered, message), _ = self.call([cs.requests.ConnectionError("not-a-real-token in a message")])
         self.assertFalse(delivered)
         self.assertIn("Could not open an issue", message)
         self.assertNotIn("not-a-real-token", message)
 
     def test_a_refused_token_is_a_failed_delivery(self):
-        with mock.patch.dict(cs.os.environ, self.ENV, clear=True), \
-                mock.patch.object(cs.requests, "get", return_value=FakeResponse(status=401, payload={"message": "Bad credentials"})):
-            delivered, message = cs.open_issue(["line"])
+        (delivered, message), _ = self.call([FakeResponse(status=401, payload={"message": "Bad credentials"})])
         self.assertFalse(delivered)
+        self.assertIn("HTTP 401", message)
+        self.assertIn("Bad credentials", message)
         self.assertNotIn("not-a-real-token", message)
+
+    def test_a_refusal_shows_what_github_says_and_which_permission_is_needed(self):
+        refusal = FakeResponse(status=403, payload={"message": "Resource not accessible by personal access token"},
+                               headers={"X-Accepted-GitHub-Permissions": "issues=write; pull_requests=write"})
+        (delivered, message), _ = self.call([FakeResponse(payload=[{"number": 13, "title": cs.ISSUE_TITLE}]), refusal])
+        self.assertFalse(delivered)
+        self.assertIn("HTTP 403", message)
+        self.assertIn("Resource not accessible by personal access token", message)
+        self.assertIn("issues=write; pull_requests=write", message)
+        self.assertIn("POST owner/repo/issues/13/comments", message)
+        self.assertNotIn("not-a-real-token", message)
+
+    def test_a_refusal_that_is_not_json_still_gives_a_reason(self):
+        class NotJson(FakeResponse):
+            def json(self):
+                raise ValueError("no json")
+        (delivered, message), _ = self.call([NotJson(status=502, text="Bad gateway")])
+        self.assertFalse(delivered)
+        self.assertIn("HTTP 502", message)
+        self.assertIn("Bad gateway", message)
 
 
 class ExitCodeTests(unittest.TestCase):
