@@ -139,3 +139,7 @@ provincial nitrogen strips [Provincial policy context].
    and change the constant in the page.
 4. Compare with the previous figures before publishing, and name the
    edition and fetch date of every source.
+
+Whether a source has changed is checked once a month by a scheduled job
+that opens a GitHub issue; it changes nothing by itself. See
+[`source-check.md`](source-check.md).

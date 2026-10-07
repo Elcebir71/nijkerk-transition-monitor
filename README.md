@@ -81,6 +81,18 @@ python scripts/nitrogen/build_page_data.py         # bundles everything for nitr
 Downloads are kept in `data/nitrogen/raw/` (not committed). The processed
 files that the page reads are in `data/nitrogen/processed/`.
 
+### Knowing when a source changed
+
+```bash
+python scripts/nitrogen/check_sources.py
+```
+
+compares what the sources say now with the state saved in
+`data/nitrogen/source_state.json` and prints a report. It changes nothing
+on the page. A scheduled job runs the same check once a month and opens a
+GitHub issue when there is something to look at; see
+[`docs/source-check.md`](docs/source-check.md).
+
 ---
 
 ## Transitie Monitor (prototype): synthetic data
@@ -168,19 +180,24 @@ index.html            Transitie Monitor prototype (synthetic data)
 data/
   nitrogen/processed/                the files nitrogen.html reads (committed)
   nitrogen/raw/                      downloads (not committed)
+  nitrogen/source_state.json         fingerprints of the sources at the last check
   nijkerk_synthetic_farms_2023.csv   synthetic: full 75-row dataset
   farms_data.json                    synthetic: compact JSON embedded in index.html
   generation_summary.json            synthetic: real vs. synthetic totals per category
 scripts/
-  nitrogen/               one script per real data source, plus config.py
-                          and build_page_data.py
+  nitrogen/               one script per real data source, plus config.py,
+                          build_page_data.py and check_sources.py
   constants.py            synthetic: single source of truth for all coefficients
   generate.py             synthetic: builds data/*.csv + generation_summary.json
   build_compact_json.py   synthetic: builds data/farms_data.json from the CSV
   sync_js_constants.py    synthetic: regenerates index.html's embedded JS constants
   build_doc_xlsx.py       synthetic: builds docs/*.xlsx methodology documentation
+docker/
+  source-check/Dockerfile image for the monthly source check
 docs/
   nitrogen-sources.md     source register for the Stikstofmonitor
+  methodology.md          the method of the Stikstofmonitor in two pages
+  source-check.md         the monthly source check: how it runs, what to do
   nitrogen-technology-research.md   desk research: manure N treatment technologies (exploratory, prototype side)
   Nijkerk_Synthetische_Demodata_Documentatie.xlsx   synthetic: methodology + data-quality tables
 ```
