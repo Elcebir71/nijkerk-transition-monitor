@@ -72,33 +72,55 @@ class FingerprintTests(unittest.TestCase):
             with self.assertRaises(cs.CheckError):
                 cs.check_rivm_gdn()
 
-    def test_habitats_fingerprint_changes_when_a_type_disappears(self):
+    @staticmethod
+    def habitat_fingerprint(everywhere, in_map_area):
+        """Answer the request with a bbox from one list and the request without it from the other."""
+        def answer(url, params=None, **_):
+            return FakeResponse(payload={"features": in_map_area if "bbox" in params else everywhere})
+        with mock.patch.object(cs.requests, "get", side_effect=answer):
+            return cs.check_aerius_habitats()
+
+    def test_habitats_counts_follow_the_map_area_request(self):
+        veluwe = [habitat_feature("Veluwe", "H4030", 714, 0.9), habitat_feature("Veluwe", "ZGH5130", 1071, 1.0)]
+        outside = [habitat_feature("Veluwe", "H7110A", 500, 1.0), habitat_feature("Elders", "H2130", 714, 1.0)]
+        near = [habitat_feature("Rijntakken", "H6120", 1000, 1.0)]
+        result = self.habitat_fingerprint(veluwe + outside + near, veluwe + near)
+        self.assertEqual(result["records_netherlands"], 5)
+        self.assertEqual(result["records_in_map_area"], 3)
+        self.assertEqual(result["habitat_types_veluwe_in_map_area"], 2)
+
+    def test_habitats_fingerprint_changes_when_a_type_disappears_from_the_map_area(self):
         features = [habitat_feature("Veluwe", "H4030", 714, 0.9), habitat_feature("Veluwe", "ZGH5130", 1071, 1.0),
-                    habitat_feature("Rijntakken", "H6120", 1000, 1.0), habitat_feature("Elders", "H2130", 714, 1.0)]
-
-        def fingerprint(feats):
-            with mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload={"features": feats})):
-                return cs.check_aerius_habitats()
-
-        before, after = fingerprint(features), fingerprint([features[0]] + features[2:])
-        self.assertEqual(before["habitat_types_veluwe"], 2)
-        self.assertEqual(after["habitat_types_veluwe"], 1)
-        self.assertEqual(before["records_areas_on_page"], 3)
-        self.assertNotEqual(before["hash_areas_on_page"], after["hash_areas_on_page"])
+                    habitat_feature("Rijntakken", "H6120", 1000, 1.0)]
+        before = self.habitat_fingerprint(features, features)
+        after = self.habitat_fingerprint(features, [features[0], features[2]])
+        self.assertEqual(before["habitat_types_veluwe_in_map_area"], 2)
+        self.assertEqual(after["habitat_types_veluwe_in_map_area"], 1)
+        self.assertNotEqual(before["hash_in_map_area"], after["hash_in_map_area"])
+        self.assertEqual(before["hash_netherlands"], after["hash_netherlands"])
         # the order in which the service returns features must not matter
-        self.assertEqual(before, fingerprint(list(reversed(features))))
+        self.assertEqual(before, self.habitat_fingerprint(list(reversed(features)), list(reversed(features))))
 
-    def test_habitats_change_elsewhere_leaves_the_page_areas_hash_alone(self):
-        base = [habitat_feature("Veluwe", "H4030", 714, 0.9), habitat_feature("Elders", "H2130", 714, 1.0)]
-        changed = [base[0], habitat_feature("Elders", "H2130", 1071, 1.0)]
-
-        def fingerprint(feats):
-            with mock.patch.object(cs.requests, "get", return_value=FakeResponse(payload={"features": feats})):
-                return cs.check_aerius_habitats()
-
-        a, b = fingerprint(base), fingerprint(changed)
-        self.assertEqual(a["hash_areas_on_page"], b["hash_areas_on_page"])
+    def test_habitats_change_elsewhere_leaves_the_map_area_hash_alone(self):
+        here = [habitat_feature("Veluwe", "H4030", 714, 0.9)]
+        a = self.habitat_fingerprint(here + [habitat_feature("Elders", "H2130", 714, 1.0)], here)
+        b = self.habitat_fingerprint(here + [habitat_feature("Elders", "H2130", 1071, 1.0)], here)
+        self.assertEqual(a["hash_in_map_area"], b["hash_in_map_area"])
         self.assertNotEqual(a["hash_netherlands"], b["hash_netherlands"])
+
+    def test_habitats_map_area_request_uses_the_box_of_the_page(self):
+        calls = []
+        def answer(url, params=None, **_):
+            calls.append(params)
+            return FakeResponse(payload={"features": [habitat_feature("Veluwe", "H4030", 714, 0.9)]})
+        with mock.patch.object(cs.requests, "get", side_effect=answer):
+            cs.check_aerius_habitats()
+        boxed = [params for params in calls if "bbox" in params]
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(len(boxed), 1)
+        self.assertTrue(boxed[0]["bbox"].startswith("140411,449181,186929,490103,"))
+        self.assertEqual(boxed[0]["srsName"], "urn:ogc:def:crs:EPSG::28992")
+        self.assertNotIn("geometry", boxed[0]["propertyName"])
 
     def test_catalogue_record_names_the_release(self):
         xml = ("<gmd:MD_Metadata><gmd:dateStamp><gco:Date>2026-10-06</gco:Date></gmd:dateStamp>"

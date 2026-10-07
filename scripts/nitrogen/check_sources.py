@@ -47,8 +47,9 @@ ISSUE_TITLE = "Stikstofmonitor: a source changed or needs a look"
 ISSUE_LABEL = "source-check"
 GITHUB_API = "https://api.github.com"
 
-# The Natura 2000 areas that the AERIUS habitat layer returns for the map area of the page.
-HABITAT_AREAS_ON_PAGE = ("Veluwe", "Rijntakken")
+# The map area of the page in EPSG:28992: the bounding box of Nijkerk plus 15 km. The same box as in
+# inspect_aerius.py; fetch_aerius_habitats.py computes it from the municipal boundary.
+MAP_BBOX_RD = "140411,449181,186929,490103,urn:ogc:def:crs:EPSG::28992"
 HABITAT_FIELDS = ("natura2000_area_name", "habitat_type_name", "critical_deposition", "coverage")
 
 # Sources without a signal a script can read. `how` says what to look at.
@@ -137,11 +138,11 @@ def check_municipal_boundaries() -> dict:
     return {"features": wfs_count(config.PDOK_MUNICIPALITY_WFS, config.PDOK_MUNICIPALITY_LAYER)}
 
 
-def check_aerius_habitats() -> dict:
-    """Habitat types, KDW and coverage, without the shapes (the shapes are over 100 MB)."""
+def habitat_rows(extra_params: dict) -> list[list[str]]:
+    """Area, habitat type, KDW and coverage of the habitat records, without the shapes (those are over 100 MB)."""
     params = {
         "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": config.AERIUS_HABITAT_LAYER,
-        "outputFormat": "application/json", "propertyName": ",".join(HABITAT_FIELDS),
+        "outputFormat": "application/json", "propertyName": ",".join(HABITAT_FIELDS), **extra_params,
     }
     response = get(config.AERIUS_WFS, params=params)
     if "json" not in response.headers.get("Content-Type", ""):
@@ -149,17 +150,23 @@ def check_aerius_habitats() -> dict:
     features = response.json().get("features", [])
     if not features:
         raise CheckError("the layer came back empty")
-    rows = sorted(
-        [str(feature["properties"].get(field)) for field in HABITAT_FIELDS] for feature in features
-    )
-    on_page = [row for row in rows if row[0] in HABITAT_AREAS_ON_PAGE]
-    veluwe = [row for row in rows if row[0] == "Veluwe"]
+    return sorted([str(feature["properties"].get(field)) for field in HABITAT_FIELDS] for feature in features)
+
+
+def check_aerius_habitats() -> dict:
+    """Two questions: did the layer change anywhere, and did it change in the map area of the page?
+
+    The second asks for the same box as fetch_aerius_habitats.py, so its numbers can be laid next to
+    the page: the count for the Veluwe is the number of habitat types the page reports.
+    """
+    everywhere = habitat_rows({})
+    in_map_area = habitat_rows({"srsName": MAP_BBOX_RD.split(",", 4)[4], "bbox": MAP_BBOX_RD})
     return {
-        "records_netherlands": len(rows),
-        "hash_netherlands": sha256_of(rows),
-        "records_areas_on_page": len(on_page),
-        "hash_areas_on_page": sha256_of(on_page),
-        "habitat_types_veluwe": len(veluwe),
+        "records_netherlands": len(everywhere),
+        "hash_netherlands": sha256_of(everywhere),
+        "records_in_map_area": len(in_map_area),
+        "hash_in_map_area": sha256_of(in_map_area),
+        "habitat_types_veluwe_in_map_area": sum(1 for row in in_map_area if row[0] == "Veluwe"),
     }
 
 
