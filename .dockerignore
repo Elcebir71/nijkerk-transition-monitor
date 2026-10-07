@@ -1,9 +1,16 @@
-# Keep the build context to the two files the source-check image needs.
-# Everything is left out first, then those two files are let back in.
+# Keep the build context to the files the two images need.
+# Everything is left out first, then those files are let back in.
 *
 !scripts
 scripts/*
 !scripts/nitrogen
 scripts/nitrogen/*
+# docker/source-check
 !scripts/nitrogen/config.py
 !scripts/nitrogen/check_sources.py
+# docker/etl-pipeline
+!scripts/nitrogen/fetch_cbs_livestock.py
+!pipeline
+pipeline/*
+!pipeline/cbs_livestock.py
+!pipeline/requirements.txt
