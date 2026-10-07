@@ -85,13 +85,21 @@ def get(url: str, **kwargs) -> requests.Response:
     return response
 
 
+def as_json(response: requests.Response):
+    """The answer as JSON. A page of text instead of JSON (maintenance, rate limit) is a failed check."""
+    try:
+        return response.json()
+    except ValueError as error:
+        raise CheckError("the answer is not JSON: " + response.text[:120].replace("\n", " ")) from error
+
+
 # ---------------------------------------------------------------------------
 # One function per source. Each returns a small dict: the fingerprint.
 # ---------------------------------------------------------------------------
 
 def check_cbs_livestock() -> dict:
     """CBS states when the table was last modified."""
-    rows = get(f"{config.CBS_BASE_URL}/TableInfos", params={"$format": "json"}).json().get("value", [])
+    rows = as_json(get(f"{config.CBS_BASE_URL}/TableInfos", params={"$format": "json"})).get("value", [])
     if not rows:
         raise CheckError("TableInfos is empty")
     return {"modified": rows[0].get("Modified"), "period": rows[0].get("Period")}
@@ -147,7 +155,7 @@ def habitat_rows(extra_params: dict) -> list[list[str]]:
     response = get(config.AERIUS_WFS, params=params)
     if "json" not in response.headers.get("Content-Type", ""):
         raise CheckError("the service did not return JSON: " + response.text[:120].replace("\n", " "))
-    features = response.json().get("features", [])
+    features = as_json(response).get("features", [])
     if not features:
         raise CheckError("the layer came back empty")
     return sorted([str(feature["properties"].get(field)) for field in HABITAT_FIELDS] for feature in features)
@@ -207,7 +215,7 @@ CHECKS = {
 
 def read_state(location: str) -> dict:
     if location.startswith(("http://", "https://")):
-        return get(location).json()
+        return as_json(get(location))
     path = Path(location)
     if not path.exists():
         return {}
@@ -223,6 +231,8 @@ def run_checks() -> dict:
             results[source_id] = {"fingerprint": check()}
         except CheckError as error:
             results[source_id] = {"error": str(error)}
+        except Exception as error:  # one source with an answer nobody foresaw must not stop the others
+            results[source_id] = {"error": f"unexpected answer ({type(error).__name__}: {error})"}
     return results
 
 

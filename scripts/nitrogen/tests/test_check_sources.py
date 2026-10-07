@@ -57,6 +57,24 @@ class FingerprintTests(unittest.TestCase):
             with self.assertRaises(cs.CheckError):
                 cs.check_cbs_livestock()
 
+    def test_a_text_page_instead_of_json_is_a_check_error(self):
+        class NotJson(FakeResponse):
+            def json(self):
+                raise ValueError("Expecting value")
+        with mock.patch.object(cs.requests, "get", return_value=NotJson(text="<html>Onderhoud</html>")):
+            with self.assertRaises(cs.CheckError) as caught:
+                cs.check_cbs_livestock()
+        self.assertIn("not JSON", str(caught.exception))
+
+    def test_one_source_with_an_unforeseen_answer_does_not_stop_the_others(self):
+        def broken():
+            raise KeyError("properties")
+        checks = {"first": ("First", broken), "second": ("Second", lambda: {"value": 1})}
+        with mock.patch.object(cs, "CHECKS", checks):
+            results = cs.run_checks()
+        self.assertIn("unexpected answer (KeyError", results["first"]["error"])
+        self.assertEqual(results["second"], {"fingerprint": {"value": 1}})
+
     def test_rivm_sees_a_file_for_the_next_year(self):
         def head(url, **_):
             if f"_{cs.config.RIVM_GDN_YEAR}.zip" in url:
