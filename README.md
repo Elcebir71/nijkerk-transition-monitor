@@ -192,8 +192,11 @@ scripts/
   build_compact_json.py   synthetic: builds data/farms_data.json from the CSV
   sync_js_constants.py    synthetic: regenerates index.html's embedded JS constants
   build_doc_xlsx.py       synthetic: builds docs/*.xlsx methodology documentation
+pipeline/                 ETL pipeline: CBS livestock counts into PostgreSQL
+                          (separate from the page; see pipeline/README.md)
 docker/
   source-check/Dockerfile image for the monthly source check
+  etl-pipeline/Dockerfile image for the ETL pipeline
 docs/
   nitrogen-sources.md     source register for the Stikstofmonitor
   methodology.md          the method of the Stikstofmonitor in two pages
