@@ -1,0 +1,13 @@
+{
+  "about": "Fingerprints of the sources behind nitrogen.html, written by scripts/nitrogen/check_sources.py. Update 'manual' by hand after looking at those sources.",
+  "written_on": null,
+  "sources": {},
+  "manual": {
+    "emissieregistratie": {
+      "checked_on": "2026-10-05"
+    },
+    "aerius_monitor": {
+      "checked_on": "2026-10-06"
+    }
+  }
+}
