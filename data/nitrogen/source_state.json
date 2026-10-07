@@ -1,7 +1,39 @@
 {
   "about": "Fingerprints of the sources behind nitrogen.html, written by scripts/nitrogen/check_sources.py. Update 'manual' by hand after looking at those sources.",
-  "written_on": null,
-  "sources": {},
+  "written_on": "2026-10-07",
+  "sources": {
+    "cbs_livestock": {
+      "modified": "2026-03-30T02:00:00",
+      "period": "2000-2025"
+    },
+    "rivm_gdn": {
+      "year_on_page": 2025,
+      "file": {
+        "bytes": "294742",
+        "last_modified": "Mon, 10 Aug 2026 15:05:23 GMT"
+      },
+      "next_year_available": false
+    },
+    "natura2000": {
+      "features": 209
+    },
+    "municipal_boundaries": {
+      "features": 342
+    },
+    "aerius_habitats": {
+      "records_netherlands": 1345,
+      "hash_netherlands": "63a3c3aadd4d3ddc",
+      "records_in_map_area": 41,
+      "hash_in_map_area": "40718e4e9a499785",
+      "habitat_types_veluwe_in_map_area": 31
+    },
+    "aerius_catalogue_record": {
+      "releases_named": [
+        "2026"
+      ],
+      "record_date": "2026-10-06"
+    }
+  },
   "manual": {
     "emissieregistratie": {
       "checked_on": "2026-10-05"
