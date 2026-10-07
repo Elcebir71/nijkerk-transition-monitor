@@ -108,7 +108,9 @@ note.
 Shown on 7 October 2026, on the author's computer with PostgreSQL 16 in
 Docker: the 22 tests; a dry run against CBS (52 rows, 312 values, the same
 figures as on the page); a first load (312 values in run 1); a second run
-that skipped the same edition; the example queries.
+that skipped the same edition; the example queries; the container image
+built and run against that database, where `--force` loaded the same
+edition again and the table still held 312 values.
 
 Shown only with made-up editions on a test database, with a stand-in for
 the database driver: a new edition next to an old one, a failed check
@@ -116,4 +118,4 @@ that stores nothing, a database error.
 
 Not shown: a real second edition from CBS (the table is updated about once
 a year), and a scheduled run. The container image is in
-`docker/etl-pipeline/`.
+`docker/etl-pipeline/`; it has run on the author's computer only.
