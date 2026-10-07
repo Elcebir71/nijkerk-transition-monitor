@@ -22,7 +22,10 @@ Options:
                           GITHUB_TOKEN and GITHUB_REPOSITORY (owner/name).
     --manual-days N       remind of a check by hand after N days (default 120).
 
-Exit code: 0 nothing to report, 1 something to report, 2 the state could not be read.
+Exit code: 0 nothing left to do (nothing to report, or the report was put in an issue),
+1 something to report and no issue asked for, 2 the saved state could not be read,
+3 something to report but the issue could not be opened. A scheduled job that ends
+with anything but 0 therefore needs a look.
 
 Needs only the `requests` package.
 """
@@ -305,30 +308,53 @@ def write_state(results: dict, old_state: dict, today: date) -> None:
 # GitHub issue
 # ---------------------------------------------------------------------------
 
-def open_issue(report_lines: list[str]) -> str:
-    """Open an issue with the report, unless one from an earlier check is still open."""
+def github_call(method: str, url: str, headers: dict, **kwargs) -> requests.Response:
+    """One call to the GitHub API. A refusal is raised with GitHub's own explanation, never with the token."""
+    try:
+        response = requests.request(method, url, headers=headers, timeout=TIMEOUT_S, **kwargs)
+    except requests.RequestException as error:
+        raise CheckError(f"no answer from GitHub: {type(error).__name__}") from error
+    if response.status_code >= 400:
+        try:
+            reason = response.json().get("message", "")
+        except ValueError:
+            reason = response.text[:200]
+        details = [f"HTTP {response.status_code}", reason]
+        # GitHub says in these headers which permission a call needs and whether a rate limit was hit.
+        for header in ("X-Accepted-GitHub-Permissions", "Retry-After", "X-RateLimit-Remaining"):
+            if response.headers.get(header) is not None:
+                details.append(f"{header}: {response.headers[header]}")
+        raise CheckError("; ".join(part for part in details if part) + f" ({method} {url.split('/repos/')[-1]})")
+    return response
+
+
+def open_issue(report_lines: list[str]) -> tuple[bool, str]:
+    """Put the report in a GitHub issue. Returns whether that worked, and a line for the log.
+
+    An issue from an earlier check that is still open gets the report as a comment, so a
+    source that stays changed does not produce a new issue every month.
+    """
     token, repository = os.environ.get("GITHUB_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
     if not token or not repository:
-        return "No issue opened: GITHUB_TOKEN and GITHUB_REPOSITORY are not both set."
-    headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"}
+        return False, "No issue opened: GITHUB_TOKEN and GITHUB_REPOSITORY are not both set."
+    headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
+               "X-GitHub-Api-Version": "2022-11-28"}
     base = f"{GITHUB_API}/repos/{repository}/issues"
+    body = "```\n" + "\n".join(report_lines) + "\n```\n\nOpened by `scripts/nitrogen/check_sources.py`. " \
+           "Nothing on the page was changed. After looking, refresh the data by hand if needed and save the " \
+           "new state with `--write-state`."
     try:
-        existing = requests.get(base, headers=headers, params={"state": "open", "labels": ISSUE_LABEL}, timeout=TIMEOUT_S)
-        existing.raise_for_status()
-        body = "```\n" + "\n".join(report_lines) + "\n```\n\nOpened by `scripts/nitrogen/check_sources.py`. " \
-               "Nothing on the page was changed. After looking, refresh the data by hand if needed and save the " \
-               "new state with `--write-state`."
-        if existing.json():
-            number = existing.json()[0]["number"]
-            comment = requests.post(f"{base}/{number}/comments", headers=headers, json={"body": body}, timeout=TIMEOUT_S)
-            comment.raise_for_status()
-            return f"Added the report to open issue #{number}."
-        created = requests.post(base, headers=headers, timeout=TIMEOUT_S,
-                                json={"title": ISSUE_TITLE, "body": body, "labels": [ISSUE_LABEL]})
-        created.raise_for_status()
-        return f"Opened issue #{created.json()['number']}."
-    except requests.RequestException as error:
-        return f"Could not open an issue: {error}"
+        listing = github_call("GET", base, headers, params={"state": "open", "per_page": 100})
+        # Found by title, not by label: a token without the right to set labels drops them silently.
+        earlier = [issue for issue in as_json(listing) if issue.get("title") == ISSUE_TITLE and "pull_request" not in issue]
+        if earlier:
+            number = earlier[0]["number"]
+            github_call("POST", f"{base}/{number}/comments", headers, json={"body": body})
+            return True, f"Added the report to open issue #{number}."
+        created = github_call("POST", base, headers, json={"title": ISSUE_TITLE, "body": body, "labels": [ISSUE_LABEL]})
+        return True, f"Opened issue #{as_json(created)['number']}."
+    except (CheckError, KeyError, TypeError) as error:
+        return False, f"Could not open an issue: {error}"
 
 
 def main() -> int:
@@ -354,9 +380,13 @@ def main() -> int:
 
     if args.write_state:
         write_state(results, state, today)
-    if args.issue and attention:
-        print(open_issue(report_lines))
-    return 1 if attention else 0
+    if not attention:
+        return 0
+    if args.issue:
+        delivered, message = open_issue(report_lines)
+        print(message)
+        return 0 if delivered else 3
+    return 1
 
 
 if __name__ == "__main__":
