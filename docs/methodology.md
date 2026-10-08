@@ -72,6 +72,11 @@ Everything else is shown as published.
 - **Relevant habitat types.** The nitrogen-sensitive types that count at a
   location under the policy criteria of AERIUS. The selection is AERIUS's
   [AERIUS definitions, point 1].
+- **Drawn and mapped surface.** AERIUS calls the polygons in which a
+  habitat type occurs the "ingetekende oppervlakte" (drawn surface), and
+  that surface times the coverage the "gekarteerde oppervlakte" (the area
+  the type really occupies). The hectares of habitat on the page are drawn
+  surface [Answer of the AERIUS helpdesk].
 - **Codes.** H: habitat type. ZGH: search area for a habitat type. Lg:
   nitrogen-sensitive habitat (leefgebied) of protected species. `L4030`: a
   leefgebied too, described by the province as "Lgt 4030, weinig vergraste

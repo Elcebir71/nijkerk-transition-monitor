@@ -229,6 +229,10 @@ RIVM-briefrapport 2025-0020 (p. 29-30) and 2024-0078 (p. 25):
   a matching (draft or definitive) objective must apply at that location
   (2024-0078, p. 25).
 
+The same conditions, with the 2,400 mol threshold, are in the Handboek
+Werken met AERIUS Calculator 2026 (v1, 6 October 2026), Bijlage 36,
+p. 196-197, again for hexagons.
+
 Not found: a text that states these same conditions for the polygon layer
 `relevant_habitats` itself. The page wording stays as it is ("volgens de
 beleidscriteria"), which matches the metadata.
@@ -373,6 +377,23 @@ Settled later on 2026-10-06 from the Handboek Data AERIUS 2026, v1.0 (RIVM,
   `coverage` is again "Percentage dekking van het habitat" (p. 50). So the
   relevant surface is drawn surface times coverage, as in RIVM's dashboard
   data. The handbook gives no more than these few words.
+- Explained in full in the Handboek Werken met AERIUS Calculator 2026,
+  Bijlage 2 "Bepalen gekarteerd oppervlakte" (p. 127-128): "De oppervlakte
+  waar een habitat voorkomt definiëren we als de ingetekende oppervlakte
+  (surface). De mate waarin een habitat voorkomt binnen een ingetekende
+  oppervlakte noemen we de dekkingsgraad (coverage). [...] Binnen één
+  ingetekende oppervlakte is de dekkingsgraad constant per habitat [...]
+  Door het ingetekend oppervlak te vermenigvuldigen met de dekkingsgraad
+  verkrijgen we de gekarteerde oppervlakte". Per hexagon the worked example
+  gives a "Gemiddelde dekkingsgraad binnen de hexagoon": mapped surface
+  divided by drawn surface (2,300 / 4,000 = 0.575). So `coverage` is a
+  property of the drawn polygons, averaged where a hexagon holds several,
+  not a share of the hexagon. This is what the field test found (point 7).
+- Terms that follow from it: "ingetekende oppervlakte" is the drawn
+  surface; "gekarteerde oppervlakte" is drawn surface times coverage, the
+  area the habitat really occupies. The handbook (p. 23) adds that AERIUS
+  shows the drawn surfaces on its maps and the mapped surfaces in its
+  tables.
 - Background to that description, from the BIJ12 Methodiekdocument
   (2015, p. 21): one mapped polygon can hold several habitat types, "waarbij
   per type het percentage in het vlak wordt vermeld". For search areas no
@@ -416,8 +437,13 @@ is voor alle AERIUS producten altijd in mol N / ha / jaar."
 - One statement does not fit the sources on the page: "2024 [...] de meest
   recente grootschalige stikstof depositie data". The RIVM GDN map on the
   page is for 2025 (release 1.0, 10 August 2026, see source 3). The two
-  are different products; why AERIUS 2026 uses 2024 has not been
-  established. The page keeps them apart, as before.
+  are different products. The Handboek Werken met AERIUS Calculator 2026
+  (p. 78) gives the rule AERIUS follows: "Voor de actuele depositie in
+  Calculator wordt altijd uitgegaan van de huidige situatie (meest recente
+  jaar in AERIUS Monitor)". The most recent year in AERIUS Monitor M26 is
+  2024. Why the Monitor's latest year is 2024 while a GDN map for 2025
+  exists has not been established. The page keeps the two apart, as
+  before.
 
 **Vraag 3a, `coverage` in `relevant_habitats` and the link table.**
 "Coverage in relevant_habitats betekent percentage dekking van het
@@ -433,7 +459,10 @@ point 7: close to, but not the same as, a surface-weighted mean).
   Bijvoorbeeld omdat de KDW veel hoger is dan de depositie." A reason that
   is not in the documents under point 1, which name designation and
   objectives. It is given as an example; the criteria themselves are not
-  listed. The page wording "volgens de beleidscriteria" still fits.
+  listed. Bijlage 36 of the Handboek Werken met AERIUS Calculator 2026,
+  which the helpdesk names, lists the criteria (see point 1) and does not
+  contain this one. The page wording "volgens de beleidscriteria" still
+  fits.
 - On `coverage` per hexagon: "per hexagon [wordt] bepaald hoeveel van een
   habitatgebied in de hexagon ligt. Dit wordt dan uitgedrukt in coverage of
   dekking [...] een decimaal getal tussen 0 en 1". This does not fit the
@@ -443,9 +472,17 @@ point 7: close to, but not the same as, a surface-weighted mean).
   dekking van het habitat", next to `surface`, "Ingetekende oppervlakte")
   and the BIJ12 rule that a mapped polygon records a percentage per type do
   fit. The helpdesk refers to annex 36 of the Handboek werken met AERIUS
-  Calculator 2026 for how it is determined; not read yet. Until then the
-  reading under point 6 stands, and the page, which does not use the
-  hexagon coverage, is not affected.
+  Calculator 2026 for how it is determined. Read on 2026-10-08 (PDF
+  supplied by the author): Bijlage 36 is about relevant, (bijna)
+  overbelaste and hersteldoel hexagons and does not treat coverage.
+  Coverage is explained in Bijlage 2 of the same handbook, which
+  supports the reading under point 6 and not the helpdesk's wording.
+- What this changes on the page: its habitat table headed a column
+  "Gekarteerd (ha)", but the figures are drawn surface ("ingetekende
+  oppervlakte"), not drawn surface times coverage. In AERIUS terms that is
+  the wrong word. Changed on 2026-10-08 to "Ingetekend (ha)", with the same
+  word in the text above the table and in the key figure, and a note
+  under the table on the difference.
 
 **Vraag 4, the codes.** "Bij een habitatcode beginnende met een H (Hxxxx)
 betekent dit dat dit het Habitattype is die hoort bij die code. Bij een
@@ -462,6 +499,14 @@ types on natura2000.nl.
 - The answer is about codes of the form Lxxxx. It does not cover the Lg
   types (Lg01 to Lg14) or the search areas (ZGH), which the page explains
   from other sources.
+- Section 6.8.1 of the Handboek Werken met AERIUS Calculator 2026 (p. 78),
+  read on 2026-10-08, gives the full list: "Hxxxx: Habitattype"; "Lxxxx:
+  Combinatie van vegetatietypen die bijna voldoet aan habitattype";
+  "H9999/ L9999 onbekend"; "Lgxx: Habitat dat mogelijk van belang kan zijn
+  voor de instandhouding van een soort"; "ZGHxxxx/ZGLxxxx/ ZGLgxx:
+  Zoekgebied waar een vermoeden is dat het betreffende type voorkomt";
+  suffixes such as A/B/C are variants with a different KDW. The page's
+  explanation of the codes agrees with this list.
 
 ### Observed in the service (2026-10-06)
 
@@ -567,6 +612,13 @@ types overlap each other inside a hexagon.
   Data AERIUS 2026 describes the field as "Percentage dekking van het
   habitat", which agrees. The BIJ12 rule of 2015 that search areas are
   always 100% does not hold in this data.
+- Settled for the hexagon rows by Bijlage 2 of the Handboek Werken met
+  AERIUS Calculator 2026 (see point 6): the mean coverage within the
+  hexagon. For the single value per area and type in `relevant_habitats`
+  the handbook gives no formula. Reading, not a statement by AERIUS: the
+  same ratio over the whole Natura 2000 area, which would explain why it
+  matches the hexagon values only where a type lies almost wholly in the
+  map area.
 - `L4030` behaves like the Lg types (always 1) and unlike H4030, which
   supports reading it as habitat of species (leefgebied), see point 3 above.
 
@@ -587,6 +639,8 @@ Sources for this section:
 - [AERIUS Handboek Data 2025, v3 (14 April 2026)](https://www.aeriusproducten.nl/documenten/2026/04/14/handboek-data-aerius-2025-v3)
 - RIVM, Handboek Data AERIUS 2026, v1.0, 6 October 2026 (read from a PDF supplied by the author; link not recorded)
 - [AERIUS Calculator 2025, online documentation](https://docs.aerius.nl/downloads/nl/calculator-2025.html)
+- AERIUS, Handboek Werken met AERIUS Calculator 2026, v1, 6 October 2026, 197 pages (read from a PDF supplied by the author; the helpdesk names [aeriusproducten.nl/documenten](https://www.aeriusproducten.nl/documenten) as the place to find it)
+- [RIVM metadata: AERIUS totale stikstofdepositie (depositions:depositions)](https://data.rivm.nl/meta/srv/dut/catalog.search#/metadata/b5e7a6f3-aa6d-483b-bebc-c5f7ddd9a233)
 - [AERIUS Handboek Werken met Calculator 2025](https://www.aeriusproducten.nl/site/binaries/site-content/collections/documents/2025/12/9/handboek-werken-met-aerius-calculator-2025/handboek-werken-met-calculator-2025.pdf)
 - [BIJ12, Methodiekdocument kartering habitattypen Natura 2000 (2015)](https://www.bij12.nl/wp-content/uploads/2023/11/WW-BIJLAGE-09-%E2%80%93-Methodiekdocument-kartering-habitattypen.pdf)
 - [HaskoningDHV (2020), Compensatieplan stikstofgevoelig habitat Natura 2000-gebied Veluwe](https://zoek.officielebekendmakingen.nl/blg-959322.pdf)
@@ -1294,10 +1348,6 @@ Sources for this section:
   gebied" with the 65-69% target is delimited.
 - When AERIUS Monitor M27 appears: read the Veluwe share again and update
   `PUBLISHED_EXCEEDANCE` in `nitrogen.html`.
-- Read annex 36 (coverage) and section 6.8.1 (habitat codes) of the
-  Handboek werken met AERIUS Calculator 2026, to which the AERIUS helpdesk
-  referred on 2026-10-08. Its description of `coverage` per hexagon does
-  not fit the field test; see "Answer of the AERIUS helpdesk".
 - AERIUS 2026 was published on 6 October 2026. The habitat layer on the
   page and the field test were made around that date and are labelled
   AERIUS 2025. Fetch again, compare, and state the AERIUS version: habitat
