@@ -409,7 +409,7 @@ Settled later on 2026-10-06 from the Handboek Data AERIUS 2026, v1.0 (RIVM,
 ### Answer of the AERIUS helpdesk (by 2026-10-08)
 
 The questions sent on 2026-10-06 through the AERIUS contact form were
-answered by e-mail; the author passed the answer on on 2026-10-08. Quotes
+answered by e-mail; the author passed on the answer on 2026-10-08. Quotes
 are from that e-mail, typing errors included. What it confirms, adds and leaves open:
 
 **Vraag 1, `exceeding` and `above_cl`.** "Als er bij een haxogon staat dat
