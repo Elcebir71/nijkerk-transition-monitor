@@ -288,7 +288,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
       <details>
         <summary id="hab-table-summary">Tabel met alle typen</summary>
         <div class="table-scroll"><table id="hab-table"></table></div>
-        <p class="note" style="margin-top:6px">Oppervlakte van de gekarteerde vlakken binnen het kaartgebied. Een vlak kan maar voor een deel uit het genoemde type bestaan, en vlakken van verschillende typen kunnen overlappen; de regels tellen daarom niet op tot het totaal.</p>
+        <p class="note" style="margin-top:6px">Ingetekende oppervlakte binnen het kaartgebied: de vlakken waarin het type voorkomt. Een vlak kan maar voor een deel uit het genoemde type bestaan, en vlakken van verschillende typen kunnen overlappen; de regels tellen daarom niet op tot het totaal. AERIUS noemt het deel dat het type werkelijk bedekt (ingetekende oppervlakte maal dekkingsgraad) de gekarteerde oppervlakte; die is kleiner en staat niet op deze pagina.</p>
       </details>
     </div>
   </section>
@@ -696,9 +696,9 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     });
     var without = n2kAreas.map(function (a) { return a.name; }).filter(function (n) { return habStats.names.indexOf(n) < 0; });
     var txt = habStats.inMuni >= 0.05
-      ? 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS ' + nf1.format(habStats.inMuni) + ' ha relevant stikstofgevoelig habitat.'
+      ? 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS ' + nf1.format(habStats.inMuni) + ' ha ingetekende oppervlakte met relevant stikstofgevoelig habitat.'
       : 'Binnen de gemeente ' + muni.properties.name + ' ligt volgens de habitatkartering van AERIUS geen relevant stikstofgevoelig habitat.';
-    txt += ' In het kaartgebied gaat het om ' + nf0.format(habStats.inMap) + ' ha, ' + (habStats.names.length === 1 ? 'geheel in het Natura 2000-gebied ' + habStats.names[0] : 'verdeeld over ' + listNl(habStats.names)) + ', met ' + hRows.length + ' habitattypen en leefgebieden.';
+    txt += ' In het kaartgebied gaat het om ' + nf0.format(habStats.inMap) + ' ha ingetekende oppervlakte, ' + (habStats.names.length === 1 ? 'geheel in het Natura 2000-gebied ' + habStats.names[0] : 'verdeeld over ' + listNl(habStats.names)) + ', met ' + hRows.length + ' habitattypen en leefgebieden.';
     if (habStats.nearest && habStats.inMuni < 0.05) txt += ' Het dichtstbijzijnde ligt op ongeveer ' + nf1.format(habStats.nearest.km) + ' km van de gemeentegrens.';
     if (without.length) txt += ' Voor ' + listNl(without) + ' bevat deze kartering binnen het kaartgebied geen relevante typen.';
     if (habStats.inMuni < 0.05) txt += ' Dit betekent niet dat stikstofdepositie geen effect kan hebben op natuur buiten de gemeentegrens.';
@@ -722,7 +722,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     peItem.appendChild(document.createTextNode('.'));
     peItem.hidden = false;
     var habTable = $('#hab-table');
-    row(habTable, ['Gebied', 'Code', 'Habitattype of leefgebied', { text: 'KDW (mol N/ha/jaar)', n: 1 }, { text: 'Gekarteerd (ha)', n: 1 }], true);
+    row(habTable, ['Gebied', 'Code', 'Habitattype of leefgebied', { text: 'KDW (mol N/ha/jaar)', n: 1 }, { text: 'Ingetekend (ha)', n: 1 }], true);
     hRows.slice().sort(function (a, b) { return (a.kdw_mol_per_ha || 0) - (b.kdw_mol_per_ha || 0) || b.mapped_ha_in_map_area - a.mapped_ha_in_map_area; }).forEach(function (r) {
       row(habTable, [r.natura2000_area, r.habitat_code, r.habitat_description,
         { text: r.kdw_mol_per_ha === null ? '–' : nf0.format(r.kdw_mol_per_ha), n: 1 },
@@ -754,7 +754,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     nf0.format(insideHa) + ' ha van ' + nf0.format(muni.properties.area_ha) + ' ha' + (insideParts.length ? ': ' + listNl(insideParts) + '.' : '.'));
   var veluwe = n2kAreas.filter(function (a) { return a.name === 'Veluwe'; })[0];
   if (habStats) kpi('Relevant stikstofgevoelig habitat binnen de gemeente (AERIUS)', habStats.inMuni < 10 ? nf1.format(habStats.inMuni).replace(',0', '') : nf0.format(habStats.inMuni), 'ha',
-    'Volgens de habitatkartering van AERIUS, binnen Natura 2000. In het kaartgebied: ' + nf0.format(habStats.inMap) + ' ha' + (habStats.nearest ? ', het dichtstbijzijnde op ' + nf1.format(habStats.nearest.km) + ' km (' + habStats.nearest.name + ').' : '.'));
+    'Volgens de habitatkartering van AERIUS, binnen Natura 2000. In het kaartgebied: ' + nf0.format(habStats.inMap) + ' ha ingetekend' + (habStats.nearest ? ', het dichtstbijzijnde op ' + nf1.format(habStats.nearest.km) + ' km (' + habStats.nearest.name + ').' : '.'));
   else if (veluwe) kpi('Afstand tot de Veluwe', nf1.format(veluwe.distance), 'km',
     'Kortste afstand tussen de gemeentegrens en het Natura 2000-gebied Veluwe.');
 
