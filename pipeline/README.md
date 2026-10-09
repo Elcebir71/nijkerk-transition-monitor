@@ -1,6 +1,6 @@
 # ETL pipeline: CBS livestock counts into PostgreSQL
 
-As of 7 October 2026. A small pipeline next to the Stikstofmonitor: it
+As of 9 October 2026. A small pipeline next to the Stikstofmonitor: it
 fetches the CBS livestock table for Nijkerk and Gelderland, checks the rows
 and stores them in PostgreSQL, with the edition of the table they came
 from.
@@ -82,6 +82,11 @@ the checks need no network and no database:
 ```powershell
 python -m unittest discover -s pipeline/tests
 ```
+`tests/test_integration_postgres.py` runs the whole pipeline against a real
+PostgreSQL database, with made-up CBS editions. It is skipped unless
+`TEST_DATABASE_URL` is set, and it only runs on a database whose name ends
+in `_test`, because it recreates the schema `etl`. How to run it is at the
+top of the file.
 
 ## Reading the figures
 
@@ -112,9 +117,14 @@ that skipped the same edition; the example queries; the container image
 built and run against that database, where `--force` loaded the same
 edition again and the table still held 312 values.
 
-Shown only with made-up editions on a test database, with a stand-in for
-the database driver: a new edition next to an old one, a failed check
-that stores nothing, a database error.
+Shown on 9 October 2026 against PostgreSQL 16 with the real driver, with
+made-up CBS editions (`tests/test_integration_postgres.py`, 8 tests): a
+second edition stored next to the first, 624 values with none replaced;
+the view `livestock_latest` returning the newer value; the revision query
+finding exactly the one changed value; `--force` replacing instead of
+doubling; a run with a negative count and a run with fewer rows both
+failing and storing nothing. A database error was shown only with a
+stand-in for the driver.
 
 Not shown: a real second edition from CBS (the table is updated about once
 a year), and a scheduled run. The container image is in
