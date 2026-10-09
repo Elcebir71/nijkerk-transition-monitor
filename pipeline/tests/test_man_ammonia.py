@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import sys
 import unittest
+from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
@@ -89,6 +90,61 @@ class FormatProblems(unittest.TestCase):
         self.assertEqual(len(caught.exception.problems), 2)
 
 
+TODAY = date(2026, 10, 9)
+
+
+class Validate(unittest.TestCase):
+    def test_a_good_file_has_no_problems(self):
+        self.assertEqual(man.validate(man.parse(ANNUAL), "annual", TODAY), [])
+        self.assertEqual(man.validate(man.parse(QUARTERS), "quarterly", TODAY), [])
+
+    def test_the_kind_must_match_the_file(self):
+        self.assertIn("three-monthly", man.validate(man.parse(QUARTERS), "annual", TODAY)[0])
+        self.assertIn("annual columns", man.validate(man.parse(ANNUAL), "quarterly", TODAY)[0])
+
+    def test_a_file_without_values(self):
+        self.assertEqual(man.validate([], "annual", TODAY), ["the file holds no values"])
+
+    def test_an_implausible_value(self):
+        problems = man.validate(man.parse(ANNUAL.replace("3,7", "370,0")), "annual", TODAY)
+        self.assertEqual(problems, ["location 5, 2025: 370.0 is above 100 µg/m³"])
+
+    def test_two_names_for_one_location(self):
+        text = ANNUAL.replace("Veluwe Algemeen;10;Kootwijk, de Houtbeek 4;;2,9;3,1;",
+                              "Veluwe Algemeen;10;Kootwijk;;2,9;3,1;\r\nVeluwe Algemeen;10;Kootwijkerzand;1,0;;;")
+        self.assertIn("more than one name", man.validate(man.parse(text), "annual", TODAY)[0])
+
+    def test_a_location_twice(self):
+        text = ANNUAL + "Veluwe Algemeen;5;Grote Ark;3,0;;;\r\n"
+        self.assertIn("twice", man.validate(man.parse(text), "annual", TODAY)[0])
+
+    def test_two_areas_in_one_file(self):
+        text = ANNUAL + "Horsterwold;1;De Stille Kern;5,0;;;\r\n"
+        self.assertIn("more than one area", man.validate(man.parse(text), "annual", TODAY)[0])
+
+    def test_an_old_file(self):
+        problems = man.validate(man.parse(ANNUAL), "annual", date(2030, 1, 1))
+        self.assertEqual(problems, ["the latest year is 2025; expected 2028 or later"])
+
+    def test_fewer_values_than_the_last_download(self):
+        previous = man.Download(run_id=3, sha256="x", value_count=6)
+        self.assertEqual(man.compare_with_previous(6, previous), [])
+        self.assertIn("fewer than the 6 of run 3", man.compare_with_previous(5, previous)[0])
+        self.assertEqual(man.compare_with_previous(5, None), [])
+
+
+class Changes(unittest.TestCase):
+    def test_changed_new_and_gone_values_are_listed(self):
+        older = {(5, 2025, None): Decimal("3.7"), (1, 2025, None): Decimal("2.6"), (5, 2024, None): Decimal("3.2")}
+        newer = {(5, 2025, None): Decimal("3.9"), (5, 2026, None): Decimal("3.5"), (5, 2024, None): Decimal("3.2")}
+        self.assertEqual(man.changes(older, newer), ["location 1, 2025: gone, was 2.6",
+                                                     "location 5, 2025: 3.7 -> 3.9",
+                                                     "location 5, 2026: new, 3.5"])
+
+    def test_the_same_value_written_differently_is_no_change(self):
+        self.assertEqual(man.changes({(5, 2025, 1): Decimal("4.0")}, {(5, 2025, 1): Decimal("4")}), [])
+
+
 @unittest.skipUnless(ANNUAL_FILE.exists() and QUARTER_FILE.exists(),
                      f"put the MAN downloads of area 65 in {RAW_DIR} to check the real files")
 class RealFiles(unittest.TestCase):
@@ -99,11 +155,13 @@ class RealFiles(unittest.TestCase):
         self.assertEqual(grote_ark[2025], Decimal("3.7"))
         self.assertEqual({r.location for r in records}, {1, 2, 3, 4, 5, 10, 11})   # 6 has no values
         self.assertTrue(all(r.quarter is None for r in records))
+        self.assertEqual(man.validate(records, "annual", TODAY), [])
 
     def test_quarterly_file_of_area_65(self):
         records = man.read_file(QUARTER_FILE)
         self.assertEqual(max((r.year, r.quarter) for r in records), (2025, 3))
         self.assertTrue(all(r.quarter in (1, 2, 3, 4) for r in records))
+        self.assertEqual(man.validate(records, "quarterly", TODAY), [])
 
 
 if __name__ == "__main__":
