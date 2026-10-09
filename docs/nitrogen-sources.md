@@ -56,6 +56,7 @@ whether the KDW is the right yardstick.
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
 | Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on the fetch date, 6 October 2026; the catalogue record then described AERIUS 2026 | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
 | Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | 2024 (the only year in the layer for the map area) | WFS | Not used yet | Fields officially described (Handboek Data AERIUS 2026, p. 47) and confirmed in a test on the data (2026-10-06) |
+| NH₃-concentratie in de lucht | RIVM, Meetnet Ammoniak Nederland (MAN) | Gebiedsgegevens `65` (Veluwe Algemeen); jaarlijkse en driemaandelijkse bestanden | MAN-meetlocaties; relevant voor Veluwe en omgeving | Jaarlijkse waarden en perioden van drie maanden; exacte referentieperiode per bestand te controleren | Online databestanden | Vergelijking met regionale luchtconcentraties; trend per meetlocatie | Bronstructuur beschreven; interpretatie van jaarwaarden en gebruiksvoorwaarden nog te bevestigen |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
 
 The land-use row is not needed for v1.
@@ -197,6 +198,29 @@ The land-use row is not needed for v1.
   GDN map on the page is for 2025. Do not combine the two in one figure.
 - **Script:** `scripts/nitrogen/fetch_aerius_habitats.py`. The download is
   kept in `data/nitrogen/raw/` (not committed) and reused on later runs.
+
+### 6. RIVM: Meetnet Ammoniak Nederland (MAN)
+
+- **Where:** <https://man.rivm.nl/Man/Data/65> (annual data); <https://man.rivm.nl/Man/Data_3_maanden/65> (three-month data).
+- **Area code:** `65`, corresponding to **Veluwe Algemeen**. The same area number appears in the location code `s65_5`.
+- **What it measures:** ammonia (NH₃) concentrations in ambient air at individual MAN monitoring locations. These are atmospheric concentrations, not nitrogen deposition.
+- **Time periods:** the three-month periods follow the seasonal grouping reported in the source notes: 1 = February–April, 2 = May–July, 3 = August–October, 4 = November–January. Confirm period labels and precise dates in the downloaded files before processing.
+- **Annual values:** at least seven measured values are required for an annual value to be reported. This supports, but does not prove, the interpretation that the annual value is based on monthly observations and a calendar year. The reference-year definition remains to be confirmed by RIVM.
+- **Missing values:** missing observations may be estimated and included in averages. The file documentation must be checked to determine how estimated values are identified and how they affect each published statistic.
+- **Historical revisions:** the calculation method changed in 2014 and 2017. Historical values may consequently differ from values in earlier reports. During the June update, the previous year's value is recalculated as well. A value downloaded today must therefore not be assumed to be identical to the value published in an earlier release.
+- **Spatial comparison:** do not use the unweighted mean across all monitoring locations as a long-term regional trend without qualification. The number of available locations changes over time, which can change the mean independently of the underlying concentration trend. Display individual monitoring locations and their time series separately.
+- **Versioning:** the download URLs appear to be stable, but the file contents may change. Save each retrieved file as an immutable snapshot, calculate a SHA-256 hash, and record the retrieval timestamp. Compare each new file with the previous snapshot and report added, removed or changed values. A hash identifies a file version; it does not by itself explain why the source changed.
+- **Use on the page:** a section titled “Ammoniakmetingen in de omgeving van Nijkerk” may show the nearest relevant MAN monitoring locations, including Grote Ark and Horsterwold once their coordinates, location codes and distances have been verified. Show the reference period, provisional status where applicable, and any available indication of estimated values.
+- **May not calculate:** do not convert NH₃ air concentrations directly into deposition in mol N/ha/year. Do not present measurements at nearby sites as if they were measurements inside the municipality of Nijkerk.
+- **Terms of use:** no licence statement has been identified in the information reviewed so far. Confirm the permitted reuse, attribution requirements and publication conditions with RIVM before republishing the data.
+- **Contact:** <mailto:info@rivm.nl> for questions about definitions, calculation methods, historical revisions and reuse conditions.
+
+#### Open questions
+
+1. Does an annual value refer explicitly to the calendar year, and which observations and estimation rules are used to calculate it?
+2. What are the exact definitions of the annual and three-month statistics, including the treatment of estimated or missing observations?
+3. What licence or terms of use apply to the downloaded MAN files, and what attribution is required?
+4. Are the stable URLs intended for automated retrieval, and is there an official publication or revision date available in the files or metadata?
 
 ## AERIUS definitions: verification
 
