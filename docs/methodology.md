@@ -76,7 +76,7 @@ Everything else is shown as published.
   habitat type occurs the "ingetekende oppervlakte" (drawn surface), and
   that surface times the coverage the "gekarteerde oppervlakte" (the area
   the type really occupies). The hectares of habitat on the page are drawn
-  surface [Answer of the AERIUS helpdesk].
+  surface [AERIUS definitions, point 6].
 - **Codes.** H: habitat type. ZGH: search area for a habitat type. Lg:
   nitrogen-sensitive habitat (leefgebied) of protected species. `L4030`: a
   leefgebied too, described by the province as "Lgt 4030, weinig vergraste
