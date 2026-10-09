@@ -57,6 +57,18 @@ source that stays changed does not produce a new issue every month.
 | 3 | Something to report, but the issue could not be opened |
 
 ## Where it runs
+Since 9 October 2026: GitHub Actions, in `.github/workflows/monthly-checks.yml`,
+on the 1st of every month at 06:17 UTC and by hand from the Actions tab. The
+job uses the workflow's own short-lived token (permission: issues, write), so
+no token has to be stored or renewed, and it does not depend on an Azure
+subscription. The same workflow runs the CBS pipeline with `--dry-run`.
+
+GitHub turns off scheduled workflows in a public repository after 60 days
+without activity in it, and sends an e-mail before it does; one run by hand
+switches it on again.
+
+The Azure job described below was the first home of the check. It ran once,
+by hand, on 7 October 2026, and is removed when the Azure trial ends.
 
 An Azure Container Apps job, next to the RAG demo. The settings below
 were read from the job's own summary on 7 October 2026.

@@ -119,8 +119,7 @@ note.
 - **Two regions, six indicators.** Only what the page uses.
 - **Animals are counted at the farm's main address**, not where they are
   kept; the same caveat as on the page.
-- **A failed run tells nobody by itself.** It ends with exit code 1 or 2
-  and a row in `etl.load_run`; someone has to look.
+- **A failed load tells nobody by itself.** A load ends with exit code 1 or 2 and a row in `etl.load_run`; someone has to look. The monthly workflow runs the checks with `--dry-run`, and GitHub sends an e-mail when that run fails, but it stores nothing.
 
 ## What was shown to work, and what was not
 
