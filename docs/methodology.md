@@ -1,6 +1,6 @@
 # Stikstofmonitor Nijkerk: method in short
 
-As of 6 October 2026. This note says in two pages what `nitrogen.html`
+As of 9 October 2026. This note says in two pages what `nitrogen.html`
 shows, where each figure comes from, what is calculated here and what is
 not. The evidence for every statement, with quotes and page numbers, is in
 [`nitrogen-sources.md`](nitrogen-sources.md); the section names are given
