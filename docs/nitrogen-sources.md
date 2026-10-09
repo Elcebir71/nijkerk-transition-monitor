@@ -55,7 +55,7 @@ whether the KDW is the right yardstick.
 | Natura 2000 | PDOK / RVO | WFS `natura2000:natura2000` | Veluwe and surroundings | Current | GeoJSON, EPSG:28992, CC0 | Kaart | Verified |
 | Stikstofgevoelige habitats en KDW | RIVM, AERIUS open data | WFS `base_geometries:relevant_habitats` | Map area (Nijkerk + 15 km) | As served on the fetch date, 6 October 2026; the catalogue record then described AERIUS 2026 | GeoJSON via WFS, EPSG:28992 | Weergave, tabel | Verified |
 | Overschrijding per hexagoon | RIVM, AERIUS open data | WFS `base_geometries:hexagons`, `depositions:depositions` | Map area | 2024 (the only year in the layer for the map area) | WFS | Not used yet | Fields officially described (Handboek Data AERIUS 2026, p. 47) and confirmed in a test on the data (2026-10-06) |
-| NH₃ concentratie (gemeten) | RIVM | MAN, area 65 Veluwe Algemeen | Locations near Nijkerk | 2005–2025 (last year provisional) | CSV (download by hand) | Weergave | Being verified |
+| NH₃ concentratie (gemeten) | RIVM | MAN, area 65 Veluwe Algemeen and area 902 Horsterwold | Grote Ark (≈3 km E of Nijkerk), De Stille Kern (≈6 km N) | 2005–2025 and 2015–2025 (last year provisional) | CSV (download by hand) | Weergave | Being verified |
 | Landgebruik | PDOK / CBS | To determine | Nijkerk | – | GIS | Context | Not checked |
 
 The land-use row is not needed for v1.
@@ -206,7 +206,8 @@ The land-use row is not needed for v1.
   values <https://man.rivm.nl/Man/Data/65>, three-monthly values
   <https://man.rivm.nl/Man/Data_3_maanden/65>; all areas
   <https://man.rivm.nl/data_alle_jaar> and
-  <https://man.rivm.nl/data_alle_3_maanden>.
+  <https://man.rivm.nl/data_alle_3_maanden>
+  Area 902 "Horsterwold": annual values <https://man.rivm.nl/Man/Data/902>.
 - **What it means:** measured ammonia concentration in air (µg/m³) at fixed
   points in nature areas, with passive samplers that volunteers replace
   every month. The samplers are calibrated each month against the
@@ -272,8 +273,10 @@ The land-use row is not needed for v1.
   3. May the download links be retrieved automatically once a month, and is
      the date of the yearly update announced?
 - **Not used yet:** the page section waits for the answer to question 2.
-  Horsterwold (location `s902_1`, "De Stille Kern") is a candidate; its
-  area number and coordinates are not checked yet.
+- **Location of De Stille Kern, Horsterwold (area 902, location 1; `s902_1`):** Google Maps
+  marker at 52.315949, 5.481943 (read 2026-10-09). About 5.8 km outside the municipality of
+  Nijkerk, to the north across the Nuldernauw, measured as for Grote Ark. Annual values
+  2015–2025 (2025 provisional); downloaded 2026-10-09.
 
 ## AERIUS definitions: verification
 
