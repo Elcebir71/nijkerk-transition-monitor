@@ -88,6 +88,20 @@ PostgreSQL database, with made-up CBS editions. It is skipped unless
 in `_test`, because it recreates the schema `etl`. How to run it is at the
 top of the file.
 
+## Does the page still match the database?
+
+`compare_with_page.py` compares `data/nitrogen/processed/livestock_trend.json`,
+from which the page is built, with the newest edition in the database. It
+reads both and changes neither.
+
+    python pipeline/compare_with_page.py
+
+It lists every difference: another edition, a value that differs, a figure
+on one side only, a year on one side only. Exit code: 0 they agree, 1 they
+differ, 2 the database or the file could not be read. When CBS revises its
+figures, the database gets the new edition and this check says that the
+page has not followed yet.
+
 ## Reading the figures
 
 The largest jumps in the series are not changes on the farms alone. The
@@ -125,6 +139,11 @@ finding exactly the one changed value; `--force` replacing instead of
 doubling; a run with a negative count and a run with fewer rows both
 failing and storing nothing. A database error was shown only with a
 stand-in for the driver.
+
+On 9 October 2026 `compare_with_page.py` found the page and the database in
+agreement: 312 values, edition of 30 March 2026. The page's figures and the
+pipeline's come from two separate requests to CBS, so the two routes give
+the same result.
 
 Not shown: a real second edition from CBS (the table is updated about once
 a year), and a scheduled run. The container image is in
