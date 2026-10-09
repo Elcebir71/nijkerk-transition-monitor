@@ -257,7 +257,7 @@ The land-use row is not needed for v1.
   <https://www.rivm.nl/stikstof/meten/drogedepositieNH3/HogeVeluwe>),
   which suggests but does not establish the terms for MAN. For LML data the
   stated licence differs by channel: CC BY-ND 4.0 for CBS table `50084NED`,
-  "Publiek domein" on data.overheid.nl. Asked RIVM on <2026-10-09>.
+  "Publiek domein" on data.overheid.nl. Asked RIVM on 2026-10-09.
 - **Source (method):** Lolkema, D. E. et al. (2015), "Long-term monitoring
   of ammonia concentrations in Dutch nature areas", Biogeosciences 12,
   5133–5142, doi:10.5194/bg-12-5133-2015.
@@ -265,7 +265,7 @@ The land-use row is not needed for v1.
   (man.rivm.nl/Gebied/veluwe_algemeen),  both download files of area 65,
   Lolkema et al. 2015, data.overheid.nl and the Nationaal Georegister.
 - **Open questions:** asked RIVM (info@rivm.nl, the contact named on the
-  MAN site) on <2026-10-09>.
+  MAN site) on 2026-10-09.
   1. Can estimated values be told apart from measured ones in the files?
   2. Under which licence are the MAN files, and which attribution does
      RIVM prefer?
