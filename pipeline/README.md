@@ -147,3 +147,41 @@ the same result.
 Not shown: a real second edition from CBS (the table is updated about once
 a year), and a scheduled run. The container image is in
 `docker/etl-pipeline/`; it has run on the author's computer only.
+
+## RIVM MAN ammonia measurements
+
+`pipeline/man_ammonia.py` loads a file downloaded by hand from man.rivm.nl
+(annual or three-monthly values of one area) into PostgreSQL. What the values
+mean and what they may be used for: `docs/nitrogen-sources.md`, section 6.
+
+A MAN file has no edition date, so a new version is recognised by its SHA-256.
+A file with the same SHA-256 as the last stored download is skipped. Every
+download is kept with the file itself, and the run reports which values changed
+since the previous download.
+
+```powershell
+docker cp pipeline/sql/002_man.sql stikstof-db:/tmp/002_man.sql
+docker exec stikstof-db psql -U pipeline -d stikstof -v ON_ERROR_STOP=1 -f /tmp/002_man.sql
+python pipeline/man_ammonia.py --file data/nitrogen/raw/man_65_jaar.csv --kind annual --retrieved-at 2026-10-09T16:26
+python pipeline/man_ammonia.py --file data/nitrogen/raw/man_65_3_maanden.csv --kind quarterly
+```
+
+The time of retrieval is the file's modification time unless `--retrieved-at`
+is given; give it when the file was copied or renamed after the download.
+
+| Table | Holds |
+|---|---|
+| `man_download` | One row per stored download: area, file kind, URL, time of retrieval, SHA-256, the file |
+| `man_measurement` | Every value of a download; `quarter` is empty in the annual file |
+| `man_latest` (view) | The values of the newest download of every area and file kind |
+
+`pipeline/sql/man_queries.sql` lists the downloads and what changed between the
+last two.
+
+Not done yet: the file is not fetched automatically. Whether that is allowed
+has been asked to RIVM; until then the files are downloaded by hand.
+
+Shown to work (2026-10-09): 26 unit tests and 7 integration tests against a
+real PostgreSQL 16 pass; the real files of area 65 load (145 annual and 573
+three-monthly values), a second load of the same file is skipped, and the
+values of Grote Ark match the published ones.
