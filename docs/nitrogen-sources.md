@@ -243,8 +243,10 @@ The land-use row is not needed for v1.
   [0.10² + (0.096 × c)²]^½ µg/m³, about 10% at the levels here (0.41 µg/m³
   at 4.2 µg/m³). A trend of about 3% per year is detectable over 6 to 9
   years (Lolkema et al. 2015).
-- **Area means:** the site gives area means. They depend on which
-  locations were measured in which year; the page uses single locations.
+- **Area means:** the site gives area means. They depend on which locations
+  were measured in which year, so the page shows individual locations instead.
+- **Location of Grote Ark (area 65, location 5):** ...
+- **Location of De Stille Kern, Horsterwold (area 902, location 1; `s902_1`):** ...
 - **May calculate:** show the published annual values of named locations
   as a series, with the last year marked provisional; report which values
   changed between two downloads.
@@ -266,7 +268,8 @@ The land-use row is not needed for v1.
   (man.rivm.nl/Gebied/veluwe_algemeen),  both download files of area 65,
   Lolkema et al. 2015, data.overheid.nl and the Nationaal Georegister.
 - **Open questions:** asked RIVM (info@rivm.nl, the contact named on the
-  MAN site) on 2026-10-09.
+  MAN site) on 2026-10-09; automatic reply: answer within 10 working days
+  (by 2026-10-23).
   1. Can estimated values be told apart from measured ones in the files?
   2. Under which licence are the MAN files, and which attribution does
      RIVM prefer?
