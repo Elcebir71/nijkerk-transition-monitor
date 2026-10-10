@@ -36,6 +36,7 @@ limitations next to every figure. The page is in Dutch.
 | Nitrogen deposition | RIVM GDN maps, 2025 | 1×1 km map (total N, NHx, NOy) and the area-weighted mean for Nijkerk |
 | Natura 2000 boundaries | RVO via PDOK | Areas in and around Nijkerk, distance and overlap |
 | Nitrogen-sensitive habitat | RIVM AERIUS open data | Mapped habitat types with their critical deposition value (KDW) |
+| Measured ammonia in air | Universiteit Utrecht and RIVM, Lô et al. (2025), CC BY 4.0 | Means for March 2022 – February 2024 from 71 sites in the Foodvalley region, by site type, with Arkemheen (2 sites; about 70% of the area lies in Nijkerk) |
 
 Figures on the page as of October 2026:
 

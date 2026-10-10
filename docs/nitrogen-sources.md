@@ -301,12 +301,14 @@ The land-use row is not needed for v1.
   Set up within the Regio Deal Foodvalley. A concentration is not a deposition.
 - **Figures taken over (Table 1 and section 3.1):** rural sites 13.6
   (n = 47), semi-urban 9.6 (n = 14), nature reserves 5.1 (n = 10), all sites
-  11.7; Arkemheen 8.1, the highest nature site; Veluwe 3.9, Utrechtse
-  Heuvelrug 4.5. All are means over the two years.
-- **Arkemheen and Nijkerk:** the exact site is not published (Figure S2 only
-  shows a photo). 1,003.7 of the 1,422 ha of Natura 2000 area Arkemheen
-  (about 70%) lie in the municipality, from `natura2000_nearby.geojson`.
-  Whether the site itself is inside the municipality is not known.
+  11.7;Arkemheen 8.1 (2 sites), the highest nature area; Veluwe 3.9 (2 sites),
+  Utrechtse Heuvelrug 4.5 (6 sites). All are means over the two years. The 
+  paper notes that the habitats in Arkemheen are not considered sensitive to 
+  nitrogen deposition.
+- **Arkemheen and Nijkerk:** the exact location of the two sites is not published 
+  (Figure S2 only  shows a photo). 1,003.7 of the 1,422 ha of Natura 2000 area 
+  Arkemheen (about 70%) lie in the municipality, from `natura2000_nearby.geojson`.
+  Whether the sites themselves are inside the municipality is not known.
 - **Comparability:** the paper reports that its nature-reserve values on the
   Veluwe were on average 9% higher than the MAN values there. March 2022 was
   exceptionally high everywhere.
