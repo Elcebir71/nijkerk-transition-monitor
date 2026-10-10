@@ -293,6 +293,31 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     </div>
   </section>
 
+  <section class="panel" id="ammoniak">
+    <h2>Gemeten ammoniak in de lucht, 2022–2024</h2>
+    <p class="lede">De kaart hierboven is berekend. Hier staat een meting: hoeveel ammoniak er in de lucht zat, niet hoeveel er neerkwam. Concentratie en depositie zijn verschillende grootheden; deze pagina rekent de een niet om naar de ander.</p>
+    <p style="max-width:80ch">Een meetnetwerk van de Universiteit Utrecht en het RIVM mat van maart 2022 tot en met februari 2024 elke maand ammoniak op 71 plekken in de regio Foodvalley, met dezelfde meetbuisjes als het landelijke Meetnet Ammoniak in Natuurgebieden. Van de tien plekken in natuurgebieden was het gemiddelde het hoogst in <strong>Arkemheen: 8,1&nbsp;µg/m³</strong>. Op de Veluwe was dat 3,9 en op de Utrechtse Heuvelrug 4,5&nbsp;µg/m³. Arkemheen ligt voor ongeveer 70% in de gemeente Nijkerk.</p>
+    <div class="table-scroll" style="margin-top:10px;max-width:640px">
+      <table>
+        <thead><tr><th scope="col">Plekken</th><th scope="col" class="n">Aantal</th><th scope="col" class="n">Gemiddelde</th></tr></thead>
+        <tbody>
+          <tr><td>Buitengebied</td><td class="n">47</td><td class="n">13,6</td></tr>
+          <tr><td>Dorpsranden en kleine kernen</td><td class="n">14</td><td class="n">9,6</td></tr>
+          <tr><td>Natuurgebieden</td><td class="n">10</td><td class="n">5,1</td></tr>
+          <tr><td>waarvan Arkemheen</td><td class="n">1</td><td class="n">8,1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:6px">Gemiddelde over maart 2022 – februari 2024, in µg/m³. Bron: Lô e.a. (2025), tabel 1 en paragraaf 3.1.</p>
+    <ul class="notes" style="margin-top:14px">
+      <li><strong>Eén studie, twee jaar.</strong> De cijfers zijn gemiddelden van één onderzoek over 24 maanden, geen jaarreeks. In maart 2022 waren de waarden overal uitzonderlijk hoog (begin van het uitrijden van mest en stabiel weer); dat telt mee in het gemiddelde.</li>
+      <li><strong>Waar precies.</strong> De exacte plek van het meetpunt in Arkemheen is niet gepubliceerd. Of het binnen de gemeentegrens ligt, is daarom niet bekend. Het aandeel van 70% komt uit de Natura 2000-grenzen op deze pagina (1.004 van de 1.422 ha).</li>
+      <li><strong>Vergelijkbaarheid.</strong> Volgens de onderzoekers lagen de metingen in natuurgebieden op de Veluwe gemiddeld 9% hoger dan die van het landelijke meetnet op de Veluwe. Vergelijk de getallen daarom niet tot op de decimaal met andere meetnetten.</li>
+      <li><strong>Geen oordeel.</strong> De pagina vergelijkt deze concentraties niet met normen of met de kritische depositiewaarde.</li>
+    </ul>
+    <p class="note" style="margin-top:10px">Bron: S. Lô, W. Dohmen, D. Heederik, E. Weijers, I. van Schothorst, A. Bleeker, R. Vermeulen en G. Hoek (2025), “Spatial and temporal variability of atmospheric ammonia using a dense network in an area with livestock, residential and natural environments intertwined”, <em>Atmospheric Environment</em> 360, 121394, <a href="https://doi.org/10.1016/j.atmosenv.2025.121394">doi:10.1016/j.atmosenv.2025.121394</a>. Open access, licentie CC BY 4.0.</p>
+  </section>
+
   <section class="panel" id="emissies" hidden>
     <h2>Emissies van ammoniak en stikstofoxiden, <span id="em-period"></span></h2>
     <p class="lede">Cijfers van de Emissieregistratie voor de gemeente Nijkerk, per sector. Emissie is wat hier vrijkomt; depositie (de kaart hierboven) is wat hier neerkomt. Dat zijn verschillende grootheden met verschillende eenheden. Deze pagina rekent de een niet om naar de ander.</p>
@@ -351,6 +376,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
           <li>Geen eigen oordeel over welke natuur stikstofgevoelig is; de pagina toont de kartering van AERIUS.</li>
           <li>Geen eigen vergelijking van depositie met kritische depositiewaarden.</li>
           <li>Geen omrekening van emissie naar depositie.</li>
+          <li>Geen omrekening van gemeten concentratie naar depositie.</li>
           <li>Geen kostenberekeningen.</li>
         </ul>
       </div>
@@ -1119,13 +1145,14 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   row(src, ['Gemeentegrens', 'Kadaster, via PDOK', link('https://www.pdok.nl/', 'Bestuurlijke Gebieden (WFS)'), 'Actueel', nlDate(D.boundary.source.fetched_on), status('In gebruik', true)]);
   if (HAB) row(src, ['Relevante stikstofgevoelige habitattypen en KDW', 'RIVM, AERIUS', link(HAB.source.record || HAB.source.info, 'Relevante habitatkartering (open data)'), 'Zoals gepubliceerd op de ophaaldatum', nlDate(HAB.source.fetched_on), status('In gebruik', true)]);
   if (HAB) row(src, ['Depositie ten opzichte van de KDW, ' + PUBLISHED_EXCEEDANCE.area, 'RIVM, AERIUS', link(PUBLISHED_EXCEEDANCE.monitor_url, 'AERIUS Monitor, versie ' + PUBLISHED_EXCEEDANCE.edition + ', grafiek “Ontwikkeling stikstofbelasting”'), String(PUBLISHED_EXCEEDANCE.year), nlDate(PUBLISHED_EXCEEDANCE.read_on), status('Overgenomen cijfer', true)]);
+  row(src, ['Ammoniak in de lucht (gemeten)', 'Universiteit Utrecht en RIVM', link('https://doi.org/10.1016/j.atmosenv.2025.121394', 'Lô e.a. (2025), Atmospheric Environment 360, 121394, licentie CC BY 4.0'), 'Maart 2022 – februari 2024', nlDate('2026-10-10'), status('Overgenomen cijfer', true)]);
   if (EM) row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM, CBS, PBL, WUR, Deltares)', link(EM.source.url, EM.source.dataset + ', per gemeente en sector'), EM.years[0] + '–' + EM.years[EM.years.length - 1], String(EM.source.exported_at || '').slice(0, 10), status('In gebruik', true)]);
   else row(src, ['Emissies van NH₃ en NOx', 'Emissieregistratie (RIVM e.a.)', link('https://www.emissieregistratie.nl/', 'Emissiereeks 1990–2024'), '–', '–', status('Nog niet toegevoegd', false)]);
 
   var ft = $('#footer');
   ft.appendChild(document.createTextNode('Gemaakt door Hakan Şahin, inwoner van Nijkerk. Broncode en methode: '));
   ft.appendChild(link('https://github.com/Elcebir71/nijkerk-transition-monitor', 'GitHub'));
-  ft.appendChild(document.createTextNode('. Data samengesteld op ' + nlDate(D.built_on) + '. Bronnen: CBS, RIVM (GDN en AERIUS), Emissieregistratie, PDOK (RVO, Kadaster). Deze pagina is geen publicatie van de gemeente Nijkerk of van de genoemde bronhouders.'));
+  ft.appendChild(document.createTextNode('. Data samengesteld op ' + nlDate(D.built_on) + '. Bronnen: CBS, RIVM (GDN en AERIUS), Emissieregistratie, Universiteit Utrecht, PDOK (RVO, Kadaster). Deze pagina is geen publicatie van de gemeente Nijkerk of van de genoemde bronhouders.'));
 })();
 </script>
 </body>
