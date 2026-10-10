@@ -206,7 +206,7 @@ The land-use row is not needed for v1.
   values <https://man.rivm.nl/Man/Data/65>, three-monthly values
   <https://man.rivm.nl/Man/Data_3_maanden/65>; all areas
   <https://man.rivm.nl/data_alle_jaar> and
-  <https://man.rivm.nl/data_alle_3_maanden>
+  <https://man.rivm.nl/data_alle_3_maanden>.
   Area 902 "Horsterwold": annual values <https://man.rivm.nl/Man/Data/902>.
 - **What it means:** measured ammonia concentration in air (µg/m³) at fixed
   points in nature areas, with passive samplers that volunteers replace
@@ -245,8 +245,17 @@ The land-use row is not needed for v1.
   years (Lolkema et al. 2015).
 - **Area means:** the site gives area means. They depend on which locations
   were measured in which year, so the page shows individual locations instead.
-- **Location of Grote Ark (area 65, location 5):** ...
-- **Location of De Stille Kern, Horsterwold (area 902, location 1; `s902_1`):** ...
+- **Location of Grote Ark (area 65, location 5):** Kolthoornseweg, Putten;
+  Google Maps marker "de Grote Ark" at 52.234446, 5.643375 (read 2026-10-09).
+  About 3.0 km outside the municipality of Nijkerk, measured as the shortest
+  straight line to the PDOK boundary in `municipality_boundary.geojson`
+  (RD New). The marker is that of the area, not of the sampler, so the
+  distance is approximate. MAN does not publish coordinates in its files.
+- **Location of De Stille Kern, Horsterwold (area 902, location 1; `s902_1`):**
+  Google Maps marker at 52.315949, 5.481943 (read 2026-10-09). About 5.8 km
+  outside the municipality of Nijkerk, to the north across the Nuldernauw,
+  measured as for Grote Ark. Annual values 2015–2025 (2025 provisional);
+  downloaded 2026-10-09.
 - **May calculate:** show the published annual values of named locations
   as a series, with the last year marked provisional; report which values
   changed between two downloads.
@@ -276,10 +285,6 @@ The land-use row is not needed for v1.
   3. May the download links be retrieved automatically once a month, and is
      the date of the yearly update announced?
 - **Not used yet:** the page section waits for the answer to question 2.
-- **Location of De Stille Kern, Horsterwold (area 902, location 1; `s902_1`):** Google Maps
-  marker at 52.315949, 5.481943 (read 2026-10-09). About 5.8 km outside the municipality of
-  Nijkerk, to the north across the Nuldernauw, measured as for Grote Ark. Annual values
-  2015–2025 (2025 provisional); downloaded 2026-10-09.
 
 ## AERIUS definitions: verification
 
