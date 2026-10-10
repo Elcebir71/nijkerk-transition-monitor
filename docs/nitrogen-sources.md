@@ -286,6 +286,42 @@ The land-use row is not needed for v1.
      the date of the yearly update announced?
 - **Not used yet:** the page section waits for the answer to question 2.
 
+### 7. Universiteit Utrecht and RIVM: Foodvalley ammonia network (Lô et al. 2025)
+
+- **Where:** Lô, S., Dohmen, W., Heederik, D., Weijers, E., van Schothorst, I.,
+  Bleeker, A., Vermeulen, R. and Hoek, G. (2025), "Spatial and temporal
+  variability of atmospheric ammonia using a dense network in an area with
+  livestock, residential and natural environments intertwined",
+  Atmospheric Environment 360, 121394,
+  <https://doi.org/10.1016/j.atmosenv.2025.121394>. Supplementary material
+  (mmc1.docx) read as well.
+- **What it means:** monthly ammonia concentration in air (µg/m³) at 71
+  sites in the Foodvalley region, March 2022 to February 2024, with Gradko
+  passive samplers in triplicate, the same samplers as the MAN network.
+  Set up within the Regio Deal Foodvalley. A concentration is not a deposition.
+- **Figures taken over (Table 1 and section 3.1):** rural sites 13.6
+  (n = 47), semi-urban 9.6 (n = 14), nature reserves 5.1 (n = 10), all sites
+  11.7; Arkemheen 8.1, the highest nature site; Veluwe 3.9, Utrechtse
+  Heuvelrug 4.5. All are means over the two years.
+- **Arkemheen and Nijkerk:** the exact site is not published (Figure S2 only
+  shows a photo). 1,003.7 of the 1,422 ha of Natura 2000 area Arkemheen
+  (about 70%) lie in the municipality, from `natura2000_nearby.geojson`.
+  Whether the site itself is inside the municipality is not known.
+- **Comparability:** the paper reports that its nature-reserve values on the
+  Veluwe were on average 9% higher than the MAN values there. March 2022 was
+  exceptionally high everywhere.
+- **Per-site values:** not published: "Data will be made available on
+  request." Asked the corresponding author (s.b.lo@uu.nl) on 2026-10-10 for
+  the Arkemheen site and sites in Nijkerk; asked
+  info@metenluchtkwaliteitfoodvalley.nl on the same day.
+- **Terms of use:** open access, CC BY 4.0 (stated on the article). The page
+  quotes the figures with the full citation.
+- **May calculate:** nothing; the figures are quoted as published.
+- **May not calculate:** a deposition from these concentrations; a value for
+  Nijkerk from the regional means; a comparison with norms or the KDW.
+- **On the page:** section "Gemeten ammoniak in de lucht, 2022–2024" and a row
+  in the sources table, status "Overgenomen cijfer" (2026-10-10).
+
 ## AERIUS definitions: verification
 
 Checked on 2026-10-06 in three steps: against RIVM and BIJ12 documents,
