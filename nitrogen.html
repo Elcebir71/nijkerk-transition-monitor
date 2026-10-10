@@ -60,6 +60,10 @@ a{color:var(--accent-3)}
 .principle strong{font-weight:600}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
 .lede{color:var(--ink-dim);font-size:.9rem;max-width:80ch}
+.lede strong{color:var(--ink);font-weight:600}
+.jump{font-size:.85rem;color:var(--ink-dim);margin:10px 0 2px;line-height:1.9}
+.jump a{white-space:nowrap}
+section.panel{scroll-margin-top:12px}
 
 /* stat tiles */
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px}
@@ -194,7 +198,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
   body{padding:0;font-size:11pt}
   .wrap{max-width:none}
   .panel{border:none;padding:0;border-radius:0}
-  .controls,.backlink,.tip,.screen-only{display:none !important}
+  .controls,.backlink,.jump,.tip,.screen-only{display:none !important}
   .print-only{display:block}
   .kpi,.chart-card,.principle,.legend,.comp,.two > div,.notes li,tr,.map-grid > div:first-child{break-inside:avoid;page-break-inside:avoid}
   h2,h3,.lede,.chart-legend{break-after:avoid;page-break-after:avoid}
@@ -225,7 +229,9 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
     <a class="backlink" href="index.html">Naar de Transitie Monitor (synthetische demodata)</a>
   </header>
 
-  <div class="principle"><strong>Alleen echte, openbare data.</strong> Deze pagina toont cijfers zoals CBS, RIVM, de Emissieregistratie en PDOK ze publiceren, met bron, peildatum en beperkingen erbij. Ik bereken zelf geen depositie en leg geen verband tussen dieraantallen en depositie.</div>
+  <div class="principle"><strong>Alleen echte, openbare data.</strong> Deze pagina toont cijfers zoals CBS, RIVM, de Emissieregistratie, PDOK en wetenschappelijke publicaties ze publiceren, met bron, peildatum en beperkingen erbij. Ik bereken zelf geen depositie en leg geen verband tussen dieraantallen en depositie.</div>
+
+  <nav class="jump" aria-label="Naar een onderdeel">Naar: <a href="#depositie">Depositie</a> · <a href="#ammoniak">Gemeten ammoniak</a> · <a href="#emissies">Emissies</a> · <a href="#veestapel">Veestapel</a> · <a href="#bronnen">Bronnen</a></nav>
 
   <div class="missing" id="missing" hidden>
     <strong>Het databestand ontbreekt.</strong> Voer in de map van het project <code>python scripts/nitrogen/build_page_data.py</code> uit en laad deze pagina opnieuw.
@@ -295,7 +301,7 @@ code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.85em}
 
   <section class="panel" id="ammoniak">
     <h2>Gemeten ammoniak in de lucht, 2022–2024</h2>
-    <p class="lede">De kaart hierboven is berekend. Hier staat een meting: hoeveel ammoniak er in de lucht zat, niet hoeveel er neerkwam. Concentratie en depositie zijn verschillende grootheden; deze pagina rekent de een niet om naar de ander.</p>
+    <p class="lede"><strong>Dit zijn regionale meetresultaten, geen gemiddelde voor de gemeente Nijkerk.</strong> De kaart hierboven is berekend. Hier staat een meting: hoeveel ammoniak er in de lucht zat, niet hoeveel er neerkwam. Concentratie en depositie zijn verschillende grootheden; deze pagina rekent de een niet om naar de ander.</p>
     <p style="max-width:80ch">Een meetnetwerk van de Universiteit Utrecht en het RIVM mat van maart 2022 tot en met februari 2024 elke maand ammoniak op 71 plekken in de regio Foodvalley, met dezelfde meetbuisjes als het landelijke Meetnet Ammoniak in Natuurgebieden. Van de natuurgebieden was het gemiddelde het hoogst in <strong>Arkemheen: 8,1&nbsp;µg/m³</strong> (twee meetpunten). Op de Veluwe (twee meetpunten) was dat 3,9 en op de Utrechtse Heuvelrug (zes meetpunten) 4,5&nbsp;µg/m³. Arkemheen ligt voor ongeveer 70% in de gemeente Nijkerk.</p>
     <div class="table-scroll" style="margin-top:10px;max-width:640px">
       <table>
