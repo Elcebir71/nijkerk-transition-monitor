@@ -237,8 +237,9 @@ record, which is why Claude appears among the contributors. My part:
   database, and reviewing it before it was merged;
 - deciding what the page shows, and what it deliberately does not.
 
-Some early commits carry a `Co-Authored-By: Claude` line; that is
-where the assistant appears among the contributors.
+I remain responsible for the scope, the choice and interpretation of the
+sources, and the published content. AI-generated work is reviewed and
+tested, not accepted as authoritative by default.
 
 ## Sources and terms
 
