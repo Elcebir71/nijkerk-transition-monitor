@@ -1532,3 +1532,19 @@ Sources for this section:
   Veluwe in M26: the tooltips of "bijna overbelast" and "lichte
   overbelasting" for 2024 (now derived by subtraction). Also how the
   Monitor aggregates hexagons on its map.
+
+## Terms of use shown on the page (checked 2026-10-11)
+
+The sources table on the page has a column "Gebruiksvoorwaarden". What it
+shows, and where that comes from:
+
+| Source | On the page | Basis |
+|---|---|---|
+| CBS StatLine 80781ned | Hergebruik toegestaan met bronvermelding | `licence` in the data file, written by the fetch script |
+| RIVM GDN deposition maps | Geen licentie vermeld bij de download | Neither the download page (rivm.nl/gcn-gdn-kaarten) nor the file directory (data.rivm.nl/data/gcn) states a licence; the RIVM "Disclaimer en copyright" page could not be read on 2026-10-11. Still to check |
+| Natura 2000 (RVO via PDOK) | CC0 | Section 4 of this register |
+| Bestuurlijke Gebieden (Kadaster via PDOK) | CC BY 4.0 | WFS GetCapabilities of `service.pdok.nl/kadaster/bestuurlijkegebieden/wfs/v1_0`, AccessConstraints: `https://creativecommons.org/licenses/by/4.0/deed.nl` (read 2026-10-11). The data file still says "not checked yet"; update the fetch script at the next refresh |
+| AERIUS relevant habitats | Publiek domein (Public Domain Mark 1.0) | Section 5 of this register |
+| AERIUS Monitor, Veluwe figure | Niet vermeld; overgenomen met bronvermelding | Licence of the catalogue record still to record |
+| Emissieregistratie | Overnemen toegestaan met bronvermelding | Terms in the export: "Data van de Emissieregistratie mag worden overgenomen, mits met bronvermelding" |
+| Lô et al. (2025) | CC BY 4.0 | Stated on the article; section 7 |
