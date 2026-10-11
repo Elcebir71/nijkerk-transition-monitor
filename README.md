@@ -220,6 +220,25 @@ Possible next steps:
 3. For the prototype: replace synthetic data with real (anonymized,
    validated) farm-level data, with the municipality's or RVO's cooperation.
 
+## How this was built
+
+I built this project with an AI assistant (Claude, by Anthropic). The
+assistant wrote drafts of the code, the tests and parts of the
+documentation. My part:
+
+- choosing the questions the page answers for Nijkerk, and the sources
+  for them;
+- finding and checking the sources, and recording their versions,
+  licences and limits in [docs/nitrogen-sources.md](docs/nitrogen-sources.md);
+- asking the data holders where the documentation fell short (the
+  AERIUS helpdesk at BIJ12, RIVM, Universiteit Utrecht);
+- running every change on my own machine, against a real PostgreSQL
+  database, and reviewing it before it was merged;
+- deciding what the page shows, and what it deliberately does not.
+
+Some early commits carry a `Co-Authored-By: Claude` line; that is
+where the assistant appears among the contributors.
+
 ## Sources and terms
 
 Data: CBS, RIVM (GDN maps and AERIUS), Emissieregistratie, PDOK (RVO,
