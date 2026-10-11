@@ -222,9 +222,10 @@ Possible next steps:
 
 ## How this was built
 
-I built this project with an AI assistant (Claude, by Anthropic). The
-assistant wrote drafts of the code, the tests and parts of the
-documentation. My part:
+I developed this project with the assistance of Claude (Anthropic). Claude
+contributed drafts of the code, the tests and the documentation; some
+commits are authored by Claude and others carry a `Co-Authored-By: Claude`
+record, which is why Claude appears among the contributors. My part:
 
 - choosing the questions the page answers for Nijkerk, and the sources
   for them;
