@@ -222,6 +222,13 @@ Possible next steps:
 
 ## Sources and terms
 
-CBS, RIVM (GDN maps and AERIUS), Emissieregistratie, and PDOK (RVO,
-Kadaster). This project is not a publication of gemeente Nijkerk or of any
-of these organisations.
+Data: CBS, RIVM (GDN maps and AERIUS), Emissieregistratie, PDOK (RVO,
+Kadaster) and Lô et al. (2025, Universiteit Utrecht and RIVM). Each source
+keeps its own terms of use; they are listed per source in
+[docs/nitrogen-sources.md](docs/nitrogen-sources.md). This project is not a
+publication of gemeente Nijkerk or of any of these organisations.
+
+Licence: the code is under the [MIT licence](LICENSE). The texts and
+documentation written for this project are under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Data from the
+sources above are not covered by these licences.
