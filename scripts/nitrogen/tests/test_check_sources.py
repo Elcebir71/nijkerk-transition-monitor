@@ -161,7 +161,7 @@ class ReportTests(unittest.TestCase):
         return base
 
     def state(self, **manual):
-        dates = {"emissieregistratie": "2026-10-05", "aerius_monitor": "2026-10-06"}
+        dates = {"emissieregistratie": "2026-10-05", "aerius_monitor": "2026-10-06", "man": "2026-10-09"}
         dates.update(manual)
         return {"written_on": "2026-10-07", "sources": {source_id: {"value": 1} for source_id in cs.CHECKS},
                 "manual": {key: {"checked_on": value} for key, value in dates.items()}}
@@ -203,6 +203,19 @@ class ReportTests(unittest.TestCase):
         lines, attention = cs.build_report(state, self.results(), self.TODAY, 120)
         self.assertTrue(attention)
         self.assertTrue(any("never recorded" in line for line in lines))
+
+    def test_yearly_check_by_hand_is_due_from_1_july_only(self):
+        man = cs.MANUAL_SOURCES["man"]
+        self.assertFalse(cs.is_due(man, "2026-10-09", date(2027, 6, 30), 120))
+        self.assertTrue(cs.is_due(man, "2026-10-09", date(2027, 7, 1), 120))
+        self.assertFalse(cs.is_due(man, "2026-07-01", date(2026, 12, 31), 120))
+        self.assertTrue(cs.is_due(man, "2026-06-30", date(2026, 7, 2), 120))
+        self.assertTrue(cs.is_due(man, None, date(2026, 10, 7), 120))
+
+    def test_yearly_check_by_hand_is_reported_as_due(self):
+        lines, attention = cs.build_report(self.state(man="2026-05-01"), self.results(), self.TODAY, 120)
+        self.assertTrue(attention)
+        self.assertTrue(any(line.startswith("BY HAND, DUE    RIVM MAN") for line in lines))
 
 
 class StateTests(unittest.TestCase):
