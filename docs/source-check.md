@@ -23,10 +23,12 @@ hand.
 | AERIUS open data, `relevant_habitats` | Number of records and a hash of four attributes, for the country and for the map area; number of Veluwe habitat types in the map area |
 | Nationaal Georegister, record of that layer | AERIUS release named in the record and the date of the record |
 
-Two sources have no signal a script can read: the Emissieregistratie
-export and the Veluwe figure in AERIUS Monitor. The state file holds the
-date they were last looked at (`manual.checked_on`); after 120 days the
-check reports them as due.
+Three sources have no signal a script can read: the Emissieregistratie
+export, the Veluwe figure in AERIUS Monitor and the RIVM MAN ammonia files.
+The state file holds the date they were last looked at (`manual.checked_on`).
+The first two are reported as due after 120 days. MAN is updated once a
+year, around June, so it is reported as due once a year: when it has not
+been looked at since the last 1 July.
 
 What it cannot see: a change in the shapes of a layer when the attributes
 stay the same.
