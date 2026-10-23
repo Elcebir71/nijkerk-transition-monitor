@@ -255,14 +255,16 @@ The land-use row is not needed for v1.
   years (Lolkema et al. 2015).
 - **Area means:** the site gives area means. They depend on which locations
   were measured in which year, so the page shows individual locations instead.
-- **Location of Grote Ark (area 65, location 5):** Kolthoornseweg, Putten;
-  Google Maps marker "de Grote Ark" at 52.234446, 5.643375 (read 2026-10-09).
-  About 3.0 km outside the municipality of Nijkerk, measured as the shortest
+- **Location of Grote Ark (area 65, location 5):** municipality of Putten,
+  near 52.23, 5.64 (rounded to two decimals, about 1 km; see "Location data"
+  below). Measured from the Google Maps marker of the nature area "de Grote
+  Ark" (read 2026-10-09), about 3.0 km outside the municipality of Nijkerk, measured as the shortest
   straight line to the PDOK boundary in `municipality_boundary.geojson`
   (RD New). The marker is that of the area, not of the sampler, so the
   distance is approximate. MAN does not publish coordinates in its files.
 - **Location of De Stille Kern, Horsterwold (area 902, location 1; `s902_1`):**
-  Google Maps marker at 52.315949, 5.481943 (read 2026-10-09). About 5.8 km
+  near 52.32, 5.48 (rounded as above), from the Google Maps marker of the
+  area (read 2026-10-09). About 5.8 km
   outside the municipality of Nijkerk, to the north across the Nuldernauw,
   measured as for Grote Ark. Annual values 2015–2025 (2025 provisional);
   downloaded 2026-10-09.
@@ -278,6 +280,38 @@ The land-use row is not needed for v1.
   Ministerie van Landbouw, Visserij, Voedselzekerheid en Natuur."
   Note that RIVM's sentence says "Meetnet Ammoniak Nederland", not "in
   Natuurgebieden"; quote it as given.
+- **Location data:** the MAN terms of use (request form, below) forbid
+  sharing or publishing the exact location of measurement points, and allow
+  locations in publications only at an accuracy of 500 m or coarser. Never
+  put exact coordinates of a MAN point in this repo or on the page, even
+  ones read from a map; round to two decimals (about 1 km) or name the area.
+  Until 2026-10-23 this file held the Google Maps markers of the two areas
+  to six decimals; older versions in the git history still hold them.
+  Those markers are of the nature areas, not of the samplers.
+- **Terms for monthly data on request** (request form "Aanvraagformulier
+  van de meetgegevens van het MAN" on formdesk.com, read 2026-10-23 from a
+  screenshot; these are the terms of the data sent on request, not stated
+  for the annual files on man.rivm.nl):
+  1. RIVM reviews each request, sends an Excel file by e-mail, and may refuse.
+  2. The data may be used only for the purpose given on the form; another
+     purpose needs a new request.
+  3. The data remain RIVM's property; modifying them or sharing them with
+     third parties needs RIVM's express permission.
+  4. A publication must carry the attribution sentence above (English
+     version on the form). Edited data may be published only with a clear
+     description of the nature and method of the editing.
+  5. Exact locations may not be shared or published; at most 500 m accuracy.
+  6. New data of the previous year appear each year around 1 June; changes
+     in processing can slightly change historical values; RIVM advises
+     always using the latest series.
+  7. No liability for errors or incompleteness; use at own risk.
+  8. For information and research only; not the sole basis for policy
+     decisions or legal proceedings without additional verification.
+     RIVM may change or withdraw the terms at any time.
+  What this means here: publishing the requested monthly values themselves
+  on the public page would be sharing them with third parties, so it needs
+  RIVM's explicit permission, named in the request as the purpose. Derived
+  figures need the editing method stated.
 - **Terms of use:** Licence still open. RIVM (2026-10-23): the question
   has to be agreed with the project leader, who was away; an answer is
   expected in the week of 2026-10-26. Do not state a licence until then.
