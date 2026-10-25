@@ -178,8 +178,11 @@ is given; give it when the file was copied or renamed after the download.
 `pipeline/sql/man_queries.sql` lists the downloads and what changed between the
 last two.
 
-Not done yet: the file is not fetched automatically. Whether that is allowed
-has been asked to RIVM; until then the files are downloaded by hand.
+The file is not fetched automatically, and need not be: RIVM updates
+man.rivm.nl once a year, around June (answer of 2026-10-23). Download the files
+by hand once a year; `scripts/nitrogen/check_sources.py` reports the MAN check
+as due from 1 July. Annual values can include estimated months that are not
+marked, and the licence is still open; see `docs/nitrogen-sources.md`, section 6.
 
 Shown to work (2026-10-09): 26 unit tests and 7 integration tests against a
 real PostgreSQL 16 pass; the real files of area 65 load (145 annual and 573

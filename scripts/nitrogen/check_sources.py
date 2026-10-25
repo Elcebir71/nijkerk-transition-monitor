@@ -12,7 +12,9 @@ on the page. Refreshing the page stays a decision made by hand, after comparing.
 
 What it cannot see: a change in the shapes of a layer when the attributes stay the
 same, and the sources that have no machine-readable signal. Those are listed as
-"by hand", with the date they were last looked at.
+"by hand", with the date they were last looked at. Most are due after --manual-days;
+a source with `due_from` (month, day) is due once a year instead, when it has not been
+looked at since that date.
 
 Options:
     --state PATH_OR_URL   where to read the saved state (default: the file in this repo).
@@ -66,6 +68,14 @@ MANUAL_SOURCES = {
         "label": "AERIUS Monitor: share of the Veluwe not above the KDW",
         "how": "Open AERIUS Monitor, chart 'Ontwikkeling stikstofbelasting', area Veluwe, and see whether a newer "
                "edition than the one named on the page is offered. The figure is read from the screen.",
+    },
+    # RIVM updates man.rivm.nl once a year, around June (RIVM Infopunt, 2026-10-23), so a
+    # monthly look finds nothing new: due once a year, from 1 July.
+    "man": {
+        "label": "RIVM MAN: annual ammonia values of Grote Ark and De Stille Kern",
+        "how": "Open https://man.rivm.nl/Man/Data/65 and https://man.rivm.nl/Man/Data/902 and see whether a new "
+               "year has been added. Load the files with pipeline/man_ammonia.py; it reports changed values.",
+        "due_from": (7, 1),
     },
 }
 
@@ -248,6 +258,21 @@ def differences(old: dict, new: dict) -> list[str]:
     return lines
 
 
+def is_due(source: dict, checked_on: str | None, today: date, manual_days: int) -> bool:
+    """A check by hand is due when never recorded, when older than manual_days, or, for a
+    source with `due_from`, when not done since the last occurrence of that date."""
+    if not checked_on:
+        return True
+    looked = date.fromisoformat(checked_on)
+    if "due_from" in source:
+        month, day = source["due_from"]
+        last = date(today.year, month, day)
+        if last > today:
+            last = date(today.year - 1, month, day)
+        return looked < last
+    return (today - looked).days > manual_days
+
+
 def build_report(state: dict, results: dict, today: date, manual_days: int) -> tuple[list[str], bool]:
     """Return the report lines and whether there is anything to act on."""
     saved = state.get("sources", {})
@@ -274,7 +299,7 @@ def build_report(state: dict, results: dict, today: date, manual_days: int) -> t
     for source_id, source in MANUAL_SOURCES.items():
         checked_on = (state.get("manual", {}).get(source_id) or {}).get("checked_on")
         age = (today - date.fromisoformat(checked_on)).days if checked_on else None
-        if age is None or age > manual_days:
+        if is_due(source, checked_on, today, manual_days):
             when = f"last looked at on {checked_on}, {age} days ago" if checked_on else "never recorded"
             lines.append(f"BY HAND, DUE    {source['label']}: {when}")
             lines.append(f"                  {source['how']}")

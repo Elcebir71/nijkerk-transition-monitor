@@ -233,26 +233,38 @@ The land-use row is not needed for v1.
   sections 3.3 and 3.5). That the year is the calendar year is strongly
   supported but not stated in so many words.
 - **Provisional data and revisions:** the data are updated once a year, in
-  June. The last year is provisional ("voorlopig") and may change. Missing
+  June (confirmed by RIVM, 2026-10-23: "één keer per jaar (rond juni)").
+  The last year is provisional ("voorlopig") and may change. Missing
   months are estimated: "For the year under consideration, data of three
   consecutive years … For the last year, a temporary set …" (Lolkema et
   al. 2015). So values of the last year can change at the next update even
   without new measurements. The method as described is that of 2015; the
   procedure was revised in 2014 and 2017.
+- **Estimated months are inside the annual values:** RIVM confirmed
+  (2026-10-23) that missing monthly values are imputed so that seasonal and
+  annual means can be calculated, and that these estimated monthly values
+  are not available separately. So a published annual value can rest partly
+  on estimated months, and neither the files nor RIVM say which. Anything
+  that shows a MAN annual value must say so.
+- **Monthly values:** not on the website. They can be requested from RIVM
+  with the "Aanvraagformulier van de meetgegevens van het MAN" (named in
+  RIVM's answer of 2026-10-23). Not requested.
 - **Uncertainty:** for a yearly value at one location
   [0.10² + (0.096 × c)²]^½ µg/m³, about 10% at the levels here (0.41 µg/m³
   at 4.2 µg/m³). A trend of about 3% per year is detectable over 6 to 9
   years (Lolkema et al. 2015).
 - **Area means:** the site gives area means. They depend on which locations
   were measured in which year, so the page shows individual locations instead.
-- **Location of Grote Ark (area 65, location 5):** Kolthoornseweg, Putten;
-  Google Maps marker "de Grote Ark" at 52.234446, 5.643375 (read 2026-10-09).
-  About 3.0 km outside the municipality of Nijkerk, measured as the shortest
+- **Location of Grote Ark (area 65, location 5):** municipality of Putten,
+  near 52.23, 5.64 (rounded to two decimals, about 1 km; see "Location data"
+  below). Measured from the Google Maps marker of the nature area "de Grote
+  Ark" (read 2026-10-09), about 3.0 km outside the municipality of Nijkerk, measured as the shortest
   straight line to the PDOK boundary in `municipality_boundary.geojson`
   (RD New). The marker is that of the area, not of the sampler, so the
   distance is approximate. MAN does not publish coordinates in its files.
 - **Location of De Stille Kern, Horsterwold (area 902, location 1; `s902_1`):**
-  Google Maps marker at 52.315949, 5.481943 (read 2026-10-09). About 5.8 km
+  near 52.32, 5.48 (rounded as above), from the Google Maps marker of the
+  area (read 2026-10-09). About 5.8 km
   outside the municipality of Nijkerk, to the north across the Nuldernauw,
   measured as for Grote Ark. Annual values 2015–2025 (2025 provisional);
   downloaded 2026-10-09.
@@ -262,7 +274,48 @@ The land-use row is not needed for v1.
 - **May not calculate:** annual values from quarters; a deposition from a
   concentration; a value for Nijkerk itself (no MAN point lies inside the
   municipality); a comparison with the KDW.
-- **Terms of use:** No licence stated on man.rivm.nl or in data.overheid.nl
+- **Attribution (required by RIVM, 2026-10-23), word for word:**
+  "Deze publicatie is gebaseerd op meetgegevens uit het Meetnet Ammoniak
+  Nederland (MAN). Het RIVM onderhoudt dit meetnet in opdracht van het
+  Ministerie van Landbouw, Visserij, Voedselzekerheid en Natuur."
+  Note that RIVM's sentence says "Meetnet Ammoniak Nederland", not "in
+  Natuurgebieden"; quote it as given.
+- **Location data:** the MAN terms of use (request form, below) forbid
+  sharing or publishing the exact location of measurement points, and allow
+  locations in publications only at an accuracy of 500 m or coarser. Never
+  put exact coordinates of a MAN point in this repo or on the page, even
+  ones read from a map; round to two decimals (about 1 km) or name the area.
+  Until 2026-10-23 this file held the Google Maps markers of the two areas
+  to six decimals; older versions in the git history still hold them.
+  Those markers are of the nature areas, not of the samplers.
+- **Terms for monthly data on request** (request form "Aanvraagformulier
+  van de meetgegevens van het MAN" on formdesk.com, read 2026-10-23 from a
+  screenshot; these are the terms of the data sent on request, not stated
+  for the annual files on man.rivm.nl):
+  1. RIVM reviews each request, sends an Excel file by e-mail, and may refuse.
+  2. The data may be used only for the purpose given on the form; another
+     purpose needs a new request.
+  3. The data remain RIVM's property; modifying them or sharing them with
+     third parties needs RIVM's express permission.
+  4. A publication must carry the attribution sentence above (English
+     version on the form). Edited data may be published only with a clear
+     description of the nature and method of the editing.
+  5. Exact locations may not be shared or published; at most 500 m accuracy.
+  6. New data of the previous year appear each year around 1 June; changes
+     in processing can slightly change historical values; RIVM advises
+     always using the latest series.
+  7. No liability for errors or incompleteness; use at own risk.
+  8. For information and research only; not the sole basis for policy
+     decisions or legal proceedings without additional verification.
+     RIVM may change or withdraw the terms at any time.
+  What this means here: publishing the requested monthly values themselves
+  on the public page would be sharing them with third parties, so it needs
+  RIVM's explicit permission, named in the request as the purpose. Derived
+  figures need the editing method stated.
+- **Terms of use:** Licence still open. RIVM (2026-10-23): the question
+  has to be agreed with the project leader, who was away; an answer is
+  expected in the week of 2026-10-26. Do not state a licence until then.
+  Before that answer: no licence stated on man.rivm.nl or in data.overheid.nl
   / Nationaal Georegister (checked 2026-10-09). RIVM publishes its own NH₃
   dry-deposition measurements on rivm.nl under CC BY 4.0 ("Droge
   Depositiemetingen Ammoniak – Hoge Veluwe",
@@ -276,15 +329,23 @@ The land-use row is not needed for v1.
 - **Checked here (2026-10-09):** the MAN area page
   (man.rivm.nl/Gebied/veluwe_algemeen),  both download files of area 65,
   Lolkema et al. 2015, data.overheid.nl and the Nationaal Georegister.
-- **Open questions:** asked RIVM (info@rivm.nl, the contact named on the
-  MAN site) on 2026-10-09; automatic reply: answer within 10 working days
-  (by 2026-10-23).
+- **Questions to RIVM:** asked RIVM (info@rivm.nl, the contact named on the
+  MAN site) on 2026-10-09; answered by RIVM Infopunt on 2026-10-23.
   1. Can estimated values be told apart from measured ones in the files?
+     No: missing months are imputed and the estimates are not available
+     separately.
   2. Under which licence are the MAN files, and which attribution does
-     RIVM prefer?
+     RIVM prefer? Attribution: see above. Licence: still open, answer
+     expected in the week of 2026-10-26.
   3. May the download links be retrieved automatically once a month, and is
-     the date of the yearly update announced?
-- **Not used yet:** the page section waits for the answer to question 2.
+     the date of the yearly update announced? The site is updated once a
+     year, around June, so a monthly retrieval finds nothing new. The
+     source check (`scripts/nitrogen/check_sources.py`) lists MAN as a check
+     by hand that is due once a year, from 1 July. The files are still
+     downloaded by hand.
+- **Not used yet:** no MAN value is on the page. The page section waits for
+  the licence (question 2). When it is added, it carries the attribution
+  sentence above and the note on estimated months.
 
 ### 7. Universiteit Utrecht and RIVM: Foodvalley ammonia network (Lô et al. 2025)
 

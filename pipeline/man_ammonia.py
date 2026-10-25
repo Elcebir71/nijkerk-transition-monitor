@@ -17,9 +17,10 @@ What it does:
               which values changed since the last download. Every run is recorded in
               etl.load_run, also when it fails or is skipped.
 
-The file is not fetched yet: whether the download links may be retrieved automatically has
-been asked to RIVM (docs/nitrogen-sources.md, section 6). The time of retrieval is taken from
-the file's modification time unless --retrieved-at is given.
+The file is not fetched automatically. RIVM updates man.rivm.nl once a year, around June
+(docs/nitrogen-sources.md, section 6), so the files are downloaded by hand once a year; the
+source check reminds of it from 1 July. The time of retrieval is taken from the file's
+modification time unless --retrieved-at is given.
 
 It is separate from nitrogen.html and never changes the page.
 
